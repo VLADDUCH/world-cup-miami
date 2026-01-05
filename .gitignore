@@ -1,0 +1,13 @@
+# Dependencies
+node_modules
+
+# Production build output
+dist
+
+# Environment variables
+.env
+.env.*
+
+# OS / editor junk
+.DS_Store
+.vscode

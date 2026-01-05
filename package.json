@@ -1,0 +1,22 @@
+{
+  "name": "world-cup-miami",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"No tests yet\"",
+    "bootstrap": "cd client && npm install && cd ../server && npm install",
+    "dev:all": "concurrently \"npm run dev --prefix client\" \"npm start --prefix server\"",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.1"
+  }
+}
