@@ -32,6 +32,7 @@ const MIAMI_MATCH_SCHEDULE = {
   groupStage: [
     { date: "June 15", time: "6:00 PM", teams: [{ name: "Saudi Arabia", iso2: "sa" }, { name: "Uruguay", iso2: "uy" }] },
     { date: "June 21", time: "6:00 PM", teams: [{ name: "Uruguay", iso2: "uy" }, { name: "Cabo Verde (Cape Verde)", iso2: "cv" }] },
+    // Scotland isn't ISO-2; we use a clean Scotland SVG.
     { date: "June 24", time: "6:00 PM", teams: [{ name: "Scotland", iso2: "sco" }, { name: "Brazil", iso2: "br" }] },
     { date: "June 27", time: "7:30 PM", teams: [{ name: "Colombia", iso2: "co" }, { name: "Portugal", iso2: "pt" }] },
   ],
@@ -43,16 +44,16 @@ const MIAMI_MATCH_SCHEDULE = {
 };
 
 /**
- * 7 Country Fan Zone Finder (your concept)
+ * 7 countries (Miami demographic + the teams playing in Miami)
  */
 const FANZONE_COUNTRIES = [
-  { name: "Brazil", iso2: "br", vibe: "South Beach / Little Havana crossover energy" },
-  { name: "Argentina", iso2: "ar", vibe: "Brickell watch-party crowd" },
-  { name: "Colombia", iso2: "co", vibe: "Doral + Wynwood nightlife flow" },
-  { name: "Mexico", iso2: "mx", vibe: "Wynwood + Downtown rally zones" },
-  { name: "Haiti", iso2: "ht", vibe: "Little Haiti + North Miami pulse" },
-  { name: "Uruguay", iso2: "uy", vibe: "Coral Gables / Downtown match nights" },
-  { name: "Portugal", iso2: "pt", vibe: "Brickell + Miami Beach late matches" },
+  { name: "Brazil", iso2: "br", primary: "South Beach", secondary: "Wynwood" },
+  { name: "Argentina", iso2: "ar", primary: "Brickell", secondary: "Downtown" },
+  { name: "Colombia", iso2: "co", primary: "Doral", secondary: "Wynwood" },
+  { name: "Mexico", iso2: "mx", primary: "Wynwood", secondary: "Downtown" },
+  { name: "Haiti", iso2: "ht", primary: "Little Haiti", secondary: "North Miami" },
+  { name: "Uruguay", iso2: "uy", primary: "Coral Gables", secondary: "Downtown" },
+  { name: "Portugal", iso2: "pt", primary: "Brickell", secondary: "Miami Beach" },
 ];
 
 const markerIcon = new L.Icon({
@@ -66,21 +67,17 @@ const markerIcon = new L.Icon({
 });
 
 /**
- * ✅ Flags WITHOUT any package:
- * - Normal countries: flagcdn.com (iso2)
- * - Scotland: use Wikimedia SVG
+ * ✅ Flags WITHOUT any package
+ * - normal countries: flagcdn.com
+ * - Scotland: Wikimedia SVG
  */
 function Flag({ iso2, label }) {
   const code = (iso2 || "").toLowerCase();
-
   const isScotland = code === "sco";
   const src = isScotland
     ? "https://upload.wikimedia.org/wikipedia/commons/1/10/Flag_of_Scotland.svg"
     : `https://flagcdn.com/w40/${code}.png`;
-
-  const srcSet = isScotland
-    ? undefined
-    : `https://flagcdn.com/w80/${code}.png 2x`;
+  const srcSet = isScotland ? undefined : `https://flagcdn.com/w80/${code}.png 2x`;
 
   return (
     <img
@@ -107,17 +104,24 @@ export default function Home() {
     return b;
   }, []);
 
+  const scrollToWhiteArea = () => {
+    requestAnimationFrame(() => {
+      whiteAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
+
   const toggleSection = (sectionId) => {
     setOpenSections((prev) => {
       const exists = prev.includes(sectionId);
-      const next = exists ? prev.filter((x) => x !== sectionId) : [...prev, sectionId];
 
-      // when opening a new section, scroll to white area
-      if (!exists) {
-        requestAnimationFrame(() => {
-          whiteAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
+      // if closing the Fan Zone hub, also close its children
+      if (exists && sectionId === "fanHub") {
+        const remove = new Set(["fanHub", "fanFind", "fanStart", "venueRegister"]);
+        return prev.filter((x) => !remove.has(x));
       }
+
+      const next = exists ? prev.filter((x) => x !== sectionId) : [...prev, sectionId];
+      if (!exists) scrollToWhiteArea();
       return next;
     });
   };
@@ -127,16 +131,13 @@ export default function Home() {
   const renderTeams = (m) => {
     if (!m?.teams || m.teams.length !== 2) return null;
     const [a, b] = m.teams;
-
     return (
       <span className={styles.matchTeams}>
         <span className={styles.team}>
           <Flag iso2={a.iso2} label={a.name} />
           <span className={styles.teamName}>{a.name}</span>
         </span>
-
         <span className={styles.vsText}>vs.</span>
-
         <span className={styles.team}>
           <Flag iso2={b.iso2} label={b.name} />
           <span className={styles.teamName}>{b.name}</span>
@@ -168,10 +169,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section
-        className={styles.hero}
-        style={{ backgroundImage: `url("/images/hero-miami-skyline.jpg")` }}
-      >
+      <section className={styles.hero} style={{ backgroundImage: 'url("/images/miami_skyline.png")' }}>
         <div className={styles.heroOverlay}>
           <div className={styles.heroInner}>
             <h1 className={styles.heroTitle}>
@@ -179,7 +177,7 @@ export default function Home() {
             </h1>
 
             <p className={styles.heroSub}>
-              Matchday energy. Fan zones. Venues. The full Miami experience.
+              Find the best places to watch, meet fans, and turn 2 nights in Miami into 2 nights you&apos;ll never forget.
             </p>
 
             <div className={styles.heroActions}>
@@ -194,11 +192,11 @@ export default function Home() {
 
               <button
                 type="button"
-                className={`${styles.primaryBtn} ${styles.fanFinderBtn} ${isOpen("fanFinder") ? styles.primaryBtnActive : ""}`}
-                onClick={() => toggleSection("fanFinder")}
-                aria-pressed={isOpen("fanFinder")}
+                className={`${styles.primaryBtn} ${styles.fanHubBtn} ${isOpen("fanHub") ? styles.primaryBtnActive : ""}`}
+                onClick={() => toggleSection("fanHub")}
+                aria-pressed={isOpen("fanHub")}
               >
-                {isOpen("fanFinder") ? "Hide Fan Zone Finder™" : "Fan Zone Finder™"}
+                {isOpen("fanHub") ? "Hide Fan Zone Network™" : "Fan Zone Network™"}
               </button>
 
               <button
@@ -206,8 +204,7 @@ export default function Home() {
                 className={styles.secondaryBtn}
                 onClick={() => setShowMap((v) => !v)}
               >
-                {showMap ? "Hide Fan Zone Map" : "Show Fan Zone Map"}{" "}
-                <span className={styles.caret}>↗</span>
+                {showMap ? "Hide Fan Zone Map" : "Show Fan Zone Map"} <span className={styles.caret}>↗</span>
               </button>
             </div>
 
@@ -237,11 +234,7 @@ export default function Home() {
                       <ZoomControl position="topright" />
 
                       {LOCATIONS.map((loc) => (
-                        <Marker
-                          key={`${loc.name}-${loc.lat}-${loc.lng}`}
-                          position={[loc.lat, loc.lng]}
-                          icon={markerIcon}
-                        >
+                        <Marker key={`${loc.name}-${loc.lat}-${loc.lng}`} position={[loc.lat, loc.lng]} icon={markerIcon}>
                           <Popup className={styles.popup}>
                             <div className={styles.popupTitle}>{loc.name}</div>
                             <div className={styles.popupMeta}>{loc.area}</div>
@@ -254,7 +247,7 @@ export default function Home() {
 
                   <div className={styles.locationList}>
                     {LOCATIONS.map((loc) => (
-                      <div key={loc.name} className={styles.locationItem}>
+                      <div key={`${loc.name}-${loc.address}`} className={styles.locationItem}>
                         <div className={styles.locationTop}>
                           <div className={styles.locationName}>{loc.name}</div>
                           <div className={styles.locationTag}>{loc.area}</div>
@@ -266,331 +259,297 @@ export default function Home() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      </section>
 
-            {/* WHITE STACK AREA */}
-            <div ref={whiteAreaRef} className={styles.whiteArea}>
-              <div className={styles.whiteInner}>
-                {openSections.length === 0 ? (
-                  <div className={styles.whiteEmpty}>
-                    Click <b>Explore Matches</b> or <b>Fan Zone Finder™</b> above to open details here.
-                  </div>
-                ) : (
-                  <div className={styles.sectionStack}>
-                    {openSections.map((id, idx) => {
-                      // =========================
-                      // MATCHES SECTION
-                      // =========================
-                      if (id === "matches") {
-                        return (
-                          <div key={id} className={`${styles.whiteCard} ${styles.whiteCardNlp}`}>
-                            <div className={`${styles.whiteCardTop} ${styles.nlpHeader}`}>
-                              <div className={styles.nlpTitleBlock}>
-                                <div className={styles.nlpKickerRow}>
-                                  <div className={styles.whiteKicker}>#{idx + 1} — MIAMI SCHEDULE</div>
-                                  <span className={styles.nlpPill}>Plan your “anchor nights”</span>
-                                </div>
-
-                                <h2 className={styles.whiteTitle}>Matches in Miami</h2>
-
-                                <p className={styles.whiteSub}>
-                                  Pick 1–2 <b>must-see</b> nights now, then build your <b>hotel</b>, <b>transport</b>, and <b>fan-zone</b> plan around them.
-                                  (Click again to remove.)
-                                </p>
-
-                                <div className={styles.nlpCueRow}>
-                                  <span className={styles.nlpCueDot} aria-hidden="true" />
-                                  <span className={styles.nlpCueText}>
-                                    Tip: Choose a “prime night” + a backup night. You’ll feel locked-in.
-                                  </span>
-                                </div>
-                              </div>
-
-                              <button className={styles.removeBtn} onClick={() => toggleSection("matches")}>
-                                Remove
-                              </button>
-                            </div>
-
-                            <div className={styles.matchesGrid}>
-                              <div className={styles.matchesBlock}>
-                                <div className={styles.blockTitle}>Group Stage Matches</div>
-                                <ul className={styles.matchList}>
-                                  {MIAMI_MATCH_SCHEDULE.groupStage.map((m) => (
-                                    <li key={`${m.date}-${m.time}-${m.teams?.[0]?.name || ""}`} className={styles.matchRow}>
-                                      <span className={styles.matchDate}>{m.date}</span>
-                                      <span className={styles.matchTime}>{m.time}</span>
-                                      <span className={styles.matchVs}>{renderTeams(m)}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              <div className={styles.matchesBlock}>
-                                <div className={styles.blockTitle}>Knockout & Final Matches</div>
-                                <ul className={styles.matchList}>
-                                  {MIAMI_MATCH_SCHEDULE.knockout.map((m) => (
-                                    <li key={`${m.date}-${m.time}-${m.matchup}`} className={styles.matchRow}>
-                                      <span className={styles.matchDate}>{m.date}</span>
-                                      <span className={styles.matchTime}>{m.time}</span>
-                                      <span className={styles.matchVs}>{m.matchup}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-
-                            <div className={styles.whiteActions}>
-                              <Link to="/tickets" className={styles.whitePrimaryBtn}>
-                                Get Tickets
-                              </Link>
-                              <Link to="/venues" className={styles.whiteSecondaryBtn}>
-                                Venue Guide
-                              </Link>
-                            </div>
+      {/* WHITE STACK AREA */}
+      <section ref={whiteAreaRef} className={styles.whiteArea}>
+        <div className={styles.whiteInner}>
+          {openSections.length === 0 ? (
+            <div className={styles.whiteEmpty}>
+              <h2 className={styles.whiteTitle}>Build the full Miami plan</h2>
+              <p className={styles.whiteSub}>
+                Click <b>Explore Matches</b> or <b>Fan Zone Network™</b> above to open details here. Click again to remove.
+              </p>
+            </div>
+          ) : (
+            <div className={styles.sectionStack}>
+              {openSections.map((id, idx) => {
+                if (id === "matches") {
+                  return (
+                    <div key={id} className={`${styles.whiteCard} ${styles.whiteCardNlp}`}>
+                      <div className={`${styles.whiteCardTop} ${styles.nlpHeader}`}>
+                        <div className={styles.nlpTitleBlock}>
+                          <div className={styles.nlpKickerRow}>
+                            <div className={styles.whiteKicker}>#{idx + 1} — MIAMI SCHEDULE</div>
+                            <span className={styles.nlpPill}>Lock your “anchor nights”</span>
                           </div>
-                        );
-                      }
 
-                      // =========================
-                      // FAN ZONE FINDER (HUB)
-                      // =========================
-                      if (id === "fanFinder") {
-                        return (
-                          <div key={id} className={`${styles.whiteCard} ${styles.fanFinderCard}`}>
-                            <div className={styles.whiteCardTop}>
-                              <div>
-                                <div className={styles.whiteKicker}>#{idx + 1} — FAN ZONE</div>
-                                <h2 className={styles.whiteTitle}>Fan Zone Finder™</h2>
-                                <p className={styles.whiteSub}>
-                                  Choose what you want to do below. Each choice opens a new section under this one.
-                                  Click again to remove.
-                                </p>
-                              </div>
-                              <button className={styles.removeBtn} onClick={() => toggleSection("fanFinder")}>
-                                Remove
-                              </button>
-                            </div>
+                          <h2 className={styles.whiteTitle}>Matches in Miami</h2>
 
-                            <div className={styles.optionGrid}>
-                              <button
-                                type="button"
-                                className={`${styles.optionCard} ${isOpen("fanSignup") ? styles.optionCardActive : ""}`}
-                                onClick={() => toggleSection("fanSignup")}
-                              >
-                                <div className={styles.optionTitle}>Find Your Country Crowd</div>
-                                <div className={styles.optionSub}>Join a fan zone near you (fast).</div>
-                                <div className={styles.optionCta}>Open</div>
-                              </button>
+                          <p className={styles.whiteSub}>
+                            Pick 1–2 <b>must-see</b> nights now, then build your <b>hotel</b>, <b>transport</b>, and <b>fan-zone</b> plan around them.
+                            (Click again to remove.)
+                          </p>
 
-                              <button
-                                type="button"
-                                className={`${styles.optionCard} ${isOpen("startCountryZone") ? styles.optionCardActive : ""}`}
-                                onClick={() => toggleSection("startCountryZone")}
-                              >
-                                <div className={styles.optionTitle}>Start a Country Fan Zone</div>
-                                <div className={styles.optionSub}>Lead the meetup. Own the energy.</div>
-                                <div className={styles.optionCta}>Open</div>
-                              </button>
-
-                              <button
-                                type="button"
-                                className={`${styles.optionCard} ${isOpen("registerVenue") ? styles.optionCardActive : ""}`}
-                                onClick={() => toggleSection("registerVenue")}
-                              >
-                                <div className={styles.optionTitle}>Register Your Venue</div>
-                                <div className={styles.optionSub}>Get listed as an official hangout.</div>
-                                <div className={styles.optionCta}>Open</div>
-                              </button>
-                            </div>
-
-                            <div className={styles.fanCountryStrip}>
-                              {FANZONE_COUNTRIES.map((c) => (
-                                <div key={c.name} className={styles.countryPill}>
-                                  <Flag iso2={c.iso2} label={c.name} />
-                                  <span className={styles.countryName}>{c.name}</span>
-                                </div>
-                              ))}
-                            </div>
-
-                            <div className={styles.fanNote}>
-                              <b>Copyright Notice:</b> Fan Zone Finder™ is a branded experience concept for World Cup in Miami.
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      // =========================
-                      // OPTION 1: FAN SIGNUP
-                      // =========================
-                      if (id === "fanSignup") {
-                        return (
-                          <div key={id} className={`${styles.whiteCard} ${styles.fanFormCard}`}>
-                            <div className={styles.whiteCardTop}>
-                              <div>
-                                <div className={styles.whiteKicker}>#{idx + 1} — JOIN</div>
-                                <h2 className={styles.whiteTitle}>Join a Fan Zone</h2>
-                                <p className={styles.whiteSub}>
-                                  Pick your country, drop your email, and we’ll route you to the best hangout zones.
-                                </p>
-                              </div>
-                              <button className={styles.removeBtn} onClick={() => toggleSection("fanSignup")}>
-                                Remove
-                              </button>
-                            </div>
-
-                            <div className={styles.formGrid}>
-                              <label className={styles.field}>
-                                <span>Name</span>
-                                <input className={styles.input} placeholder="Your name" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Email</span>
-                                <input className={styles.input} placeholder="you@email.com" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Country</span>
-                                <select className={styles.input}>
-                                  {FANZONE_COUNTRIES.map((c) => (
-                                    <option key={c.name} value={c.name}>{c.name}</option>
-                                  ))}
-                                </select>
-                              </label>
-
-                              <button type="button" className={styles.formCta}>
-                                Save My Spot
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      // =========================
-                      // OPTION 2: START COUNTRY ZONE
-                      // =========================
-                      if (id === "startCountryZone") {
-                        return (
-                          <div key={id} className={`${styles.whiteCard} ${styles.fanFormCard}`}>
-                            <div className={styles.whiteCardTop}>
-                              <div>
-                                <div className={styles.whiteKicker}>#{idx + 1} — LEAD</div>
-                                <h2 className={styles.whiteTitle}>Start a Country Fan Zone</h2>
-                                <p className={styles.whiteSub}>
-                                  Become the organizer. We’ll feature your zone and help it grow.
-                                </p>
-                              </div>
-                              <button className={styles.removeBtn} onClick={() => toggleSection("startCountryZone")}>
-                                Remove
-                              </button>
-                            </div>
-
-                            <div className={styles.formGrid}>
-                              <label className={styles.field}>
-                                <span>Organizer Name</span>
-                                <input className={styles.input} placeholder="Your name" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Email</span>
-                                <input className={styles.input} placeholder="you@email.com" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Country</span>
-                                <select className={styles.input}>
-                                  {FANZONE_COUNTRIES.map((c) => (
-                                    <option key={c.name} value={c.name}>{c.name}</option>
-                                  ))}
-                                </select>
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Preferred Area</span>
-                                <input className={styles.input} placeholder="e.g., Brickell, Wynwood, Little Haiti" />
-                              </label>
-
-                              <button type="button" className={styles.formCta}>
-                                Launch My Fan Zone
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      // =========================
-                      // OPTION 3: REGISTER VENUE
-                      // =========================
-                      if (id === "registerVenue") {
-                        return (
-                          <div key={id} className={`${styles.whiteCard} ${styles.fanFormCard}`}>
-                            <div className={styles.whiteCardTop}>
-                              <div>
-                                <div className={styles.whiteKicker}>#{idx + 1} — LIST</div>
-                                <h2 className={styles.whiteTitle}>Register a Venue as a Fan Zone</h2>
-                                <p className={styles.whiteSub}>
-                                  Bars, rooftops, lounges—get listed where fans are actually searching.
-                                </p>
-                              </div>
-                              <button className={styles.removeBtn} onClick={() => toggleSection("registerVenue")}>
-                                Remove
-                              </button>
-                            </div>
-
-                            <div className={styles.formGrid}>
-                              <label className={styles.field}>
-                                <span>Venue Name</span>
-                                <input className={styles.input} placeholder="Your venue name" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Address</span>
-                                <input className={styles.input} placeholder="Street, Miami, FL" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Contact Email</span>
-                                <input className={styles.input} placeholder="manager@venue.com" />
-                              </label>
-
-                              <label className={styles.field}>
-                                <span>Primary Country Crowd</span>
-                                <select className={styles.input}>
-                                  {FANZONE_COUNTRIES.map((c) => (
-                                    <option key={c.name} value={c.name}>{c.name}</option>
-                                  ))}
-                                </select>
-                              </label>
-
-                              <button type="button" className={styles.formCta}>
-                                Request Listing
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      // fallback
-                      return (
-                        <div key={id} className={styles.whiteCard}>
-                          <div className={styles.whiteCardTop}>
-                            <div>
-                              <div className={styles.whiteKicker}>#{idx + 1}</div>
-                              <h2 className={styles.whiteTitle}>Section</h2>
-                              <p className={styles.whiteSub}>Unknown section: {id}</p>
-                            </div>
-                            <button className={styles.removeBtn} onClick={() => toggleSection(id)}>
-                              Remove
-                            </button>
+                          <div className={styles.nlpCueRow}>
+                            <span className={styles.nlpCueDot} aria-hidden="true" />
+                            <span className={styles.nlpCueText}>Tip: Choose a “prime night” + a backup night. You’ll feel locked-in.</span>
                           </div>
                         </div>
-                      );
-                    })}
+
+                        <button className={styles.removeBtn} onClick={() => toggleSection("matches")}>
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className={styles.matchesGrid}>
+                        <div className={styles.matchesBlock}>
+                          <div className={styles.blockTitle}>Group Stage Matches</div>
+                          <ul className={styles.matchList}>
+                            {MIAMI_MATCH_SCHEDULE.groupStage.map((m) => (
+                              <li key={`${m.date}-${m.time}-${m.teams?.[0]?.name || ""}`} className={styles.matchRow}>
+                                <span className={styles.matchDate}>{m.date}</span>
+                                <span className={styles.matchTime}>{m.time}</span>
+                                <span className={styles.matchVs}>{renderTeams(m)}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className={styles.matchesBlock}>
+                          <div className={styles.blockTitle}>Knockout & Final Matches</div>
+                          <ul className={styles.matchList}>
+                            {MIAMI_MATCH_SCHEDULE.knockout.map((m) => (
+                              <li key={`${m.date}-${m.time}-${m.matchup}`} className={styles.matchRow}>
+                                <span className={styles.matchDate}>{m.date}</span>
+                                <span className={styles.matchTime}>{m.time}</span>
+                                <span className={styles.matchVs}>{m.matchup}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className={styles.whiteActions}>
+                        <Link to="/tickets" className={styles.whitePrimaryBtn}>Get Tickets</Link>
+                        <Link to="/venues" className={styles.whiteSecondaryBtn}>Venue Guide</Link>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (id === "fanHub") {
+                  return (
+                    <div key={id} className={`${styles.whiteCard} ${styles.fanHubCard}`}>
+                      <div className={`${styles.whiteCardTop} ${styles.fanHubTop}`}>
+                        <div>
+                          <div className={styles.whiteKicker}>#{idx + 1} — FAN ZONE</div>
+                          <h2 className={styles.whiteTitle}>Fan Zone Network™</h2>
+                          <p className={styles.whiteSub}>
+                            Choose an option. Each click opens a new section <b>under this one</b> (in the order you click).
+                            Click again to remove.
+                          </p>
+                          <div className={styles.disclaimer}>
+                            World Cup in Miami is an <b>independent fan guide</b> and is not affiliated with FIFA or the World Cup.
+                          </div>
+                        </div>
+
+                        <button className={styles.removeBtn} onClick={() => toggleSection("fanHub")}>
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className={styles.optionGrid}>
+                        <button
+                          type="button"
+                          className={`${styles.optionCard} ${isOpen("fanFind") ? styles.optionCardActive : ""}`}
+                          onClick={() => toggleSection("fanFind")}
+                        >
+                          <div className={styles.optionIcon} aria-hidden="true">🔎</div>
+                          <div className={styles.optionTitle}>Find Your Fan Zone</div>
+                          <div className={styles.optionSub}>Instantly see where your country’s fans gather.</div>
+                          <div className={styles.optionCta}>Open</div>
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`${styles.optionCard} ${isOpen("fanStart") ? styles.optionCardActive : ""}`}
+                          onClick={() => toggleSection("fanStart")}
+                        >
+                          <div className={styles.optionIcon} aria-hidden="true">⚡</div>
+                          <div className={styles.optionTitle}>Start a Country Fan Zone</div>
+                          <div className={styles.optionSub}>Lead the meetup. Own the vibe.</div>
+                          <div className={styles.optionCta}>Open</div>
+                        </button>
+
+                        <button
+                          type="button"
+                          className={`${styles.optionCard} ${isOpen("venueRegister") ? styles.optionCardActive : ""}`}
+                          onClick={() => toggleSection("venueRegister")}
+                        >
+                          <div className={styles.optionIcon} aria-hidden="true">🏟️</div>
+                          <div className={styles.optionTitle}>Register Your Venue</div>
+                          <div className={styles.optionSub}>Get listed as a fan-zone location.</div>
+                          <div className={styles.optionCta}>Open</div>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (id === "fanFind") {
+                  return (
+                    <div key={id} className={`${styles.whiteCard} ${styles.fanFormCard}`}>
+                      <div className={styles.whiteCardTop}>
+                        <div>
+                          <div className={styles.whiteKicker}>#{idx + 1} — FIND YOUR FAN ZONE</div>
+                          <h2 className={styles.whiteTitle}>Where Each Country’s Fans Hang Out</h2>
+                          <p className={styles.whiteSub}>
+                            Pick your country, then we’ll send you the best matchday spots + last-minute “drops.”
+                          </p>
+                        </div>
+                        <button className={styles.removeBtn} onClick={() => toggleSection("fanFind")}>
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className={styles.countryGrid}>
+                        {FANZONE_COUNTRIES.map((c) => (
+                          <div key={c.name} className={styles.countryCard}>
+                            <div className={styles.countryCardTop}>
+                              <Flag iso2={c.iso2} label={c.name} />
+                              <div className={styles.countryCardName}>{c.name}</div>
+                            </div>
+                            <div className={styles.countryCardMeta}>
+                              <span className={styles.countryChip}>{c.primary}</span>
+                              <span className={styles.countryChipMuted}>{c.secondary}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className={styles.formGrid}>
+                        <label className={styles.field}>
+                          <span>Email</span>
+                          <input className={styles.input} placeholder="you@email.com" />
+                        </label>
+                        <label className={styles.field}>
+                          <span>Country</span>
+                          <select className={styles.input} defaultValue="Brazil">
+                            {FANZONE_COUNTRIES.map((c) => (
+                              <option key={c.name} value={c.name}>{c.name}</option>
+                            ))}
+                          </select>
+                        </label>
+                        <button type="button" className={styles.formCta}>Get Matchday Alerts</button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (id === "fanStart") {
+                  return (
+                    <div key={id} className={`${styles.whiteCard} ${styles.fanFormCard}`}>
+                      <div className={styles.whiteCardTop}>
+                        <div>
+                          <div className={styles.whiteKicker}>#{idx + 1} — START A FAN ZONE</div>
+                          <h2 className={styles.whiteTitle}>Start a Country Fan Zone</h2>
+                          <p className={styles.whiteSub}>
+                            Become the organizer. We’ll help you recruit fans + match with venues.
+                          </p>
+                        </div>
+                        <button className={styles.removeBtn} onClick={() => toggleSection("fanStart")}>
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className={styles.formGrid}>
+                        <label className={styles.field}>
+                          <span>Name</span>
+                          <input className={styles.input} placeholder="Your name" />
+                        </label>
+                        <label className={styles.field}>
+                          <span>Email</span>
+                          <input className={styles.input} placeholder="you@email.com" />
+                        </label>
+                        <label className={styles.field}>
+                          <span>Country</span>
+                          <select className={styles.input} defaultValue="Brazil">
+                            {FANZONE_COUNTRIES.map((c) => (
+                              <option key={c.name} value={c.name}>{c.name}</option>
+                            ))}
+                          </select>
+                        </label>
+                        <label className={styles.field}>
+                          <span>Preferred Area</span>
+                          <input className={styles.input} placeholder="e.g., Brickell, Wynwood, Little Haiti" />
+                        </label>
+                        <button type="button" className={styles.formCta}>Launch My Fan Zone</button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (id === "venueRegister") {
+                  return (
+                    <div key={id} className={`${styles.whiteCard} ${styles.fanFormCard}`}>
+                      <div className={styles.whiteCardTop}>
+                        <div>
+                          <div className={styles.whiteKicker}>#{idx + 1} — REGISTER YOUR VENUE</div>
+                          <h2 className={styles.whiteTitle}>Register a Fan Zone Location</h2>
+                          <p className={styles.whiteSub}>
+                            Clubs and bars can sponsor country fan zones. Get discovered during match week.
+                          </p>
+                        </div>
+                        <button className={styles.removeBtn} onClick={() => toggleSection("venueRegister")}>
+                          Remove
+                        </button>
+                      </div>
+
+                      <div className={styles.formGrid}>
+                        <label className={styles.field}>
+                          <span>Venue Name</span>
+                          <input className={styles.input} placeholder="Your venue" />
+                        </label>
+                        <label className={styles.field}>
+                          <span>Neighborhood</span>
+                          <input className={styles.input} placeholder="e.g., Wynwood" />
+                        </label>
+                        <label className={styles.field}>
+                          <span>Email</span>
+                          <input className={styles.input} placeholder="manager@venue.com" />
+                        </label>
+                        <label className={styles.field}>
+                          <span>Sponsor Country</span>
+                          <select className={styles.input} defaultValue="Brazil">
+                            {FANZONE_COUNTRIES.map((c) => (
+                              <option key={c.name} value={c.name}>{c.name}</option>
+                            ))}
+                          </select>
+                        </label>
+                        <button type="button" className={styles.formCta}>Submit Venue</button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={id} className={styles.whiteCard}>
+                    <div className={styles.whiteCardTop}>
+                      <div>
+                        <div className={styles.whiteKicker}>#{idx + 1}</div>
+                        <h2 className={styles.whiteTitle}>Section</h2>
+                        <p className={styles.whiteSub}>Unknown section: {id}</p>
+                      </div>
+                      <button className={styles.removeBtn} onClick={() => toggleSection(id)}>Remove</button>
+                    </div>
                   </div>
-                )}
-              </div>
+                );
+              })}
             </div>
-            {/* END WHITE AREA */}
-          </div>
+          )}
         </div>
       </section>
     </div>
