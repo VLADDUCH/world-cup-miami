@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import styles from "../styles/Home.module.css";
@@ -91,12 +91,67 @@ function Flag({ iso2, label }) {
   );
 }
 
+// 30 minutes
+const PULSE_ROTATE_MS = 30 * 60 * 1000;
+
+// Momentum Phase (3.5 months out) — no tickets
+const LIVE_PULSE_FEED = [
+  "🌎 International supporters organizing Miami meetups",
+  "🇭🇹 Haiti fan community expanding in South Florida",
+  "🇧🇷 Brazil supporters locking in watch party venues",
+  "🇦🇷 Argentina rooftop meetups gaining traction",
+  "🇫🇷 France fan groups scouting Downtown locations",
+  "🌍 New countries joining the Fan Zone Network™",
+  "🌆 Brickell rooftops preparing matchday experiences",
+  "🏖 South Beach venues designing themed nights",
+  "🎶 Wynwood clubs curating World Cup playlists",
+  "🍹 Miami lounges planning international fan nights",
+  "🗺 New fan locations being added to the map",
+  "👥 Fans building their Miami experience early",
+  "🌍 Global supporters connecting before kickoff",
+  "🔔 Early members joining the Fan Zone Network™",
+  "🧭 Visitors mapping out neighborhoods",
+  "🌴 Travelers saving Miami hotspots",
+  "⚽ Miami preparing for global football energy",
+  "🔥 Momentum building across South Florida",
+  "🌊 The countdown to Miami continues",
+  "🌍 The world is getting ready for Miami",
+];
+
 export default function Home() {
   const [showMap, setShowMap] = useState(true);
 
   // stacked sections (order of clicks)
   const [openSections, setOpenSections] = useState([]);
   const whiteAreaRef = useRef(null);
+
+  // LIVE PULSE index: stable + changes every 30 minutes even if user refreshes
+  const [pulseIndex, setPulseIndex] = useState(() => {
+    const slot = Math.floor(Date.now() / PULSE_ROTATE_MS);
+    return slot % LIVE_PULSE_FEED.length;
+  });
+
+  useEffect(() => {
+    const tick = () => {
+      const slot = Math.floor(Date.now() / PULSE_ROTATE_MS);
+      setPulseIndex(slot % LIVE_PULSE_FEED.length);
+    };
+
+    const now = Date.now();
+    const msToNextBoundary = PULSE_ROTATE_MS - (now % PULSE_ROTATE_MS);
+    const timeoutId = setTimeout(() => {
+      tick();
+      const intervalId = setInterval(tick, PULSE_ROTATE_MS);
+      // stash for cleanup
+      Home.__pulseInterval = intervalId;
+    }, msToNextBoundary);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (Home.__pulseInterval) clearInterval(Home.__pulseInterval);
+      Home.__pulseInterval = null;
+    };
+  }, []);
 
   const bounds = useMemo(() => {
     const b = L.latLngBounds([]);
@@ -148,24 +203,40 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.navbar}>
-        <div className={styles.navInner}>
-          <Link to="/" className={styles.brand}>
-            <span className={styles.brandMark} aria-hidden="true" />
-            <span className={styles.brandText}>
-              <div className={styles.brandTop}>WORLD CUP</div>
-              <div className={styles.brandBottom}>IN MIAMI</div>
-            </span>
-          </Link>
+      {/* NEW: Live Pulse Bar (replaces old nav) */}
+      <header className={styles.liveBar}>
+        <div className={styles.liveBarInner}>
+          <div className={styles.liveLeft}>
+            <div className={styles.liveIndicator} aria-label="Live updates">
+              <span className={styles.liveDot} aria-hidden="true" />
+              <span className={styles.liveLabel}>LIVE</span>
+            </div>
 
-          <nav className={styles.navLinks}>
-            <Link className={styles.navLink} to="/matches">Matches</Link>
-            <Link className={styles.navLink} to="/tickets">Tickets</Link>
-            <Link className={styles.navLink} to="/venues">Venues</Link>
-            <Link className={styles.navLink} to="/fan-zone">Fan Zone</Link>
-          </nav>
+            <Link to="/" className={styles.liveBrand} aria-label="World Cup in Miami">
+              <span className={styles.liveBrandMark} aria-hidden="true" />
+              <span className={styles.liveBrandText}>WCIM</span>
+            </Link>
+          </div>
 
-          <Link to="/tickets" className={styles.navCta}>Get Tickets</Link>
+          <div className={styles.liveTicker} aria-live="polite">
+            {/* key forces animation restart when item changes */}
+            <div key={pulseIndex} className={styles.liveTickerTrack}>
+              <span className={styles.liveTickerItem}>{LIVE_PULSE_FEED[pulseIndex]}</span>
+              <span className={styles.liveTickerSep} aria-hidden="true">•</span>
+              <span className={styles.liveTickerItem}>{LIVE_PULSE_FEED[pulseIndex]}</span>
+              <span className={styles.liveTickerSep} aria-hidden="true">•</span>
+              <span className={styles.liveTickerItem}>{LIVE_PULSE_FEED[pulseIndex]}</span>
+            </div>
+          </div>
+
+          <div className={styles.liveRight}>
+            <button type="button" className={styles.liveIconBtn} aria-label="Account">
+              <span aria-hidden="true">👤</span>
+            </button>
+            <button type="button" className={styles.liveIconBtn} aria-label="Menu">
+              <span aria-hidden="true">☰</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -333,7 +404,7 @@ export default function Home() {
                       </div>
 
                       <div className={styles.whiteActions}>
-                        <Link to="/tickets" className={styles.whitePrimaryBtn}>Get Tickets</Link>
+                        <Link to="/schedule" className={styles.whitePrimaryBtn}>Match Guide</Link>
                         <Link to="/venues" className={styles.whiteSecondaryBtn}>Venue Guide</Link>
                       </div>
                     </div>
