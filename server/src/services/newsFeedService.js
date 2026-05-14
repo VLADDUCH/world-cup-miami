@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import { z } from "zod";
 
 import apiKeys from "../config/apiKeys.js";
-import env from "../config/env.js";
 import { cachedGet } from "./externalApiClient.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,11 +11,13 @@ const __dirname = path.dirname(__filename);
 
 const fallbackNewsPath = path.resolve(__dirname, "../data/newsFallback.json");
 const dailyNewsPath = path.resolve(__dirname, "../data/dailyNews.json");
+const categoriesPath = path.resolve(__dirname, "../data/newsCategories.json");
 
 const DEFAULT_IMAGE = "/images/wcim_soccer_ball_miami_background.png";
 
 const querySchema = z.object({
   q: z.string().trim().min(1).max(200).optional(),
+  category: z.string().trim().min(1).max(80).optional(),
   limit: z.coerce.number().int().min(1).max(30).optional().default(12),
   forceRefresh: z
     .union([z.boolean(), z.literal("true"), z.literal("false"), z.literal("1"), z.literal("0")])
@@ -69,7 +70,7 @@ function makeId(...parts) {
     .slice(0, 120);
 }
 
-function normalizeArticle(article, provider = "fallback", index = 0) {
+function normalizeArticle(article, provider = "fallback", index = 0, forcedCategory = "") {
   const title = safeString(article.title || article.name || "Miami football update", "Miami football update");
   const description = safeString(
     article.description || article.content || article.summary || "Latest Miami soccer and fan guide update.",
@@ -107,17 +108,41 @@ function normalizeArticle(article, provider = "fallback", index = 0) {
     imageUrl: imageUrl || DEFAULT_IMAGE,
     publishedAt,
     provider,
-    category: article.category || "streaming-news",
+    category: forcedCategory || article.category || "miami-world-cup",
     tags: Array.isArray(article.tags) ? article.tags : ["miami", "soccer", "news"],
   };
 }
 
-async function getFallbackNews(limit = 12) {
-  const fallback = await readJsonFile(fallbackNewsPath, []);
-  return fallback.slice(0, limit).map((article, index) => normalizeArticle(article, "wcim", index));
+async function getNewsCategories(options = {}) {
+  const categories = await readJsonFile(categoriesPath, []);
+  const sorted = [...categories].sort((a, b) => Number(a.priority || 999) - Number(b.priority || 999));
+
+  if (options.homepageOnly) {
+    return sorted.filter((category) => category.showOnHomepage === true);
+  }
+
+  return sorted;
 }
 
-async function fetchFromGNews({ query, limit, forceRefresh }) {
+async function getNewsCategoryBySlug(slug) {
+  const categories = await getNewsCategories();
+  return categories.find((category) => category.slug === slug) || null;
+}
+
+async function getFallbackNews(limit = 12, categorySlug = "") {
+  const fallback = await readJsonFile(fallbackNewsPath, []);
+  const filtered = categorySlug
+    ? fallback.filter((article) => article.category === categorySlug)
+    : fallback.filter((article) => article.category !== "business-promotions");
+
+  const source = filtered.length > 0 ? filtered : fallback;
+
+  return source
+    .slice(0, limit)
+    .map((article, index) => normalizeArticle(article, "wcim", index, categorySlug || article.category));
+}
+
+async function fetchFromGNews({ query, limit, forceRefresh, categorySlug }) {
   if (!apiKeys.gnews) return null;
 
   const response = await cachedGet(
@@ -141,11 +166,11 @@ async function fetchFromGNews({ query, limit, forceRefresh }) {
     provider: "gnews",
     cached: response.cached,
     fetchedAt: response.fetchedAt,
-    articles: articles.map((article, index) => normalizeArticle(article, "gnews", index)),
+    articles: articles.map((article, index) => normalizeArticle(article, "gnews", index, categorySlug)),
   };
 }
 
-async function fetchFromNewsApi({ query, limit, forceRefresh }) {
+async function fetchFromNewsApi({ query, limit, forceRefresh, categorySlug }) {
   if (!apiKeys.newsApi) return null;
 
   const response = await cachedGet(
@@ -169,27 +194,41 @@ async function fetchFromNewsApi({ query, limit, forceRefresh }) {
     provider: "newsapi",
     cached: response.cached,
     fetchedAt: response.fetchedAt,
-    articles: articles.map((article, index) => normalizeArticle(article, "newsapi", index)),
+    articles: articles.map((article, index) => normalizeArticle(article, "newsapi", index, categorySlug)),
   };
 }
 
 async function getStreamingNews(options = {}) {
   const parsed = querySchema.parse(options);
 
+  let selectedCategory = null;
+
+  if (parsed.category) {
+    selectedCategory = await getNewsCategoryBySlug(parsed.category);
+
+    if (!selectedCategory) {
+      const error = new Error("News category not found.");
+      error.status = 404;
+      throw error;
+    }
+  }
+
   const query =
     parsed.q ||
+    selectedCategory?.query ||
     process.env.WCIM_NEWS_QUERY ||
     "Miami soccer OR World Cup Miami OR Miami watch party";
 
   const limit = parsed.limit;
   const forceRefresh = boolValue(parsed.forceRefresh);
+  const categorySlug = selectedCategory?.slug || parsed.category || "";
 
   const providersTried = [];
 
-  const gnews = await fetchFromGNews({ query, limit, forceRefresh });
+  const gnews = await fetchFromGNews({ query, limit, forceRefresh, categorySlug });
   if (gnews) providersTried.push(gnews);
 
-  const newsapi = await fetchFromNewsApi({ query, limit, forceRefresh });
+  const newsapi = await fetchFromNewsApi({ query, limit, forceRefresh, categorySlug });
   if (newsapi) providersTried.push(newsapi);
 
   const mergedArticles = providersTried
@@ -211,6 +250,7 @@ async function getStreamingNews(options = {}) {
       status: "ok",
       mode: "live",
       query,
+      category: selectedCategory,
       count: deduped.slice(0, limit).length,
       providers: providersTried.map((provider) => ({
         provider: provider.provider,
@@ -221,16 +261,33 @@ async function getStreamingNews(options = {}) {
     };
   }
 
-  const fallback = await getFallbackNews(limit);
+  const fallback = await getFallbackNews(limit, categorySlug);
 
   return {
     status: "ok",
     mode: "fallback",
     query,
+    category: selectedCategory,
     count: fallback.length,
     providers: [],
     articles: fallback,
   };
+}
+
+async function getNewsByCategory(slug, options = {}) {
+  const category = await getNewsCategoryBySlug(slug);
+
+  if (!category) {
+    const error = new Error("News category not found.");
+    error.status = 404;
+    throw error;
+  }
+
+  return getStreamingNews({
+    ...options,
+    category: slug,
+    q: options.q || category.query,
+  });
 }
 
 async function getDailyArticle(options = {}) {
@@ -247,17 +304,21 @@ async function getDailyArticle(options = {}) {
     };
   }
 
+  const categorySlug = options.category || "miami-world-cup";
+
   const news = await getStreamingNews({
     q: options.q,
+    category: categorySlug,
     limit: 10,
     forceRefresh: options.forceRefresh,
   });
 
-  const article = news.articles[0] || (await getFallbackNews(1))[0];
+  const article = news.articles[0] || (await getFallbackNews(1, categorySlug))[0];
 
   const stored = {
     date: dateKey,
     mode: news.mode,
+    category: categorySlug,
     createdAt: new Date().toISOString(),
     article,
   };
@@ -269,6 +330,7 @@ async function getDailyArticle(options = {}) {
     status: "ok",
     mode: news.mode,
     date: dateKey,
+    category: categorySlug,
     article,
   };
 }
@@ -279,4 +341,7 @@ export {
   getStreamingNews,
   getDailyArticle,
   getFallbackNews,
+  getNewsCategories,
+  getNewsCategoryBySlug,
+  getNewsByCategory,
 };

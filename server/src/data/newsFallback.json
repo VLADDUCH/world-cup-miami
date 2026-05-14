@@ -1,6 +1,6 @@
 [
   {
-    "id": "wcim-fallback-1",
+    "id": "wcim-fallback-miami-world-cup-1",
     "title": "Miami prepares for global football energy",
     "description": "World Cup in Miami is tracking fan zones, watch parties, local businesses, streaming updates, and match-day movement across the city.",
     "source": "World Cup in Miami",
@@ -8,31 +8,67 @@
     "url": "/",
     "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
     "publishedAt": "2026-05-14T00:00:00.000Z",
-    "category": "local-update",
+    "category": "miami-world-cup",
     "tags": ["miami", "soccer", "fan-guide", "business"]
   },
   {
-    "id": "wcim-fallback-2",
-    "title": "Local businesses can now request featured placement",
+    "id": "wcim-fallback-match-day-1",
+    "title": "Match-day guide coverage expands around Miami Gardens",
+    "description": "WCIM is preparing match-day updates around stadium activity, local movement, fan timing, and useful city information.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Match Desk",
+    "url": "/#matches",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "match-day-updates",
+    "tags": ["match-day", "miami-gardens", "stadium", "updates"]
+  },
+  {
+    "id": "wcim-fallback-watch-parties-1",
+    "title": "Watch party listings become a core Miami fan feature",
+    "description": "Restaurants, sports bars, and nightlife venues can be organized by area so fans know where to watch and gather.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Watch Party Desk",
+    "url": "/#map",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "watch-parties",
+    "tags": ["watch-party", "sports-bars", "wynwood", "brickell"]
+  },
+  {
+    "id": "wcim-fallback-fan-zone-1",
+    "title": "Miami fan map expands with public gathering areas",
+    "description": "The WCIM map supports fan zones, watch parties, business listings, and coordinates for major Miami gathering spots.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Map Desk",
+    "url": "/#map",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "fan-zone-events",
+    "tags": ["fan-zone", "map", "events", "public-space"]
+  },
+  {
+    "id": "wcim-fallback-team-fans-1",
+    "title": "South Florida fan communities shape the Miami match atmosphere",
+    "description": "Brazil, Colombia, Portugal, Uruguay, and other fan communities can drive match-week traffic, watch parties, and merch demand.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Fan Desk",
+    "url": "/#matches",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "team-fan-communities",
+    "tags": ["brazil", "colombia", "portugal", "uruguay", "south-florida"]
+  },
+  {
+    "id": "wcim-fallback-business-1",
+    "title": "Local businesses can request featured placement",
     "description": "Restaurants, bars, venues, and fan-focused businesses can prepare for match-day traffic through featured map listings and promotion slots.",
     "source": "World Cup in Miami",
     "author": "WCIM Business Desk",
     "url": "/#business",
     "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
     "publishedAt": "2026-05-14T00:00:00.000Z",
-    "category": "business",
+    "category": "business-promotions",
     "tags": ["advertising", "business", "featured-listings", "map-pins"]
-  },
-  {
-    "id": "wcim-fallback-3",
-    "title": "Miami fan map expands with watch party and venue pins",
-    "description": "The WCIM map now supports business listings, featured locations, and coordinates for fan zones, sports bars, and match-day hotspots.",
-    "source": "World Cup in Miami",
-    "author": "WCIM Map Desk",
-    "url": "/#map",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
-    "publishedAt": "2026-05-14T00:00:00.000Z",
-    "category": "map",
-    "tags": ["map", "watch-parties", "venues", "traffic"]
   }
 ]

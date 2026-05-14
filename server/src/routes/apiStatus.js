@@ -3,6 +3,7 @@ import apiKeys from "../config/apiKeys.js";
 import env from "../config/env.js";
 import { getCacheStats, clearCache } from "../config/cache.js";
 import { getAllBusinesses, getFeaturedBusinesses } from "../services/businessService.js";
+import { getNewsCategories } from "../services/newsFeedService.js";
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.get("/status", async (req, res, next) => {
   try {
     const businesses = await getAllBusinesses();
     const featuredBusinesses = await getFeaturedBusinesses();
+    const newsCategories = await getNewsCategories({ homepageOnly: true });
 
     const feeds = {
       news: {
@@ -22,6 +24,8 @@ router.get("/status", async (req, res, next) => {
         streamingNewsEndpoint: "configured",
         dailyArticleEndpoint: "configured",
         imageSupport: "configured",
+        categoriesEndpoint: "configured",
+        categoryCount: newsCategories.length,
       },
       events: {
         ticketmaster: keyLabel(apiKeys.status.ticketmaster),

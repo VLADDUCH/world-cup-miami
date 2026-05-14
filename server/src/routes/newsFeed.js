@@ -2,6 +2,8 @@ import express from "express";
 import {
   getStreamingNews,
   getDailyArticle,
+  getNewsCategories,
+  getNewsByCategory,
 } from "../services/newsFeedService.js";
 
 const router = express.Router();
@@ -9,6 +11,36 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const news = await getStreamingNews(req.query);
+
+    res.json({
+      ...news,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/categories", async (req, res, next) => {
+  try {
+    const categories = await getNewsCategories({
+      homepageOnly: req.query.homepageOnly === "true" || req.query.homepageOnly === "1",
+    });
+
+    res.json({
+      status: "ok",
+      count: categories.length,
+      categories,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/category/:slug", async (req, res, next) => {
+  try {
+    const news = await getNewsByCategory(req.params.slug, req.query);
 
     res.json({
       ...news,

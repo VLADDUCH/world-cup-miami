@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "miami-world-cup",
+    "label": "Miami World Cup",
+    "homepageLabel": "Miami World Cup Updates",
+    "description": "Core Miami-focused tournament updates, stadium activity, fan movement, city energy, and match-week developments.",
+    "query": "Miami soccer OR World Cup Miami OR Hard Rock Stadium soccer OR Miami Gardens soccer",
+    "priority": 1,
+    "showOnHomepage": true,
+    "editorialRule": "Must connect soccer, tournament energy, stadium activity, or Miami fan experience to South Florida."
+  },
+  {
+    "slug": "match-day-updates",
+    "label": "Match-Day Updates",
+    "homepageLabel": "Match-Day Updates",
+    "description": "Match-day logistics, crowd movement, public updates, stadium-area activity, and real-time fan usefulness.",
+    "query": "Hard Rock Stadium soccer OR Miami Gardens match day OR Miami soccer traffic OR Miami match day",
+    "priority": 2,
+    "showOnHomepage": true,
+    "editorialRule": "Must help fans understand what is happening before, during, or after match days."
+  },
+  {
+    "slug": "watch-parties",
+    "label": "Watch Parties",
+    "homepageLabel": "Watch Parties",
+    "description": "Sports bars, restaurants, viewing parties, nightlife gatherings, and local fan meetups.",
+    "query": "Miami soccer watch party OR Miami sports bar soccer OR Wynwood soccer watch party OR Brickell soccer watch party",
+    "priority": 3,
+    "showOnHomepage": true,
+    "editorialRule": "Must connect to places where fans can watch, gather, eat, drink, or celebrate."
+  },
+  {
+    "slug": "fan-zone-events",
+    "label": "Fan Zone Events",
+    "homepageLabel": "Fan Zone Events",
+    "description": "Fan festivals, public events, local celebrations, community events, and city activation moments.",
+    "query": "Miami fan festival soccer OR Miami fan zone OR Bayfront Park soccer OR Miami public soccer event",
+    "priority": 4,
+    "showOnHomepage": true,
+    "editorialRule": "Must connect to public fan activity, city events, or community gathering spaces."
+  },
+  {
+    "slug": "team-fan-communities",
+    "label": "Team Fan Communities",
+    "homepageLabel": "Team Fan Communities",
+    "description": "Brazil, Colombia, Portugal, Uruguay, and other major fan communities active in South Florida.",
+    "query": "Brazil fans Miami soccer OR Colombia fans Miami soccer OR Portugal fans Miami soccer OR Uruguay fans Miami soccer",
+    "priority": 5,
+    "showOnHomepage": true,
+    "editorialRule": "Must connect international team fan communities to Miami or South Florida."
+  },
+  {
+    "slug": "business-promotions",
+    "label": "Business Promotions",
+    "homepageLabel": "Promoted Businesses",
+    "description": "Paid or submitted local business promotions. This should be visually separated from editorial news.",
+    "query": "Miami soccer business promotion OR Miami watch party business OR Miami restaurant soccer promotion",
+    "priority": 6,
+    "showOnHomepage": false,
+    "editorialRule": "This is not editorial news. Use it for paid placements, submitted flyers, and sponsor inventory."
+  }
+]
