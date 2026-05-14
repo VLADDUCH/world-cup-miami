@@ -19,6 +19,9 @@ router.get("/status", async (req, res, next) => {
       news: {
         gnews: keyLabel(apiKeys.status.gnews),
         newsApi: keyLabel(apiKeys.status.newsApi),
+        streamingNewsEndpoint: "configured",
+        dailyArticleEndpoint: "configured",
+        imageSupport: "configured",
       },
       events: {
         ticketmaster: keyLabel(apiKeys.status.ticketmaster),

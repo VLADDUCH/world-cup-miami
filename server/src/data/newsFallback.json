@@ -1,0 +1,38 @@
+[
+  {
+    "id": "wcim-fallback-1",
+    "title": "Miami prepares for global football energy",
+    "description": "World Cup in Miami is tracking fan zones, watch parties, local businesses, streaming updates, and match-day movement across the city.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Desk",
+    "url": "/",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "local-update",
+    "tags": ["miami", "soccer", "fan-guide", "business"]
+  },
+  {
+    "id": "wcim-fallback-2",
+    "title": "Local businesses can now request featured placement",
+    "description": "Restaurants, bars, venues, and fan-focused businesses can prepare for match-day traffic through featured map listings and promotion slots.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Business Desk",
+    "url": "/#business",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "business",
+    "tags": ["advertising", "business", "featured-listings", "map-pins"]
+  },
+  {
+    "id": "wcim-fallback-3",
+    "title": "Miami fan map expands with watch party and venue pins",
+    "description": "The WCIM map now supports business listings, featured locations, and coordinates for fan zones, sports bars, and match-day hotspots.",
+    "source": "World Cup in Miami",
+    "author": "WCIM Map Desk",
+    "url": "/#map",
+    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "publishedAt": "2026-05-14T00:00:00.000Z",
+    "category": "map",
+    "tags": ["map", "watch-parties", "venues", "traffic"]
+  }
+]

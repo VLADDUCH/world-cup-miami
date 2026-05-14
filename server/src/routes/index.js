@@ -1,6 +1,7 @@
 import express from "express";
 import apiStatusRouter from "./apiStatus.js";
 import businessesRouter from "./businesses.js";
+import newsFeedRouter from "./newsFeed.js";
 
 const router = express.Router();
 
@@ -15,7 +16,10 @@ router.get("/", (req, res) => {
       businesses: "/api/v1/businesses",
       featuredBusinesses: "/api/v1/businesses/featured",
       businessMapPins: "/api/v1/businesses/map-pins",
-      submitBusiness: "/api/v1/businesses/submit"
+      submitBusiness: "/api/v1/businesses/submit",
+      streamingNews: "/api/v1/feeds/news",
+      dailyNews: "/api/v1/feeds/news/daily",
+      searchNews: "/api/v1/feeds/news/search?q=Miami%20soccer"
     },
     timestamp: new Date().toISOString(),
   });
@@ -23,5 +27,6 @@ router.get("/", (req, res) => {
 
 router.use("/", apiStatusRouter);
 router.use("/businesses", businessesRouter);
+router.use("/feeds/news", newsFeedRouter);
 
 export default router;
