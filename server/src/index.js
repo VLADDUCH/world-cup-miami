@@ -1,13 +1,32 @@
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
+import app from "./app.js";
+import env from "./config/env.js";
 
-const app = express();
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
+const server = app.listen(env.port, () => {
+  console.log("");
+  console.log("============================================================");
+  console.log("World Cup in Miami API server running");
+  console.log("============================================================");
+  console.log(`Environment: ${env.nodeEnv}`);
+  console.log(`Local:       http://localhost:${env.port}`);
+  console.log(`API Root:    http://localhost:${env.port}${env.apiPrefix}`);
+  console.log(`API Status:  http://localhost:${env.port}${env.apiPrefix}/status`);
+  console.log("============================================================");
+  console.log("");
+});
 
-app.get("/api/v1/health", (_req, res) => res.json({ ok: true, service: "server", ts: new Date().toISOString() }));
+function shutdown(signal) {
+  console.log(`[server] received ${signal}. Closing HTTP server...`);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
+  server.close(() => {
+    console.log("[server] shutdown complete.");
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    console.error("[server] forced shutdown.");
+    process.exit(1);
+  }, 10000).unref();
+}
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));

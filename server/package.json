@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "knexfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
@@ -12,12 +12,18 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "cors": "^2.8.5",
+    "axios": "^1.16.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.1.0",
-    "helmet": "^8.1.0"
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.1.0",
+    "node-cache": "^5.1.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "supertest": "^7.2.2"
   },
   "type": "module"
 }
