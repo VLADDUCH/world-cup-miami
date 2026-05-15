@@ -291,11 +291,35 @@ async function getAdPackages() {
 }
 
 async function submitLead(payload) {
-  return requestJson("/leads/subscribe", {
+  const response = await fetch(`${API_BASE_URL}/leads/subscribe`, {
     method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(payload),
   });
+
+  const text = await response.text();
+  let data = null;
+
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = { raw: text };
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error
+        ? `Lead submission failed: ${data.error}`
+        : `Lead submission failed with status ${response.status}`
+    );
+  }
+
+  return data;
 }
+
 
 export {
   API_BASE_URL,
