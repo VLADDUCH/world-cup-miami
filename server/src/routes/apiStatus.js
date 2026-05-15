@@ -62,6 +62,8 @@ router.get("/status", async (req, res, next) => {
         promotionTypesEndpoint: "configured",
         promotionSubmitEndpoint: "configured",
         reviewWorkflow: "pending_review_json_store",
+        adminReviewQueueEndpoint: "configured",
+        adminReviewAuth: "x-admin-token",
       },
     };
 

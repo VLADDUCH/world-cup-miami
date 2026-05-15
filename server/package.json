@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "knexfile.js",
   "scripts": {
-    "test": "node --test",
+    "test": "node --test --test-concurrency=1",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
