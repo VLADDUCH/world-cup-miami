@@ -64,6 +64,11 @@ router.get("/status", async (req, res, next) => {
         reviewWorkflow: "pending_review_json_store",
         adminReviewQueueEndpoint: "configured",
         adminReviewAuth: "x-admin-token",
+        publishedPromotionsEndpoint: "configured",
+        publishedBusinessesEndpoint: "configured",
+        publishedEventsEndpoint: "configured",
+        publishedMapPinsEndpoint: "configured",
+        publishedSponsorsEndpoint: "configured",
       },
     };
 

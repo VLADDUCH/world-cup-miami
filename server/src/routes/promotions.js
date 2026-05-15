@@ -3,8 +3,89 @@ import {
   getPromotionTypes,
   submitPromotion,
 } from "../services/promotionSubmissionService.js";
+import {
+  getPublishedBusinesses,
+  getPublishedEvents,
+  getPublishedMapPins,
+  getPublishedPromotionFeeds,
+  getPublishedSponsors,
+} from "../services/publishedPromotionService.js";
 
 const router = express.Router();
+
+
+router.get("/published", async (req, res, next) => {
+  try {
+    const feeds = await getPublishedPromotionFeeds();
+
+    res.json({
+      ...feeds,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/published/businesses", async (req, res, next) => {
+  try {
+    const businesses = await getPublishedBusinesses();
+
+    res.json({
+      status: "ok",
+      count: businesses.length,
+      businesses,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/published/events", async (req, res, next) => {
+  try {
+    const events = await getPublishedEvents();
+
+    res.json({
+      status: "ok",
+      count: events.length,
+      events,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/published/map-pins", async (req, res, next) => {
+  try {
+    const pins = await getPublishedMapPins();
+
+    res.json({
+      status: "ok",
+      count: pins.length,
+      pins,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/published/sponsors", async (req, res, next) => {
+  try {
+    const sponsors = await getPublishedSponsors();
+
+    res.json({
+      status: "ok",
+      count: sponsors.length,
+      sponsors,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.get("/types", async (req, res, next) => {
   try {
