@@ -1,106 +1,116 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+import {
+  getApiStatus,
+  getBusinessMapPins,
+  getDailyNews,
+  getFeaturedBusinesses,
+  getNewsByCategory,
+  getNewsCategories,
+  getStreamingNews,
+} from "../services/wcimApi";
 import styles from "../styles/Home.module.css";
 
-const WCIM_LOCATIONS = [
+const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
+
+const FALLBACK_MAP_PINS = [
   {
+    id: "bayfront-park-downtown",
     name: "Bayfront Park",
-    type: "Fan Festival Area",
+    category: "Fan Festival Area",
     area: "Downtown",
     address: "301 Biscayne Blvd, Miami, FL 33132",
     lat: 25.7743,
-    lng: -80.1870,
+    lng: -80.187,
+    featured: true,
+    sponsorTier: "featured",
   },
   {
+    id: "wynwood-marketplace",
     name: "Wynwood Marketplace",
-    type: "Watch Party / Events",
+    category: "Watch Party / Events",
     area: "Wynwood",
     address: "2250 NW 2nd Ave, Miami, FL 33127",
     lat: 25.8004,
     lng: -80.1994,
+    featured: true,
+    sponsorTier: "featured",
   },
   {
-    name: "The Clevelander South Beach",
-    type: "Nightlife / Watch Party",
-    area: "Miami Beach",
-    address: "1020 Ocean Dr, Miami Beach, FL 33139",
-    lat: 25.7813,
-    lng: -80.1300,
-  },
-  {
-    name: "Grails Sports Bar",
-    type: "Sports Bar",
-    area: "Wynwood",
-    address: "2800 N Miami Ave, Miami, FL 33127",
-    lat: 25.8021,
-    lng: -80.1947,
-  },
-  {
-    name: "Fritz & Franz Bierhaus",
-    type: "International Watch Party",
-    area: "Coral Gables",
-    address: "60 Merrick Way, Coral Gables, FL 33134",
-    lat: 25.7337,
-    lng: -80.2610,
-  },
-  {
-    name: "Cervecería La Tropical",
-    type: "Restaurant / Events",
-    area: "Wynwood",
-    address: "42 NE 25th St, Miami, FL 33137",
-    lat: 25.7992,
-    lng: -80.1928,
-  },
-  {
-    name: "The Doral Yard",
-    type: "Food Hall / Fan Meetup",
-    area: "Doral",
-    address: "8455 NW 53rd St, Suite 106, Doral, FL 33166",
-    lat: 25.8266,
-    lng: -80.3326,
-  },
-  {
-    name: "Bayshore Club",
-    type: "Waterfront Viewing",
-    area: "Coconut Grove",
-    address: "3391 Pan American Dr, Miami, FL 33133",
-    lat: 25.7285,
-    lng: -80.2362,
-  },
-  {
-    name: "American Social",
-    type: "Bar / Restaurant",
-    area: "Brickell",
-    address: "690 SW 1st Ct, Miami, FL 33130",
-    lat: 25.7665,
-    lng: -80.1933,
-  },
-  {
-    name: "Black Market Miami",
-    type: "Downtown Sports Bar",
-    area: "Downtown",
-    address: "168 SE 1st St, Miami, FL 33131",
-    lat: 25.7730,
-    lng: -80.1893,
-  },
-  {
-    name: "Sports & Social",
-    type: "Large Watch Party Venue",
-    area: "Near Stadium",
-    address: "11401 NW 12th St, Miami, FL 33172",
-    lat: 25.7905,
-    lng: -80.3796,
-  },
-  {
+    id: "hard-rock-stadium-area",
     name: "Hard Rock Stadium Area",
-    type: "Match Area",
+    category: "Match Area",
     area: "Miami Gardens",
     address: "347 Don Shula Drive, Miami Gardens, FL 33056",
-    lat: 25.9580,
+    lat: 25.958,
     lng: -80.2389,
+    featured: true,
+    sponsorTier: "featured",
+  },
+];
+
+const FALLBACK_NEWS = [
+  {
+    id: "fallback-miami-world-cup",
+    title: "Miami prepares for global football energy",
+    description:
+      "World Cup in Miami is tracking fan zones, watch parties, local businesses, streaming updates, and match-day movement across the city.",
+    source: "World Cup in Miami",
+    url: "/",
+    imageUrl: DEFAULT_BACKGROUND,
+    category: "miami-world-cup",
+  },
+  {
+    id: "fallback-watch-parties",
+    title: "Watch party listings become a core Miami fan feature",
+    description:
+      "Restaurants, sports bars, and nightlife venues can be organized by area so fans know where to watch and gather.",
+    source: "World Cup in Miami",
+    url: "/#map",
+    imageUrl: DEFAULT_BACKGROUND,
+    category: "watch-parties",
+  },
+  {
+    id: "fallback-business",
+    title: "Local businesses can request featured placement",
+    description:
+      "Restaurants, bars, venues, and fan-focused businesses can prepare for match-day traffic through featured map listings and promotion slots.",
+    source: "World Cup in Miami",
+    url: "/#business",
+    imageUrl: DEFAULT_BACKGROUND,
+    category: "business-promotions",
+  },
+];
+
+const FALLBACK_CATEGORIES = [
+  {
+    slug: "miami-world-cup",
+    label: "Miami World Cup",
+    homepageLabel: "Miami World Cup Updates",
+  },
+  {
+    slug: "match-day-updates",
+    label: "Match-Day Updates",
+    homepageLabel: "Match-Day Updates",
+  },
+  {
+    slug: "watch-parties",
+    label: "Watch Parties",
+    homepageLabel: "Watch Parties",
+  },
+  {
+    slug: "fan-zone-events",
+    label: "Fan Zone Events",
+    homepageLabel: "Fan Zone Events",
+  },
+  {
+    slug: "team-fan-communities",
+    label: "Team Fan Communities",
+    homepageLabel: "Team Fan Communities",
   },
 ];
 
@@ -149,35 +159,6 @@ const MIAMI_MATCHES = [
   },
 ];
 
-const STREAMING_NEWS = [
-  {
-    title: "Miami fan zones and watch parties are being added",
-    meta: "Streaming update",
-  },
-  {
-    title: "Local businesses can submit flyers and promotions",
-    meta: "Business update",
-  },
-  {
-    title: "Match-day guides, maps, and merch drops are coming",
-    meta: "Fan update",
-  },
-];
-
-const API_STACK = [
-  "OpenFootball",
-  "Sportmonks / API-Football",
-  "GNews / NewsAPI",
-  "Ticketmaster",
-  "Eventbrite",
-  "City of Miami Open Data",
-  "Miami-Dade Open Data",
-  "OpenStreetMap",
-  "Leaflet",
-  "Geoapify",
-  "WCIM Business DB",
-];
-
 const markerIcon = new L.Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -188,12 +169,172 @@ const markerIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
+function isExternalUrl(url = "") {
+  return url.startsWith("http://") || url.startsWith("https://");
+}
+
+function ArticleImage({ src, alt }) {
+  const [imageSrc, setImageSrc] = useState(src || DEFAULT_BACKGROUND);
+
+  useEffect(() => {
+    setImageSrc(src || DEFAULT_BACKGROUND);
+  }, [src]);
+
+  return (
+    <img
+      src={imageSrc}
+      alt={alt}
+      loading="lazy"
+      onError={() => setImageSrc(DEFAULT_BACKGROUND)}
+    />
+  );
+}
+
+function ArticleLink({ article, className, children }) {
+  const href = article?.url || "#";
+
+  if (isExternalUrl(href)) {
+    return (
+      <a className={className} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <a className={className} href={href}>
+      {children}
+    </a>
+  );
+}
+
 export default function Home() {
-  const bounds = useMemo(() => {
-    const b = L.latLngBounds([]);
-    WCIM_LOCATIONS.forEach((location) => b.extend([location.lat, location.lng]));
-    return b;
+  const [apiStatus, setApiStatus] = useState(null);
+  const [featuredBusinesses, setFeaturedBusinesses] = useState([]);
+  const [mapPins, setMapPins] = useState(FALLBACK_MAP_PINS);
+  const [streamingNews, setStreamingNews] = useState(FALLBACK_NEWS);
+  const [dailyArticle, setDailyArticle] = useState(FALLBACK_NEWS[0]);
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
+  const [activeCategory, setActiveCategory] = useState("miami-world-cup");
+  const [categoryArticles, setCategoryArticles] = useState(FALLBACK_NEWS);
+  const [loading, setLoading] = useState(true);
+  const [feedMode, setFeedMode] = useState("fallback");
+  const [apiError, setApiError] = useState("");
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadHomepageData() {
+      try {
+        setLoading(true);
+        setApiError("");
+
+        const [
+          statusResult,
+          businessesResult,
+          pinsResult,
+          newsResult,
+          dailyResult,
+          categoriesResult,
+        ] = await Promise.allSettled([
+          getApiStatus(),
+          getFeaturedBusinesses(),
+          getBusinessMapPins(),
+          getStreamingNews(6),
+          getDailyNews(),
+          getNewsCategories(),
+        ]);
+
+        if (ignore) return;
+
+        if (statusResult.status === "fulfilled") {
+          setApiStatus(statusResult.value);
+        }
+
+        if (businessesResult.status === "fulfilled") {
+          setFeaturedBusinesses(businessesResult.value);
+        }
+
+        if (pinsResult.status === "fulfilled" && pinsResult.value.length > 0) {
+          setMapPins(pinsResult.value);
+        }
+
+        if (newsResult.status === "fulfilled") {
+          setStreamingNews(newsResult.value.articles || FALLBACK_NEWS);
+          setFeedMode(newsResult.value.mode || "fallback");
+        }
+
+        if (dailyResult.status === "fulfilled" && dailyResult.value.article) {
+          setDailyArticle(dailyResult.value.article);
+        }
+
+        if (categoriesResult.status === "fulfilled" && categoriesResult.value.length > 0) {
+          setCategories(categoriesResult.value);
+          setActiveCategory(categoriesResult.value[0].slug);
+        }
+      } catch (error) {
+        if (!ignore) {
+          setApiError("Backend feeds are unavailable. Showing local fallback content.");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadHomepageData();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadCategory() {
+      try {
+        const result = await getNewsByCategory(activeCategory, 4);
+
+        if (!ignore) {
+          setCategoryArticles(result.articles || FALLBACK_NEWS);
+        }
+      } catch (error) {
+        if (!ignore) {
+          setCategoryArticles(
+            FALLBACK_NEWS.filter((article) => article.category === activeCategory).length > 0
+              ? FALLBACK_NEWS.filter((article) => article.category === activeCategory)
+              : FALLBACK_NEWS
+          );
+        }
+      }
+    }
+
+    if (activeCategory) {
+      loadCategory();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [activeCategory]);
+
+  const bounds = useMemo(() => {
+    const validPins = mapPins.filter(
+      (location) => Number.isFinite(location.lat) && Number.isFinite(location.lng)
+    );
+
+    if (validPins.length === 0) {
+      return L.latLngBounds(FALLBACK_MAP_PINS.map((pin) => [pin.lat, pin.lng]));
+    }
+
+    return L.latLngBounds(validPins.map((pin) => [pin.lat, pin.lng]));
+  }, [mapPins]);
+
+  const activeCategoryLabel =
+    categories.find((category) => category.slug === activeCategory)?.homepageLabel ||
+    "Miami World Cup Updates";
 
   return (
     <main className={styles.page}>
@@ -213,7 +354,7 @@ export default function Home() {
           <a href="#map">Map</a>
           <a href="#business">Businesses</a>
           <a href="#shop">Shop Merch</a>
-          <a href="#news">Streaming News</a>
+          <a href="#news">Miami Updates</a>
         </nav>
 
         <a className={styles.advertiseTopBtn} href="#business">
@@ -231,13 +372,22 @@ export default function Home() {
 
           <p className={styles.heroCopy}>
             One city. One energy. One unforgettable football experience. Find matches,
-            fan zones, streaming news, local businesses, watch parties, and Miami-first merch.
+            fan zones, Miami updates, local businesses, watch parties, and Miami-first merch.
           </p>
 
           <div className={styles.heroActions}>
             <a href="#matches" className={styles.primaryBtn}>Explore Match Schedule</a>
             <a href="#business" className={styles.secondaryBtn}>Add Your Flyer / Business</a>
           </div>
+
+          <div className={styles.apiFeedStatus}>
+            <span className={styles.statusDot} />
+            <span>
+              Backend feeds: {apiStatus?.status === "ok" ? "connected" : "fallback mode"} • News: {feedMode}
+            </span>
+          </div>
+
+          {apiError ? <p className={styles.feedWarning}>{apiError}</p> : null}
 
           <div className={styles.countdownCard}>
             <p>Countdown to Miami kickoff</p>
@@ -257,17 +407,31 @@ export default function Home() {
 
         <aside className={styles.sidePanel} id="news">
           <div className={styles.panelHeader}>
-            <h2>Streaming News</h2>
-            <a href="#news">View all</a>
+            <h2>Miami Updates</h2>
+            <a href="#newsTabs">{loading ? "Loading" : "Live Feed"}</a>
           </div>
 
+          <article className={styles.dailyArticleCard}>
+            <div className={styles.dailyImageWrap}>
+              <ArticleImage src={dailyArticle?.imageUrl} alt={dailyArticle?.title || "Daily Miami update"} />
+            </div>
+            <div>
+              <span>Daily Featured Update</span>
+              <h3>{dailyArticle?.title}</h3>
+              <p>{dailyArticle?.description}</p>
+              <ArticleLink article={dailyArticle}>Read update</ArticleLink>
+            </div>
+          </article>
+
           <div className={styles.newsList}>
-            {STREAMING_NEWS.map((item) => (
-              <article className={styles.newsItem} key={item.title}>
-                <div className={styles.newsThumb} />
+            {streamingNews.slice(0, 3).map((article) => (
+              <article className={styles.newsItem} key={article.id || article.title}>
+                <div className={styles.newsThumbImage}>
+                  <ArticleImage src={article.imageUrl} alt={article.title} />
+                </div>
                 <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.meta}</p>
+                  <h3>{article.title}</h3>
+                  <p>{article.source || "World Cup in Miami"}</p>
                 </div>
               </article>
             ))}
@@ -295,10 +459,10 @@ export default function Home() {
         </article>
 
         <article className={styles.card}>
-          <div className={styles.cardTopline}>Live Now</div>
-          <h2>Scores + Match Updates</h2>
-          <p>Powered by football APIs, news APIs, local event feeds, and WCIM updates.</p>
-          <a href="#api">View Data Stack</a>
+          <div className={styles.cardTopline}>Backend Powered</div>
+          <h2>News + Business Feeds</h2>
+          <p>Homepage data now connects to WCIM API feeds for updates, businesses, and map pins.</p>
+          <a href="#newsTabs">View Updates</a>
         </article>
 
         <article className={styles.card} id="shop">
@@ -311,9 +475,56 @@ export default function Home() {
         <article className={styles.card}>
           <div className={styles.cardTopline}>Ad Space</div>
           <h2>Featured Business Slots</h2>
-          <p>Promote your brand directly inside match, map, and streaming news traffic.</p>
+          <p>Promote your brand directly inside match, map, and Miami update traffic.</p>
           <a href="#business">Advertise Now</a>
         </article>
+      </section>
+
+      <section className={styles.newsTabsSection} id="newsTabs">
+        <div className={styles.sectionHeading}>
+          <div>
+            <p>Editorial Feeds</p>
+            <h2>Focused Miami updates, not random global soccer noise</h2>
+          </div>
+        </div>
+
+        <div className={styles.categoryTabs} role="tablist" aria-label="News categories">
+          {categories.map((category) => (
+            <button
+              type="button"
+              key={category.slug}
+              className={`${styles.categoryButton} ${
+                activeCategory === category.slug ? styles.categoryButtonActive : ""
+              }`}
+              onClick={() => setActiveCategory(category.slug)}
+            >
+              {category.homepageLabel || category.label}
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.categoryFeedGrid}>
+          <article className={styles.categoryLeadCard}>
+            <p>{activeCategoryLabel}</p>
+            <h2>{categoryArticles[0]?.title || "Miami World Cup Updates"}</h2>
+            <span>{categoryArticles[0]?.description}</span>
+            <ArticleLink article={categoryArticles[0]} className={styles.inlineReadMore}>
+              Open update
+            </ArticleLink>
+          </article>
+
+          <div className={styles.categoryArticleList}>
+            {categoryArticles.slice(0, 4).map((article) => (
+              <article className={styles.categoryArticle} key={article.id || article.title}>
+                <ArticleImage src={article.imageUrl} alt={article.title} />
+                <div>
+                  <h3>{article.title}</h3>
+                  <p>{article.source || "World Cup in Miami"}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className={styles.mapSection} id="map">
@@ -340,20 +551,22 @@ export default function Home() {
               />
               <ZoomControl position="topright" />
 
-              {WCIM_LOCATIONS.map((location) => (
+              {mapPins.map((location) => (
                 <Marker
-                  key={`${location.name}-${location.lat}-${location.lng}`}
+                  key={`${location.id || location.name}-${location.lat}-${location.lng}`}
                   position={[location.lat, location.lng]}
                   icon={markerIcon}
                 >
                   <Popup>
                     <strong>{location.name}</strong>
                     <br />
-                    {location.type}
+                    {location.category}
                     <br />
                     {location.area}
                     <br />
                     {location.address}
+                    <br />
+                    {location.featured ? "Featured listing" : "Standard listing"}
                   </Popup>
                 </Marker>
               ))}
@@ -361,21 +574,42 @@ export default function Home() {
           </div>
 
           <div className={styles.locationPanel}>
-            <h3>Map Coordinates Loaded</h3>
-            <p>{WCIM_LOCATIONS.length} Miami locations ready for the WCIM map.</p>
+            <h3>Business Map Pins Loaded</h3>
+            <p>{mapPins.length} Miami locations loaded from the WCIM backend map feed.</p>
 
             <div className={styles.locationList}>
-              {WCIM_LOCATIONS.map((location) => (
-                <div className={styles.locationItem} key={location.name}>
+              {mapPins.map((location) => (
+                <div className={styles.locationItem} key={location.id || location.name}>
                   <div>
                     <strong>{location.name}</strong>
-                    <span>{location.area} • {location.type}</span>
+                    <span>{location.area} • {location.category}</span>
                   </div>
-                  <small>{location.lat.toFixed(4)}, {location.lng.toFixed(4)}</small>
+                  <small>{Number(location.lat).toFixed(4)}, {Number(location.lng).toFixed(4)}</small>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className={styles.featuredBusinessSection}>
+        <div className={styles.sectionHeading}>
+          <div>
+            <p>Promoted Local Businesses</p>
+            <h2>Featured placements powered by the WCIM business API</h2>
+          </div>
+          <a href="#business">Promote Your Brand</a>
+        </div>
+
+        <div className={styles.featuredBusinessGrid}>
+          {(featuredBusinesses.length > 0 ? featuredBusinesses : mapPins.filter((pin) => pin.featured)).slice(0, 5).map((business) => (
+            <article className={styles.featuredBusinessCard} key={business.id || business.name}>
+              <span>{business.sponsorTier || "featured"}</span>
+              <h3>{business.name}</h3>
+              <p>{business.category} • {business.area}</p>
+              <small>{business.address}</small>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -399,27 +633,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className={styles.apiSection} id="api">
-        <div className={styles.sectionHeading}>
-          <div>
-            <p>Powered by APIs + WCIM Business Data</p>
-            <h2>Data feeds that make the site useful and repeatable</h2>
-          </div>
-        </div>
-
-        <div className={styles.apiGrid}>
-          {API_STACK.map((api) => (
-            <div className={styles.apiPill} key={api}>
-              {api}
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className={styles.emailBar}>
         <div>
           <h2>Stay in the game</h2>
-          <p>Get streaming news, match alerts, merch drops, and business promotions.</p>
+          <p>Get Miami updates, match alerts, merch drops, and business promotions.</p>
         </div>
 
         <form className={styles.emailForm}>
