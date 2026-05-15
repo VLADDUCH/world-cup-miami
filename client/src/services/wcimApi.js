@@ -134,6 +134,70 @@ async function submitPromotion(payload) {
   });
 }
 
+async function requestAdminJson(path, token, options = {}) {
+  const url = `${API_BASE_URL}${path}`;
+
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "x-admin-token": token,
+      ...(options.headers || {}),
+    },
+    ...options,
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`WCIM admin API request failed: ${response.status} ${text}`);
+  }
+
+  return response.json();
+}
+
+async function getAdminPromotionQueue(token, filters = {}) {
+  const params = new URLSearchParams();
+
+  if (filters.status) params.set("status", filters.status);
+  if (filters.type) params.set("type", filters.type);
+  if (filters.search) params.set("search", filters.search);
+
+  const query = params.toString();
+  return requestAdminJson(`/admin/review/promotions${query ? `?${query}` : ""}`, token);
+}
+
+async function getAdminPromotionStats(token) {
+  return requestAdminJson("/admin/review/promotions/stats", token);
+}
+
+async function updateAdminPromotionReview(token, id, payload) {
+  return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}`, token, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function approveAdminPromotion(token, id, payload = {}) {
+  return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}/approve`, token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function rejectAdminPromotion(token, id, payload = {}) {
+  return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}/reject`, token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+async function markAdminPromotionContacted(token, id, payload = {}) {
+  return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}/contacted`, token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -148,4 +212,10 @@ export {
   getEventsByCategory,
   getPromotionTypes,
   submitPromotion,
+  getAdminPromotionQueue,
+  getAdminPromotionStats,
+  updateAdminPromotionReview,
+  approveAdminPromotion,
+  rejectAdminPromotion,
+  markAdminPromotionContacted,
 };

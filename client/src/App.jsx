@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
+import AdminReview from "./pages/AdminReview";
 import Schedule from "./pages/Schedule.jsx";
 import Teams from "./pages/Teams.jsx";
 import News from "./pages/News.jsx";     // optional if not created yet
@@ -13,6 +14,7 @@ export default function App() {
       {/* Page Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/admin/review" element={<AdminReview />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/news" element={<News />} />
