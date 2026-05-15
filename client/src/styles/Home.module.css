@@ -1606,3 +1606,129 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   BATCH 11B — SHOP PREVIEW STYLES
+   ============================================================ */
+
+.shopPreviewSection {
+  width: min(1820px, calc(100% - 64px));
+  margin: 18px auto 0;
+}
+
+.shopPreviewStatus {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--wcim-border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--wcim-muted);
+}
+
+.shopPreviewStatus strong {
+  color: white;
+}
+
+.shopPreviewGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.shopPreviewCard {
+  border: 1px solid var(--wcim-border);
+  border-radius: 22px;
+  background: var(--wcim-panel);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.22);
+}
+
+.shopPreviewImage {
+  height: 180px;
+  background:
+    linear-gradient(135deg, rgba(23, 216, 255, 0.18), rgba(255, 63, 145, 0.2)),
+    url("/images/wcim_soccer_ball_miami_background.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.shopPreviewImage img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.shopPreviewBody {
+  padding: 18px;
+}
+
+.shopPreviewBody span {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(23, 216, 255, 0.12);
+  color: var(--wcim-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.shopPreviewBody h3 {
+  margin: 0 0 10px;
+  color: white;
+}
+
+.shopPreviewBody p {
+  min-height: 74px;
+  color: var(--wcim-muted);
+  line-height: 1.45;
+}
+
+.shopPriceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.shopPriceRow strong {
+  color: white;
+  font-size: 24px;
+}
+
+.shopPriceRow small {
+  color: var(--wcim-muted);
+  text-decoration: line-through;
+  font-weight: 900;
+}
+
+.shopPreviewBody a {
+  color: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+@media (max-width: 1180px) {
+  .shopPreviewGrid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .shopPreviewSection {
+    width: min(100% - 28px, 1820px);
+  }
+
+  .shopPreviewGrid {
+    grid-template-columns: 1fr;
+  }
+}

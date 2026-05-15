@@ -228,6 +228,42 @@ async function getPublishedPromotionSponsors() {
   return data.sponsors || [];
 }
 
+async function getShopProducts(options = {}) {
+  const params = new URLSearchParams();
+
+  if (options.category) params.set("category", options.category);
+  if (options.featured) params.set("featured", "true");
+  if (options.limit) params.set("limit", String(options.limit));
+
+  const query = params.toString();
+  const data = await requestJson(`/shop/products${query ? `?${query}` : ""}`);
+
+  return {
+    ...data,
+    products: (data.products || []).map((product) => ({
+      ...product,
+      imageUrl: normalizeImageUrl(product.imageUrl),
+    })),
+  };
+}
+
+async function getFeaturedShopProducts(limit = 6) {
+  const data = await requestJson(`/shop/featured?limit=${encodeURIComponent(limit)}`);
+
+  return {
+    ...data,
+    products: (data.products || []).map((product) => ({
+      ...product,
+      imageUrl: normalizeImageUrl(product.imageUrl),
+    })),
+  };
+}
+
+async function getShopCategories() {
+  const data = await requestJson("/shop/categories");
+  return data.categories || [];
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -253,4 +289,7 @@ export {
   getPublishedPromotionEvents,
   getPublishedPromotionMapPins,
   getPublishedPromotionSponsors,
+  getShopProducts,
+  getFeaturedShopProducts,
+  getShopCategories,
 };
