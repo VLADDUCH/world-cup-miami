@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getFeaturedShopProducts } from "../services/wcimApi";
+import { trackShopProductClicked } from "../services/analyticsTracker";
 import styles from "../styles/Home.module.css";
 
 const DEFAULT_IMAGE = "/images/wcim_soccer_ball_miami_background.png";
@@ -91,7 +92,7 @@ export default function ShopPreview() {
                   <small>{formatPrice({ ...product, price: product.compareAtPrice })}</small>
                 ) : null}
               </div>
-              <a href={product.checkoutUrl || "/shop"}>View Product</a>
+              <a href={product.checkoutUrl || "/shop"} onClick={() => trackShopProductClicked(product)}>View Product</a>
             </div>
           </article>
         ))}

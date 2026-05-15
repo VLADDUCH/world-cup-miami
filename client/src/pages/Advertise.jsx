@@ -190,7 +190,7 @@ export default function Advertise() {
                 ))}
               </div>
 
-              <a href={slot.ctaHref || "/#submit"}>
+              <a href={slot.ctaHref || "/#submit"} onClick={() => trackAdvertiseCtaClicked(slot)}>
                 {slot.ctaLabel || "Request Placement"}
               </a>
             </article>

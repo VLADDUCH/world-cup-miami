@@ -321,6 +321,36 @@ async function submitLead(payload) {
 }
 
 
+async function submitAnalyticsEvent(payload) {
+  const response = await fetch(`${API_BASE_URL}/analytics/events`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const responseText = await response.text();
+  let data = null;
+
+  try {
+    data = responseText ? JSON.parse(responseText) : null;
+  } catch {
+    data = { raw: responseText };
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error
+        ? `Analytics event failed: ${data.error}`
+        : `Analytics event failed with status ${response.status}`
+    );
+  }
+
+  return data;
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -354,4 +384,5 @@ export {
   getAdSections,
   getAdPackages,
   submitLead,
+  submitAnalyticsEvent,
 };

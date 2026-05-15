@@ -139,7 +139,7 @@ export default function Shop() {
                   ) : null}
                 </div>
 
-                <a href={product.checkoutUrl || "#submit"}>
+                <a href={product.checkoutUrl || "#submit"} onClick={() => trackShopProductClicked(product)}>
                   {product.checkoutUrl === "#submit" ? "Request Product Link" : "Buy Now"}
                 </a>
               </div>

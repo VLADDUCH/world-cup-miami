@@ -1,5 +1,6 @@
 import React from "react";
 import SEO from "./components/SEO";
+import PageViewTracker from "./components/PageViewTracker";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import AdminReview from "./pages/AdminReview";
@@ -16,6 +17,7 @@ export default function App() {
      
       {/* Page Routes */}
       <SEO />
+      <PageViewTracker />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin/review" element={<AdminReview />} />

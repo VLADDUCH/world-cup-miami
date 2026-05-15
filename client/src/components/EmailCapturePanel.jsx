@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { submitLead } from "../services/wcimApi";
+import { trackLeadSubmitted } from "../services/analyticsTracker";
 import styles from "../styles/Home.module.css";
 
 const INTEREST_OPTIONS = [
@@ -50,6 +51,12 @@ export default function EmailCapturePanel({
       await submitLead({
         ...form,
         source,
+      });
+
+      trackLeadSubmitted({
+        source,
+        interest: form.interest,
+        email: form.email,
       });
 
       setStatus("success");

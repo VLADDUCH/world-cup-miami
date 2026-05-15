@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getFeaturedAdSlots } from "../services/wcimApi";
+import { trackAdvertiseCtaClicked } from "../services/analyticsTracker";
 import styles from "../styles/Home.module.css";
 
 function formatPrice(slot) {
@@ -68,7 +69,7 @@ export default function AdInventoryPreview() {
               <small>{slot.durationDays} days • {slot.status}</small>
             </div>
 
-            <a href={slot.ctaHref || "/#submit"}>{slot.ctaLabel || "Request Placement"}</a>
+            <a href={slot.ctaHref || "/#submit"} onClick={() => trackAdvertiseCtaClicked(slot)}>{slot.ctaLabel || "Request Placement"}</a>
           </article>
         ))}
       </div>
