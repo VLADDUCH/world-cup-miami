@@ -18,6 +18,7 @@ import EventsFeedPanel from "../components/EventsFeedPanel";
 import SubmissionPanel from "../components/SubmissionPanel";
 import PublishedPromotionsPanel from "../components/PublishedPromotionsPanel";
 import ShopPreview from "../components/ShopPreview";
+import AdInventoryPreview from "../components/AdInventoryPreview";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
 
@@ -537,6 +538,10 @@ export default function Home() {
       <PublishedPromotionsPanel />
 
       <ShopPreview />
+
+      <AdInventoryPreview />
+
+
 
 
 

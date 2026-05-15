@@ -264,6 +264,32 @@ async function getShopCategories() {
   return data.categories || [];
 }
 
+async function getAdInventory(options = {}) {
+  const params = new URLSearchParams();
+
+  if (options.section) params.set("section", options.section);
+  if (options.packageTier) params.set("packageTier", options.packageTier);
+  if (options.featured) params.set("featured", "true");
+  if (options.limit) params.set("limit", String(options.limit));
+
+  const query = params.toString();
+  return requestJson(`/ads/inventory${query ? `?${query}` : ""}`);
+}
+
+async function getFeaturedAdSlots(limit = 6) {
+  return requestJson(`/ads/inventory/featured?limit=${encodeURIComponent(limit)}`);
+}
+
+async function getAdSections() {
+  const data = await requestJson("/ads/inventory/sections");
+  return data.sections || [];
+}
+
+async function getAdPackages() {
+  const data = await requestJson("/ads/inventory/packages");
+  return data.packages || [];
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -292,4 +318,8 @@ export {
   getShopProducts,
   getFeaturedShopProducts,
   getShopCategories,
+  getAdInventory,
+  getFeaturedAdSlots,
+  getAdSections,
+  getAdPackages,
 };
