@@ -117,6 +117,28 @@ test("POST /api/v1/leads/subscribe accepts lead", async () => {
   assert.equal(response.body.lead.email, "subscriber@example.com");
 });
 
+
+test("POST /api/v1/leads/subscribe accepts display label interest value", async () => {
+  await resetLeads();
+
+  const response = await request(app)
+    .post("/api/v1/leads/subscribe")
+    .send({
+      email: "displaylabel@example.com",
+      name: "Display Label",
+      phone: "7708993744",
+      source: "homepage",
+      interest: "Fan updates",
+      message: "Testing display label interest value.",
+      consentToContact: true
+    })
+    .expect(201);
+
+  assert.equal(response.body.status, "ok");
+  assert.equal(response.body.lead.email, "displaylabel@example.com");
+  assert.equal(response.body.lead.interest, "fan_updates");
+});
+
 test("POST /api/v1/leads/subscribe rejects invalid lead", async () => {
   await request(app)
     .post("/api/v1/leads/subscribe")

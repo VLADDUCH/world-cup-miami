@@ -38,12 +38,59 @@ function sanitizeText(value) {
     .trim();
 }
 
+
+function normalizeInterest(value) {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/\s+/g, "_")
+    .replace(/-/g, "_")
+    .replace(/__+/g, "_");
+
+  const aliases = {
+    fan_updates: "fan_updates",
+    fan_update: "fan_updates",
+    updates: "fan_updates",
+    fan: "fan_updates",
+
+    merch: "merch",
+    merch_drops: "merch",
+    merchandise: "merch",
+
+    advertising: "advertising",
+    advertising_sponsorship: "advertising",
+    sponsor: "advertising",
+    sponsorship: "advertising",
+    sponsors: "advertising",
+
+    business_listing: "business_listing",
+    add_my_business: "business_listing",
+    business: "business_listing",
+
+    events: "events",
+    events_watch_parties: "events",
+    watch_parties: "events",
+    watch_party: "events",
+
+    tickets: "tickets",
+    tickets_info: "tickets",
+
+    general: "general",
+    general_updates: "general",
+  };
+
+  return aliases[normalized] || normalized || "fan_updates";
+}
+
 function cleanPayload(payload = {}) {
   const cleaned = {};
 
   for (const [key, value] of Object.entries(payload)) {
     cleaned[key] = sanitizeText(value);
   }
+
+  cleaned.interest = normalizeInterest(payload.interest || cleaned.interest || "fan_updates");
 
   cleaned.consentToContact =
     payload.consentToContact === true || payload.consentToContact === "true";
