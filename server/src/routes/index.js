@@ -5,6 +5,7 @@ import newsFeedRouter from "./newsFeed.js";
 import eventsFeedRouter from "./eventsFeed.js";
 import promotionsRouter from "./promotions.js";
 import adminReviewRouter from "./adminReview.js";
+import shopRouter from "./shop.js";
 
 const router = express.Router();
 
@@ -32,6 +33,9 @@ router.get("/", (req, res) => {
       promotionTypes: "/api/v1/promotions/types",
       submitPromotion: "/api/v1/promotions/submit",
       adminPromotionReview: "/api/v1/admin/review/promotions",
+      shopProducts: "/api/v1/shop/products",
+      shopCategories: "/api/v1/shop/categories",
+      shopFeatured: "/api/v1/shop/featured",
     },
     timestamp: new Date().toISOString(),
   });
@@ -43,5 +47,6 @@ router.use("/feeds/news", newsFeedRouter);
 router.use("/feeds/events", eventsFeedRouter);
 router.use("/promotions", promotionsRouter);
 router.use("/admin/review", adminReviewRouter);
+router.use("/shop", shopRouter);
 
 export default router;
