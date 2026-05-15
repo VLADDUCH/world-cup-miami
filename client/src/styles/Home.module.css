@@ -1051,3 +1051,217 @@
     width: 100%;
   }
 }
+
+/* ============================================================
+   BATCH 6 — FRONTEND EVENTS FEED STYLES
+   ============================================================ */
+
+.eventsSection {
+  width: min(1820px, calc(100% - 64px));
+  margin: 18px auto 0;
+}
+
+.eventsStatusBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--wcim-border);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--wcim-muted);
+}
+
+.eventsStatusBar strong {
+  color: white;
+}
+
+.eventsStatusBar small {
+  color: var(--wcim-muted);
+}
+
+.eventTabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.eventTabButton {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--wcim-border);
+  border-radius: 999px;
+  color: white;
+  background: rgba(255, 255, 255, 0.055);
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.eventTabButton:hover,
+.eventTabButtonActive {
+  border-color: var(--wcim-border-hot);
+  background: linear-gradient(90deg, rgba(23, 216, 255, 0.18), rgba(255, 63, 145, 0.18));
+  transform: translateY(-1px);
+}
+
+.eventsLayout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.75fr) minmax(520px, 1.25fr);
+  gap: 14px;
+}
+
+.eventLeadCard,
+.eventCard {
+  border: 1px solid var(--wcim-border);
+  background: var(--wcim-panel);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.22);
+}
+
+.eventLeadCard {
+  min-height: 360px;
+  border-radius: 22px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eventLeadCard p {
+  margin: 0 0 12px;
+  color: var(--wcim-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.eventLeadCard h3 {
+  margin: 0 0 14px;
+  font-size: clamp(28px, 3vw, 48px);
+  line-height: 1;
+}
+
+.eventLeadCard span {
+  color: var(--wcim-muted);
+  line-height: 1.55;
+}
+
+.eventLeadCard small {
+  display: inline-flex;
+  margin-top: 18px;
+  color: white;
+  font-weight: 900;
+}
+
+.eventCardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.eventCard {
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.eventImageWrap {
+  min-height: 185px;
+  background:
+    linear-gradient(135deg, rgba(23, 216, 255, 0.18), rgba(255, 63, 145, 0.2)),
+    url("/images/wcim_soccer_ball_miami_background.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.eventImageWrap img {
+  width: 100%;
+  height: 185px;
+  object-fit: cover;
+}
+
+.eventCardBody {
+  padding: 18px;
+}
+
+.eventCardBody span {
+  display: inline-flex;
+  margin-bottom: 10px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(23, 216, 255, 0.12);
+  color: var(--wcim-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.eventCardBody h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+.eventCardBody p {
+  margin: 0 0 14px;
+  color: var(--wcim-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.eventMeta {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.eventMeta strong {
+  color: white;
+}
+
+.eventMeta small {
+  color: var(--wcim-muted);
+}
+
+.eventCardBody a {
+  color: white;
+  text-decoration: none;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+@media (max-width: 1180px) {
+  .eventsLayout,
+  .eventCardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .eventsSection {
+    width: min(100% - 28px, 1820px);
+  }
+
+  .eventTabs {
+    flex-direction: column;
+  }
+
+  .eventTabButton {
+    width: 100%;
+  }
+
+  .eventImageWrap,
+  .eventImageWrap img {
+    min-height: 220px;
+    height: 220px;
+  }
+}

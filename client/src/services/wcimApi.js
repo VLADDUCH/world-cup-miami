@@ -86,6 +86,39 @@ async function getNewsByCategory(slug, limit = 4) {
   };
 }
 
+async function getEventsFeed(limit = 6, offline = true) {
+  const offlineParam = offline ? "&offline=true" : "";
+  const data = await requestJson(`/feeds/events?limit=${encodeURIComponent(limit)}${offlineParam}`);
+
+  return {
+    ...data,
+    events: (data.events || []).map((event) => ({
+      ...event,
+      imageUrl: normalizeImageUrl(event.imageUrl),
+    })),
+  };
+}
+
+async function getEventCategories() {
+  const data = await requestJson("/feeds/events/categories?homepageOnly=true");
+  return data.categories || [];
+}
+
+async function getEventsByCategory(slug, limit = 4, offline = true) {
+  const offlineParam = offline ? "&offline=true" : "";
+  const data = await requestJson(
+    `/feeds/events/category/${encodeURIComponent(slug)}?limit=${encodeURIComponent(limit)}${offlineParam}`
+  );
+
+  return {
+    ...data,
+    events: (data.events || []).map((event) => ({
+      ...event,
+      imageUrl: normalizeImageUrl(event.imageUrl),
+    })),
+  };
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -95,4 +128,7 @@ export {
   getDailyNews,
   getNewsCategories,
   getNewsByCategory,
+  getEventsFeed,
+  getEventCategories,
+  getEventsByCategory,
 };

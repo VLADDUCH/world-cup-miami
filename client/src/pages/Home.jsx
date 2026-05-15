@@ -14,6 +14,7 @@ import {
   getStreamingNews,
 } from "../services/wcimApi";
 import styles from "../styles/Home.module.css";
+import EventsFeedPanel from "../components/EventsFeedPanel";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
 
@@ -526,6 +527,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+
+      <EventsFeedPanel />
 
       <section className={styles.mapSection} id="map">
         <div className={styles.sectionHeading}>
