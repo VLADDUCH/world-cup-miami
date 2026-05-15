@@ -7,6 +7,7 @@ import promotionsRouter from "./promotions.js";
 import adminReviewRouter from "./adminReview.js";
 import shopRouter from "./shop.js";
 import adInventoryRouter from "./adInventory.js";
+import leadsRouter from "./leads.js";
 
 const router = express.Router();
 
@@ -50,5 +51,6 @@ router.use("/promotions", promotionsRouter);
 router.use("/admin/review", adminReviewRouter);
 router.use("/shop", shopRouter);
 router.use("/ads/inventory", adInventoryRouter);
+router.use("/leads", leadsRouter);
 
 export default router;

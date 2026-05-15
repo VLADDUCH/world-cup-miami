@@ -71,6 +71,13 @@ router.get("/status", async (req, res, next) => {
         packagesEndpoint: "configured",
         salesMode: "manual_inquiry",
       },
+      leads: {
+        subscribeEndpoint: "configured",
+        adminListEndpoint: "configured",
+        statsEndpoint: "configured",
+        csvExportEndpoint: "configured",
+        adminAuth: "x-admin-token",
+      },
       promotions: {
         promotionTypesEndpoint: "configured",
         promotionSubmitEndpoint: "configured",
