@@ -78,6 +78,13 @@ router.get("/status", async (req, res, next) => {
         csvExportEndpoint: "configured",
         adminAuth: "x-admin-token",
       },
+      analytics: {
+        eventCaptureEndpoint: "configured",
+        adminEventsEndpoint: "configured",
+        summaryEndpoint: "configured",
+        csvExportEndpoint: "configured",
+        adminAuth: "x-admin-token",
+      },
       promotions: {
         promotionTypesEndpoint: "configured",
         promotionSubmitEndpoint: "configured",

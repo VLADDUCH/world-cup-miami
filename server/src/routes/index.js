@@ -8,6 +8,7 @@ import adminReviewRouter from "./adminReview.js";
 import shopRouter from "./shop.js";
 import adInventoryRouter from "./adInventory.js";
 import leadsRouter from "./leads.js";
+import analyticsRouter from "./analytics.js";
 
 const router = express.Router();
 
@@ -52,5 +53,6 @@ router.use("/admin/review", adminReviewRouter);
 router.use("/shop", shopRouter);
 router.use("/ads/inventory", adInventoryRouter);
 router.use("/leads", leadsRouter);
+router.use("/analytics", analyticsRouter);
 
 export default router;
