@@ -119,6 +119,21 @@ async function getEventsByCategory(slug, limit = 4, offline = true) {
   };
 }
 
+async function getPromotionTypes() {
+  const data = await requestJson("/promotions/types");
+  return data.types || [];
+}
+
+async function submitPromotion(payload) {
+  return requestJson("/promotions/submit", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -131,4 +146,6 @@ export {
   getEventsFeed,
   getEventCategories,
   getEventsByCategory,
+  getPromotionTypes,
+  submitPromotion,
 };

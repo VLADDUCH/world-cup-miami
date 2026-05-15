@@ -3,6 +3,7 @@ import apiStatusRouter from "./apiStatus.js";
 import businessesRouter from "./businesses.js";
 import newsFeedRouter from "./newsFeed.js";
 import eventsFeedRouter from "./eventsFeed.js";
+import promotionsRouter from "./promotions.js";
 
 const router = express.Router();
 
@@ -26,7 +27,9 @@ router.get("/", (req, res) => {
       eventCategories: "/api/v1/feeds/events/categories",
       ticketmasterEvents: "/api/v1/feeds/events/ticketmaster",
       eventbriteEvents: "/api/v1/feeds/events/eventbrite",
-      localEvents: "/api/v1/feeds/events/local"
+      localEvents: "/api/v1/feeds/events/local",
+      promotionTypes: "/api/v1/promotions/types",
+      submitPromotion: "/api/v1/promotions/submit",
     },
     timestamp: new Date().toISOString(),
   });
@@ -36,5 +39,6 @@ router.use("/", apiStatusRouter);
 router.use("/businesses", businessesRouter);
 router.use("/feeds/news", newsFeedRouter);
 router.use("/feeds/events", eventsFeedRouter);
+router.use("/promotions", promotionsRouter);
 
 export default router;

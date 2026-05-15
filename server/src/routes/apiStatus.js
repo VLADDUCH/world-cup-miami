@@ -58,6 +58,11 @@ router.get("/status", async (req, res, next) => {
         businessCount: businesses.length,
         featuredBusinessCount: featuredBusinesses.length,
       },
+      promotions: {
+        promotionTypesEndpoint: "configured",
+        promotionSubmitEndpoint: "configured",
+        reviewWorkflow: "pending_review_json_store",
+      },
     };
 
     res.json({

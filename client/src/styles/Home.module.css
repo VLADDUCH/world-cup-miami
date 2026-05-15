@@ -1265,3 +1265,201 @@
     height: 220px;
   }
 }
+
+/* ============================================================
+   BATCH 7 — SUBMISSION FORM STYLES
+   ============================================================ */
+
+.submissionSection {
+  width: min(1820px, calc(100% - 64px));
+  margin: 18px auto 0;
+}
+
+.submissionLayout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.85fr) minmax(520px, 1.15fr);
+  gap: 14px;
+}
+
+.submissionPitch,
+.submissionForm {
+  border: 1px solid var(--wcim-border);
+  border-radius: 24px;
+  background: var(--wcim-panel);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.22);
+}
+
+.submissionPitch {
+  padding: 28px;
+}
+
+.submissionPitch > span {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: var(--wcim-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.submissionPitch h3 {
+  margin: 0 0 12px;
+  font-size: clamp(30px, 3vw, 52px);
+  line-height: 0.95;
+}
+
+.submissionPitch p {
+  margin: 0 0 18px;
+  color: var(--wcim-muted);
+  line-height: 1.55;
+}
+
+.submissionTypeGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.submissionTypeButton {
+  width: 100%;
+  text-align: left;
+  padding: 14px;
+  border: 1px solid var(--wcim-border);
+  border-radius: 16px;
+  color: white;
+  background: rgba(255, 255, 255, 0.045);
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.submissionTypeButton strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+.submissionTypeButton small {
+  color: var(--wcim-muted);
+  line-height: 1.35;
+}
+
+.submissionTypeButton:hover,
+.submissionTypeButtonActive {
+  border-color: var(--wcim-border-hot);
+  background: linear-gradient(90deg, rgba(23, 216, 255, 0.16), rgba(255, 63, 145, 0.16));
+  transform: translateY(-1px);
+}
+
+.submissionForm {
+  padding: 22px;
+  display: grid;
+  gap: 14px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.submissionForm label {
+  display: grid;
+  gap: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.submissionForm input,
+.submissionForm select,
+.submissionForm textarea {
+  width: 100%;
+  border: 1px solid var(--wcim-border);
+  border-radius: 14px;
+  padding: 13px 14px;
+  background: rgba(3, 7, 18, 0.68);
+  color: white;
+  outline: none;
+  font: inherit;
+}
+
+.submissionForm textarea {
+  resize: vertical;
+}
+
+.submissionForm input:focus,
+.submissionForm select:focus,
+.submissionForm textarea:focus {
+  border-color: var(--wcim-cyan);
+  box-shadow: 0 0 0 3px rgba(23, 216, 255, 0.14);
+}
+
+.checkboxLabel {
+  display: flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px !important;
+  color: var(--wcim-muted) !important;
+}
+
+.checkboxLabel input {
+  width: auto;
+}
+
+.submissionForm button[type="submit"] {
+  min-height: 52px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(90deg, var(--wcim-cyan), var(--wcim-purple), var(--wcim-pink));
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 18px 42px rgba(255, 63, 145, 0.24);
+}
+
+.submissionForm button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.submissionMessage {
+  padding: 13px 14px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+.submissionMessage_success {
+  border: 1px solid rgba(50, 255, 160, 0.35);
+  color: #b9ffd7;
+  background: rgba(50, 255, 160, 0.09);
+}
+
+.submissionMessage_error {
+  border: 1px solid rgba(255, 90, 90, 0.35);
+  color: #ffd0d0;
+  background: rgba(255, 90, 90, 0.09);
+}
+
+@media (max-width: 1180px) {
+  .submissionLayout,
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .submissionSection {
+    width: min(100% - 28px, 1820px);
+  }
+
+  .submissionPitch,
+  .submissionForm {
+    border-radius: 18px;
+  }
+}

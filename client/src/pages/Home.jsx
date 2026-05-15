@@ -15,6 +15,7 @@ import {
 } from "../services/wcimApi";
 import styles from "../styles/Home.module.css";
 import EventsFeedPanel from "../components/EventsFeedPanel";
+import SubmissionPanel from "../components/SubmissionPanel";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
 
@@ -477,7 +478,7 @@ export default function Home() {
           <div className={styles.cardTopline}>Ad Space</div>
           <h2>Featured Business Slots</h2>
           <p>Promote your brand directly inside match, map, and Miami update traffic.</p>
-          <a href="#business">Advertise Now</a>
+          <a href="#submit">Advertise Now</a>
         </article>
       </section>
 
@@ -537,7 +538,7 @@ export default function Home() {
             <p>Interactive Miami Map</p>
             <h2>Fan zones, watch parties, business listings, and match-day hotspots</h2>
           </div>
-          <a href="#business">Add Your Location</a>
+          <a href="#submit">Add Your Location</a>
         </div>
 
         <div className={styles.mapLayout}>
@@ -596,13 +597,16 @@ export default function Home() {
         </div>
       </section>
 
+
+      <SubmissionPanel />
+
       <section className={styles.featuredBusinessSection}>
         <div className={styles.sectionHeading}>
           <div>
             <p>Promoted Local Businesses</p>
             <h2>Featured placements powered by the WCIM business API</h2>
           </div>
-          <a href="#business">Promote Your Brand</a>
+          <a href="#submit">Promote Your Brand</a>
         </div>
 
         <div className={styles.featuredBusinessGrid}>
