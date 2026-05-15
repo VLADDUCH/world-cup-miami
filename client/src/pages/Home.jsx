@@ -16,6 +16,7 @@ import {
 import styles from "../styles/Home.module.css";
 import EventsFeedPanel from "../components/EventsFeedPanel";
 import SubmissionPanel from "../components/SubmissionPanel";
+import PublishedPromotionsPanel from "../components/PublishedPromotionsPanel";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
 
@@ -531,6 +532,10 @@ export default function Home() {
 
 
       <EventsFeedPanel />
+
+      <PublishedPromotionsPanel />
+
+
 
       <section className={styles.mapSection} id="map">
         <div className={styles.sectionHeading}>

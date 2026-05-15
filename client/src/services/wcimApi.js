@@ -198,6 +198,36 @@ async function markAdminPromotionContacted(token, id, payload = {}) {
   });
 }
 
+async function getPublishedPromotions() {
+  return requestJson("/promotions/published");
+}
+
+async function getPublishedPromotionBusinesses() {
+  const data = await requestJson("/promotions/published/businesses");
+  return data.businesses || [];
+}
+
+async function getPublishedPromotionEvents() {
+  const data = await requestJson("/promotions/published/events");
+  return {
+    ...data,
+    events: (data.events || []).map((event) => ({
+      ...event,
+      imageUrl: normalizeImageUrl(event.imageUrl),
+    })),
+  };
+}
+
+async function getPublishedPromotionMapPins() {
+  const data = await requestJson("/promotions/published/map-pins");
+  return data.pins || [];
+}
+
+async function getPublishedPromotionSponsors() {
+  const data = await requestJson("/promotions/published/sponsors");
+  return data.sponsors || [];
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -218,4 +248,9 @@ export {
   approveAdminPromotion,
   rejectAdminPromotion,
   markAdminPromotionContacted,
+  getPublishedPromotions,
+  getPublishedPromotionBusinesses,
+  getPublishedPromotionEvents,
+  getPublishedPromotionMapPins,
+  getPublishedPromotionSponsors,
 };
