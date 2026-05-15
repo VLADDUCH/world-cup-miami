@@ -64,6 +64,13 @@ router.get("/status", async (req, res, next) => {
         categoriesEndpoint: "configured",
         checkoutMode: "external_links_pending",
       },
+      ads: {
+        inventoryEndpoint: "configured",
+        featuredInventoryEndpoint: "configured",
+        sectionsEndpoint: "configured",
+        packagesEndpoint: "configured",
+        salesMode: "manual_inquiry",
+      },
       promotions: {
         promotionTypesEndpoint: "configured",
         promotionSubmitEndpoint: "configured",

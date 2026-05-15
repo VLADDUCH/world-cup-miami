@@ -6,6 +6,7 @@ import eventsFeedRouter from "./eventsFeed.js";
 import promotionsRouter from "./promotions.js";
 import adminReviewRouter from "./adminReview.js";
 import shopRouter from "./shop.js";
+import adInventoryRouter from "./adInventory.js";
 
 const router = express.Router();
 
@@ -48,5 +49,6 @@ router.use("/feeds/events", eventsFeedRouter);
 router.use("/promotions", promotionsRouter);
 router.use("/admin/review", adminReviewRouter);
 router.use("/shop", shopRouter);
+router.use("/ads/inventory", adInventoryRouter);
 
 export default router;

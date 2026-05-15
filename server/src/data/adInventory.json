@@ -1,0 +1,163 @@
+[
+  {
+    "id": "homepage-hero-sponsor",
+    "name": "Homepage Hero Sponsor",
+    "slot": "homepage_hero",
+    "section": "homepage",
+    "packageTier": "premium",
+    "price": 1500,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Own the first impression",
+    "description": "Premium placement near the top of the homepage for businesses that want maximum match-week visibility.",
+    "deliverables": [
+      "Hero sponsor label",
+      "Business name and call-to-action",
+      "Link to business or promotion page",
+      "Priority visibility above content sections"
+    ],
+    "recommendedFor": ["sports bars", "nightclubs", "restaurants", "local brands", "VIP experiences"],
+    "ctaLabel": "Request Hero Sponsor",
+    "ctaHref": "/#submit",
+    "featured": true
+  },
+  {
+    "id": "news-section-sponsor",
+    "name": "Streaming News Sponsor",
+    "slot": "news_section",
+    "section": "news",
+    "packageTier": "standard",
+    "price": 600,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Sponsor the news stream",
+    "description": "Placement next to Miami soccer and match-week news for brands that want content-adjacent visibility.",
+    "deliverables": [
+      "Sponsor card near news articles",
+      "Business name and message",
+      "CTA link",
+      "Rotating placement option"
+    ],
+    "recommendedFor": ["restaurants", "bars", "media brands", "local services"],
+    "ctaLabel": "Sponsor News",
+    "ctaHref": "/#submit",
+    "featured": true
+  },
+  {
+    "id": "events-section-sponsor",
+    "name": "Events Section Sponsor",
+    "slot": "events_section",
+    "section": "events",
+    "packageTier": "standard",
+    "price": 750,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Be visible where fans plan their night",
+    "description": "Sponsor placement near watch parties, fan-zone events, nightlife, and local match-week activity.",
+    "deliverables": [
+      "Sponsor card near event listings",
+      "Event or business CTA",
+      "Featured placement option",
+      "Match-week visibility"
+    ],
+    "recommendedFor": ["watch parties", "venues", "bars", "clubs", "event organizers"],
+    "ctaLabel": "Sponsor Events",
+    "ctaHref": "/#submit",
+    "featured": true
+  },
+  {
+    "id": "shop-sponsor",
+    "name": "Shop / Merch Sponsor",
+    "slot": "shop_section",
+    "section": "shop",
+    "packageTier": "standard",
+    "price": 500,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Sponsor the merch experience",
+    "description": "Placement near shop and merchandise previews for brands aligned with apparel, fanwear, and lifestyle products.",
+    "deliverables": [
+      "Sponsor card near shop preview",
+      "CTA link",
+      "Brand mention",
+      "Product-adjacent visibility"
+    ],
+    "recommendedFor": ["apparel brands", "local creators", "merch vendors", "retail shops"],
+    "ctaLabel": "Sponsor Shop",
+    "ctaHref": "/#submit",
+    "featured": false
+  },
+  {
+    "id": "map-pin-sponsor",
+    "name": "Featured Map Pin",
+    "slot": "map_pin",
+    "section": "map",
+    "packageTier": "local",
+    "price": 350,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Get found on the Miami map",
+    "description": "Featured map-pin placement for businesses that want local discovery from fans browsing Miami.",
+    "deliverables": [
+      "Featured map marker",
+      "Business name and category",
+      "Location area",
+      "Link or contact CTA"
+    ],
+    "recommendedFor": ["restaurants", "bars", "shops", "parking", "transportation", "local services"],
+    "ctaLabel": "Request Map Pin",
+    "ctaHref": "/#submit",
+    "featured": false
+  },
+  {
+    "id": "featured-business-card",
+    "name": "Featured Business Card",
+    "slot": "featured_business",
+    "section": "businesses",
+    "packageTier": "local",
+    "price": 450,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Appear as a featured local business",
+    "description": "Featured card placement in the business discovery layer for local companies targeting World Cup visitors.",
+    "deliverables": [
+      "Featured business card",
+      "Category and location",
+      "CTA link",
+      "Homepage rotation option"
+    ],
+    "recommendedFor": ["restaurants", "bars", "shops", "attractions", "local services"],
+    "ctaLabel": "Feature My Business",
+    "ctaHref": "/#submit",
+    "featured": true
+  },
+  {
+    "id": "published-promotion-boost",
+    "name": "Published Promotion Boost",
+    "slot": "published_promotion",
+    "section": "approved_promotions",
+    "packageTier": "boost",
+    "price": 250,
+    "currency": "USD",
+    "durationDays": 7,
+    "status": "available",
+    "headline": "Boost an approved promotion",
+    "description": "A lower-cost upgrade that boosts an already-approved flyer, event, business, or sponsor inquiry.",
+    "deliverables": [
+      "Boosted placement",
+      "Higher visibility in published promotions",
+      "CTA link",
+      "Priority display option"
+    ],
+    "recommendedFor": ["small businesses", "flyers", "watch parties", "event promoters"],
+    "ctaLabel": "Boost Promotion",
+    "ctaHref": "/#submit",
+    "featured": false
+  }
+]
