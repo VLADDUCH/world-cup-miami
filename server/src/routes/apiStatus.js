@@ -4,6 +4,7 @@ import env from "../config/env.js";
 import { getCacheStats, clearCache } from "../config/cache.js";
 import { getAllBusinesses, getFeaturedBusinesses } from "../services/businessService.js";
 import { getNewsCategories } from "../services/newsFeedService.js";
+import { getEventCategories } from "../services/eventsFeedService.js";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get("/status", async (req, res, next) => {
     const businesses = await getAllBusinesses();
     const featuredBusinesses = await getFeaturedBusinesses();
     const newsCategories = await getNewsCategories({ homepageOnly: true });
+    const eventCategories = await getEventCategories({ homepageOnly: true });
 
     const feeds = {
       news: {
@@ -32,6 +34,14 @@ router.get("/status", async (req, res, next) => {
       events: {
         ticketmaster: keyLabel(apiKeys.status.ticketmaster),
         eventbrite: keyLabel(apiKeys.status.eventbrite),
+        eventsFeedEndpoint: "configured",
+        eventCategoriesEndpoint: "configured",
+        eventImageSupport: "configured",
+        providerFailureFallback: "configured",
+        categoryCount: eventCategories.length,
+        eventbriteMode: process.env.EVENTBRITE_ORGANIZATION_ID
+          ? "organization_events_configured"
+          : "organization_id_missing",
       },
       football: {
         sportmonks: keyLabel(apiKeys.status.sportmonks),

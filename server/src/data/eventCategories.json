@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "watch-parties",
+    "label": "Watch Parties",
+    "homepageLabel": "Watch Parties",
+    "description": "Sports bars, restaurants, viewing parties, and local fan meetups.",
+    "query": "Miami soccer watch party OR Miami sports bar soccer OR World Cup watch party Miami",
+    "priority": 1,
+    "showOnHomepage": true
+  },
+  {
+    "slug": "fan-zone-events",
+    "label": "Fan Zone Events",
+    "homepageLabel": "Fan Zone Events",
+    "description": "Fan festivals, public events, community events, and World Cup activation moments.",
+    "query": "Miami fan festival soccer OR Miami fan zone OR Bayfront Park soccer event",
+    "priority": 2,
+    "showOnHomepage": true
+  },
+  {
+    "slug": "nightlife-music",
+    "label": "Nightlife & Music",
+    "homepageLabel": "Nightlife & Music",
+    "description": "Concerts, nightlife, cultural events, and match-week entertainment.",
+    "query": "Miami nightlife soccer OR Miami World Cup party OR Miami music event",
+    "priority": 3,
+    "showOnHomepage": true
+  },
+  {
+    "slug": "family-community",
+    "label": "Family & Community",
+    "homepageLabel": "Family & Community",
+    "description": "Community events, family-friendly soccer events, and public gatherings.",
+    "query": "Miami family soccer event OR Miami community soccer OR Miami public soccer event",
+    "priority": 4,
+    "showOnHomepage": true
+  },
+  {
+    "slug": "promoted-business-events",
+    "label": "Promoted Business Events",
+    "homepageLabel": "Promoted Business Events",
+    "description": "Paid or submitted business events, flyers, and sponsor activations.",
+    "query": "Miami business soccer event OR Miami restaurant soccer promotion OR Miami watch party business",
+    "priority": 5,
+    "showOnHomepage": false
+  }
+]

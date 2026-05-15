@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "test-soccer-cafe-1778854395110",
+    "status": "pending_review",
+    "createdAt": "2026-05-15T14:13:15.109Z",
+    "updatedAt": "2026-05-15T14:13:15.109Z",
+    "businessName": "Test Soccer Cafe",
+    "contactName": "Test Owner",
+    "email": "owner@example.com",
+    "phone": "555-555-5555",
+    "category": "Restaurant",
+    "area": "Wynwood",
+    "address": "123 Test Ave, Miami, FL",
+    "website": "",
+    "instagram": "@testsoccer",
+    "description": "A test business submission for World Cup in Miami fan traffic.",
+    "promotionType": "featured_listing",
+    "preferredMatchDay": "June 24"
+  }
+]
