@@ -23,6 +23,27 @@ import EmailCapturePanel from "../components/EmailCapturePanel";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
 
+const MIAMI_KICKOFF_TARGET = "2026-06-15T18:00:00-04:00";
+
+function getMiamiKickoffCountdown() {
+  const targetTime = new Date(MIAMI_KICKOFF_TARGET).getTime();
+  const now = Date.now();
+  const totalSeconds = Math.max(0, Math.floor((targetTime - now) / 1000));
+
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    isLive: totalSeconds === 0,
+  };
+}
+
 const FALLBACK_MAP_PINS = [
   {
     id: "bayfront-park-downtown",
@@ -226,6 +247,19 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [feedMode, setFeedMode] = useState("fallback");
   const [apiError, setApiError] = useState("");
+  const [kickoffCountdown, setKickoffCountdown] = useState(() => getMiamiKickoffCountdown());
+
+  useEffect(() => {
+    setKickoffCountdown(getMiamiKickoffCountdown());
+
+    const timer = window.setInterval(() => {
+      setKickoffCountdown(getMiamiKickoffCountdown());
+    }, 1000);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -383,7 +417,7 @@ export default function Home() {
 
           <div className={styles.heroActions}>
             <a href="#matches" className={styles.primaryBtn}>Explore Match Schedule</a>
-            <a href="#business" className={styles.secondaryBtn}>Add Your Flyer / Business</a>
+            <a href="#business" className={styles.secondaryBtn}>Promote Your Business</a>
           </div>
 
           <div className={styles.apiFeedStatus}>
@@ -396,12 +430,12 @@ export default function Home() {
           {apiError ? <p className={styles.feedWarning}>{apiError}</p> : null}
 
           <div className={styles.countdownCard}>
-            <p>Countdown to Miami kickoff</p>
+            <p>{kickoffCountdown.isLive ? "Miami kickoff is live" : "Miami kickoff begins in"}</p>
             <div className={styles.countdownGrid}>
-              <span><strong>247</strong><small>Days</small></span>
-              <span><strong>14</strong><small>Hrs</small></span>
-              <span><strong>36</strong><small>Mins</small></span>
-              <span><strong>42</strong><small>Secs</small></span>
+              <span><strong>{kickoffCountdown.days}</strong><small>Days</small></span>
+              <span><strong>{String(kickoffCountdown.hours).padStart(2, "0")}</strong><small>Hrs</small></span>
+              <span><strong>{String(kickoffCountdown.minutes).padStart(2, "0")}</strong><small>Mins</small></span>
+              <span><strong>{String(kickoffCountdown.seconds).padStart(2, "0")}</strong><small>Secs</small></span>
             </div>
           </div>
         </section>
@@ -450,7 +484,7 @@ export default function Home() {
               and match-day places to go.
             </p>
             <a href="mailto:info@worldcupinmiami.com?subject=Add%20My%20Business%20to%20World%20Cup%20in%20Miami">
-              Add Your Flyer / Business
+              Promote Your Business
             </a>
           </div>
         </aside>
@@ -467,7 +501,7 @@ export default function Home() {
         <article className={styles.card}>
           <div className={styles.cardTopline}>Backend Powered</div>
           <h2>News + Business Feeds</h2>
-          <p>Homepage data now connects to WCIM API feeds for updates, businesses, and map pins.</p>
+          <p>Fresh Miami updates, local places, and fan experiences come together in one matchweek guide.</p>
           <a href="#newsTabs">View Updates</a>
         </article>
 
@@ -481,7 +515,7 @@ export default function Home() {
         <article className={styles.card}>
           <div className={styles.cardTopline}>Ad Space</div>
           <h2>Featured Business Slots</h2>
-          <p>Promote your brand directly inside match, map, and Miami update traffic.</p>
+          <p>Meet fans while they are choosing where to eat, watch, shop, and celebrate.</p>
           <a href="#submit">Advertise Now</a>
         </article>
       </section>
@@ -489,8 +523,8 @@ export default function Home() {
       <section className={styles.newsTabsSection} id="newsTabs">
         <div className={styles.sectionHeading}>
           <div>
-            <p>Editorial Feeds</p>
-            <h2>Focused Miami updates, not random global soccer noise</h2>
+            <p>Miami Matchweek Pulse</p>
+            <h2>Curated soccer, events, travel, and fan activity across Miami</h2>
           </div>
         </div>
 
@@ -624,7 +658,7 @@ export default function Home() {
         <div className={styles.sectionHeading}>
           <div>
             <p>Promoted Local Businesses</p>
-            <h2>Featured placements powered by the WCIM business API</h2>
+            <h2>Miami favorites fans can discover before the next match</h2>
           </div>
           <a href="#submit">Promote Your Brand</a>
         </div>
@@ -645,7 +679,7 @@ export default function Home() {
         <div className={styles.sectionHeading}>
           <div>
             <p>Miami Match Schedule</p>
-            <h2>Pages built for traffic, sharing, and merch/ad placement</h2>
+            <h2>Designed to help fans plan, share, shop, and feel Miami before matchday</h2>
           </div>
         </div>
 

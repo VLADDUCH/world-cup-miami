@@ -8,11 +8,16 @@
     "compareAtPrice": 44,
     "currency": "USD",
     "description": "A clean Miami soccer-inspired tee built for watch parties, fan zones, and match-week streetwear.",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/cards/miami-match-week-tee.svg",
     "checkoutUrl": "#submit",
     "badge": "Best Seller Concept",
     "featured": true,
-    "tags": ["shirt", "miami", "match-week", "fanwear"]
+    "tags": [
+      "shirt",
+      "miami",
+      "match-week",
+      "fanwear"
+    ]
   },
   {
     "id": "305-soccer-culture-hoodie",
@@ -23,11 +28,16 @@
     "compareAtPrice": 82,
     "currency": "USD",
     "description": "Premium hoodie concept for Miami nights, watch parties, and soccer culture.",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/cards/305-soccer-culture-hoodie.svg",
     "checkoutUrl": "#submit",
     "badge": "Premium",
     "featured": true,
-    "tags": ["hoodie", "305", "miami", "soccer"]
+    "tags": [
+      "hoodie",
+      "305",
+      "miami",
+      "soccer"
+    ]
   },
   {
     "id": "miami-fan-zone-hat",
@@ -38,11 +48,15 @@
     "compareAtPrice": 35,
     "currency": "USD",
     "description": "Minimal fan-zone hat for daily wear, tailgates, bars, and outdoor Miami events.",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/cards/miami-fan-zone-hat.svg",
     "checkoutUrl": "#submit",
     "badge": "Everyday",
     "featured": true,
-    "tags": ["hat", "fan-zone", "miami"]
+    "tags": [
+      "hat",
+      "fan-zone",
+      "miami"
+    ]
   },
   {
     "id": "watch-party-sticker-pack",
@@ -57,7 +71,11 @@
     "checkoutUrl": "#submit",
     "badge": "Low Cost",
     "featured": false,
-    "tags": ["stickers", "accessories", "watch-party"]
+    "tags": [
+      "stickers",
+      "accessories",
+      "watch-party"
+    ]
   },
   {
     "id": "miami-supporter-tote",
@@ -72,7 +90,11 @@
     "checkoutUrl": "#submit",
     "badge": "Utility",
     "featured": false,
-    "tags": ["bag", "tote", "supporter"]
+    "tags": [
+      "bag",
+      "tote",
+      "supporter"
+    ]
   },
   {
     "id": "vip-watch-party-bundle",
@@ -83,10 +105,15 @@
     "compareAtPrice": 124,
     "currency": "USD",
     "description": "Bundle concept with shirt, hat, sticker pack, and supporter tote for Miami match-week visitors.",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/cards/vip-watch-party-bundle.svg",
     "checkoutUrl": "#submit",
     "badge": "Bundle",
     "featured": true,
-    "tags": ["bundle", "vip", "watch-party", "merch"]
+    "tags": [
+      "bundle",
+      "vip",
+      "watch-party",
+      "merch"
+    ]
   }
 ]

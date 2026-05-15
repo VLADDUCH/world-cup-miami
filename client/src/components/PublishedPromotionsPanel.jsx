@@ -80,51 +80,21 @@ export default function PublishedPromotionsPanel() {
 
   const totalPublished = businesses.length + events.length + pins.length + sponsors.length;
 
+  if (totalPublished === 0) {
+    return null;
+  }
+
   return (
     <section className={styles.publishedPromotionsSection} id="published-promotions">
       <div className={styles.sectionHeading}>
         <div>
-          <p>Approved Promotions</p>
-          <h2>Published local businesses, events, map pins, and sponsor placements</h2>
+          <p>Featured Miami Experiences</p>
+          <h2>Local offers, events, and sponsor placements for matchweek visitors</h2>
         </div>
-        <a href="#submit">Submit Your Business</a>
+        <a href="#submit">Promote Your Business</a>
       </div>
 
-      <div className={styles.publishedStatsBar}>
-        <div>
-          <span>Status</span>
-          <strong>{mode}</strong>
-        </div>
-        <div>
-          <span>Total Published</span>
-          <strong>{totalPublished}</strong>
-        </div>
-        <div>
-          <span>Businesses</span>
-          <strong>{businesses.length}</strong>
-        </div>
-        <div>
-          <span>Events</span>
-          <strong>{events.length}</strong>
-        </div>
-        <div>
-          <span>Sponsors</span>
-          <strong>{sponsors.length}</strong>
-        </div>
-      </div>
-
-      {totalPublished === 0 ? (
-        <article className={styles.publishedEmptyCard}>
-          <span>Revenue inventory pending</span>
-          <h3>No approved promotions published yet</h3>
-          <p>
-            Once submissions are approved in the admin review dashboard, they will be available
-            as public business listings, event cards, map pins, and sponsor placements.
-          </p>
-          <a href="#submit">Add Your Flyer / Business</a>
-        </article>
-      ) : (
-        <div className={styles.publishedGrid}>
+      <div className={styles.publishedGrid}>
           {businesses.slice(0, 4).map((business) => (
             <article className={styles.publishedCard} key={business.id}>
               <span>{business.sponsorTier || "business"}</span>
@@ -158,7 +128,6 @@ export default function PublishedPromotionsPanel() {
             </article>
           ))}
         </div>
-      )}
     </section>
   );
 }

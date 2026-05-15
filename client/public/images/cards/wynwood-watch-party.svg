@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#08142c"/>
+      <stop offset="45%" stop-color="#14213d"/>
+      <stop offset="100%" stop-color="#ff2f92"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="62%" cy="38%" r="46%">
+      <stop offset="0%" stop-color="#00d9ff" stop-opacity=".85"/>
+      <stop offset="50%" stop-color="#7c3cff" stop-opacity=".45"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000" flood-opacity=".45"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <g opacity=".28">
+    <rect x="0" y="0" width="1200" height="675" fill="#020617"/>
+    <path d="M0 510 C200 470 310 560 510 520 C710 480 830 570 1200 515 L1200 675 L0 675Z" fill="#00d9ff" opacity=".22"/>
+  </g>
+  <g transform="translate(72 88)">
+    <rect x="0" y="0" width="490" height="340" rx="28" fill="#0b1024" opacity=".86" stroke="#00d9ff" stroke-opacity=".35"/>
+    <text x="34" y="78" fill="#00d9ff" font-size="28" font-family="Arial Black, Arial" letter-spacing="4">WYNWOOD</text>
+    <text x="34" y="142" fill="#ffffff" font-size="58" font-family="Arial Black, Arial">WATCH</text>
+    <text x="34" y="206" fill="#ffffff" font-size="58" font-family="Arial Black, Arial">PARTY</text>
+    <text x="34" y="270" fill="#ffd1ec" font-size="28" font-family="Arial">murals • nightlife • soccer</text>
+  </g>
+  <g transform="translate(700 120)" filter="url(#shadow)">
+    <circle cx="165" cy="165" r="145" fill="#f8fafc"/>
+    <path d="M165 28 L292 120 L244 270 L86 270 L38 120Z" fill="#111827"/>
+    <circle cx="165" cy="165" r="58" fill="#00d9ff"/>
+    <path d="M165 28 L165 107 M292 120 L220 143 M244 270 L200 216 M86 270 L130 216 M38 120 L110 143" stroke="#ff2f92" stroke-width="12"/>
+  </g>
+  <g opacity=".42">
+    <rect x="700" y="440" width="58" height="135" fill="#061226"/>
+    <rect x="780" y="390" width="50" height="185" fill="#071c36"/>
+    <rect x="850" y="420" width="70" height="155" fill="#061226"/>
+    <rect x="950" y="350" width="60" height="225" fill="#071c36"/>
+    <rect x="1040" y="405" width="44" height="170" fill="#061226"/>
+  </g>
+</svg>

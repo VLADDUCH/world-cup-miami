@@ -98,8 +98,8 @@ export default function SubmissionPanel() {
     <section className={styles.submissionSection} id="submit">
       <div className={styles.sectionHeading}>
         <div>
-          <p>Add Your Flyer / Business</p>
-          <h2>Turn Miami World Cup traffic into customers</h2>
+          <p>Promote Your Business</p>
+          <h2>Meet fans at the moment they are ready to choose</h2>
         </div>
         <a href="#submit-form">Start Submission</a>
       </div>

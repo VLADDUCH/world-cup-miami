@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "date": "2026-05-15",
+    "mode": "live",
+    "category": "miami-world-cup",
+    "createdAt": "2026-05-15T17:01:22.023Z",
+    "article": {
+      "id": "newsapi-is-lamine-yamal-vs-jude-bellingham-soccer-s-new-must-watch-rivalry-2026-05-12t20-38-30z-1",
+      "title": "Is Lamine Yamal vs. Jude Bellingham soccer's new must-watch rivalry?",
+      "description": "Step aside Messi and Ronaldo. Lamine Yamal and Jude Bellingham is the new must-watch soccer rivalry.",
+      "source": "USA Today",
+      "author": "Victoria Hernandez, USA TODAY",
+      "url": "https://www.usatoday.com/story/sports/soccer/2026/05/12/lamine-yamal-jude-bellingham-realm-madrid-barcelona/90036210007/",
+      "imageUrl": "https://s.yimg.com/os/en/usa_today_sports_articles_558/2b518c602b778a1a3ffcc64efbae032e",
+      "publishedAt": "2026-05-12T20:38:30Z",
+      "provider": "newsapi",
+      "category": "miami-world-cup",
+      "tags": [],
+      "editorial": {
+        "accepted": true,
+        "score": 2,
+        "reasons": [
+          "local_context",
+          "soccer_context"
+        ]
+      }
+    }
+  }
+]

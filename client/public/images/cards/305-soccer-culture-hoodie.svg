@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#050816"/>
+      <stop offset="50%" stop-color="#121a3a"/>
+      <stop offset="100%" stop-color="#7c3cff"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#000" flood-opacity=".55"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect x="0" y="520" width="1200" height="155" fill="#020617" opacity=".45"/>
+  <g opacity=".22">
+    <rect x="70" y="340" width="90" height="220" fill="#00d9ff"/>
+    <rect x="190" y="260" width="70" height="300" fill="#ff2f92"/>
+    <rect x="290" y="315" width="110" height="245" fill="#00d9ff"/>
+    <rect x="970" y="240" width="80" height="320" fill="#ff2f92"/>
+    <rect x="1080" y="330" width="60" height="230" fill="#00d9ff"/>
+  </g>
+  <g transform="translate(430 70)" filter="url(#shadow)">
+    <path d="M120 92 C145 20 300 20 325 92 L420 155 L465 535 L-20 535 L25 155Z" fill="#111827" stroke="#00d9ff" stroke-opacity=".45" stroke-width="5"/>
+    <path d="M136 105 C164 65 280 65 309 105 C280 155 165 155 136 105Z" fill="#050816" stroke="#ff2f92" stroke-width="7"/>
+    <path d="M110 175 C135 245 135 345 110 510 M335 175 C310 245 310 345 335 510" stroke="#64748b" stroke-width="10" opacity=".6"/>
+    <text x="92" y="260" fill="#ffffff" font-size="96" font-family="Arial Black, Arial">305</text>
+    <text x="100" y="322" fill="#00d9ff" font-size="34" font-family="Arial Black, Arial">SOCCER CULTURE</text>
+    <circle cx="220" cy="405" r="42" fill="#ff2f92"/>
+    <path d="M220 363 L256 389 L242 432 L198 432 L184 389Z" fill="#ffffff"/>
+  </g>
+  <text x="72" y="110" fill="#00d9ff" font-size="30" font-family="Arial Black, Arial" letter-spacing="4">PREMIUM</text>
+  <text x="72" y="166" fill="#ffffff" font-size="54" font-family="Arial Black, Arial">305 Soccer Culture Hoodie</text>
+</svg>

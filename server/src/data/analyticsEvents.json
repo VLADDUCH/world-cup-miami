@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "id": "analytics-1778864481465-tld4q7",
+    "createdAt": "2026-05-15T17:01:21.465Z",
+    "eventType": "page_view",
+    "page": "/",
+    "label": "Page View",
+    "target": "",
+    "source": "frontend",
+    "metadata": {
+      "path": "/",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "trackedAtClient": "2026-05-15T17:01:21.118Z"
+    }
+  },
+  {
+    "id": "analytics-1778866103124-q1kqwh",
+    "createdAt": "2026-05-15T17:28:23.124Z",
+    "eventType": "page_view",
+    "page": "/",
+    "label": "Page View",
+    "target": "",
+    "source": "frontend",
+    "metadata": {
+      "path": "/",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "trackedAtClient": "2026-05-15T17:28:22.998Z"
+    }
+  },
+  {
+    "id": "analytics-1778870445147-7qn96d",
+    "createdAt": "2026-05-15T18:40:45.147Z",
+    "eventType": "page_view",
+    "page": "/",
+    "label": "Page View",
+    "target": "",
+    "source": "frontend",
+    "metadata": {
+      "path": "/",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+      "trackedAtClient": "2026-05-15T18:40:44.852Z"
+    }
+  }
+]

@@ -7,7 +7,7 @@
     "source": "World Cup in Miami",
     "provider": "wcim",
     "url": "/#map",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/cards/wynwood-watch-party.svg",
     "startDate": "2026-06-15",
     "startTime": "18:00",
     "venueName": "Wynwood Area",
@@ -17,7 +17,12 @@
     "lat": 25.8004,
     "lng": -80.1994,
     "featured": true,
-    "tags": ["watch-party", "wynwood", "soccer", "miami"]
+    "tags": [
+      "watch-party",
+      "wynwood",
+      "soccer",
+      "miami"
+    ]
   },
   {
     "id": "wcim-event-fan-zone-bayfront",
@@ -37,7 +42,12 @@
     "lat": 25.7743,
     "lng": -80.187,
     "featured": true,
-    "tags": ["fan-zone", "downtown", "bayfront", "soccer"]
+    "tags": [
+      "fan-zone",
+      "downtown",
+      "bayfront",
+      "soccer"
+    ]
   },
   {
     "id": "wcim-event-brickell-nightlife",
@@ -57,7 +67,12 @@
     "lat": 25.7665,
     "lng": -80.1933,
     "featured": false,
-    "tags": ["nightlife", "brickell", "match-week", "miami"]
+    "tags": [
+      "nightlife",
+      "brickell",
+      "match-week",
+      "miami"
+    ]
   },
   {
     "id": "wcim-event-family-community",
@@ -77,7 +92,12 @@
     "lat": 25.7617,
     "lng": -80.1918,
     "featured": false,
-    "tags": ["family", "community", "soccer", "miami"]
+    "tags": [
+      "family",
+      "community",
+      "soccer",
+      "miami"
+    ]
   },
   {
     "id": "wcim-event-promoted-business",
@@ -97,6 +117,11 @@
     "lat": 25.7617,
     "lng": -80.1918,
     "featured": true,
-    "tags": ["advertising", "business", "flyer", "promotion"]
+    "tags": [
+      "advertising",
+      "business",
+      "flyer",
+      "promotion"
+    ]
   }
 ]

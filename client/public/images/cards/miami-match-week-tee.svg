@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#031121"/>
+      <stop offset="55%" stop-color="#08233f"/>
+      <stop offset="100%" stop-color="#19d3ff"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="20" stdDeviation="20" flood-color="#000" flood-opacity=".55"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="940" cy="90" r="180" fill="#ff2f92" opacity=".22"/>
+  <circle cx="190" cy="580" r="260" fill="#00d9ff" opacity=".16"/>
+  <g transform="translate(395 95)" filter="url(#shadow)">
+    <path d="M135 20 L250 20 L312 92 L430 132 L382 246 L320 222 L320 565 L65 565 L65 222 L3 246 L-45 132 L73 92Z" fill="#f8fafc"/>
+    <path d="M135 20 C150 76 235 76 250 20" fill="none" stroke="#111827" stroke-width="22"/>
+    <text x="92" y="235" fill="#081225" font-size="54" font-family="Arial Black, Arial">MIAMI</text>
+    <text x="96" y="300" fill="#ff2f92" font-size="44" font-family="Arial Black, Arial">MATCH</text>
+    <text x="112" y="354" fill="#00a7c7" font-size="36" font-family="Arial Black, Arial">WEEK</text>
+    <circle cx="192" cy="430" r="48" fill="#081225"/>
+    <path d="M192 382 L233 412 L217 462 L167 462 L151 412Z" fill="#f8fafc"/>
+  </g>
+  <text x="72" y="118" fill="#00d9ff" font-size="30" font-family="Arial Black, Arial" letter-spacing="4">FANWEAR DROP</text>
+  <text x="72" y="174" fill="#ffffff" font-size="54" font-family="Arial Black, Arial">Miami Match Week Tee</text>
+</svg>
