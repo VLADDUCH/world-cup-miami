@@ -15,6 +15,92 @@ const categoriesPath = path.resolve(__dirname, "../data/newsCategories.json");
 
 const DEFAULT_IMAGE = "/images/wcim_soccer_ball_miami_background.png";
 
+const LOCAL_CONTEXT_TERMS = [
+  "miami",
+  "miami gardens",
+  "hard rock stadium",
+  "south florida",
+  "broward",
+  "dade",
+  "miami-dade",
+  "bayfront",
+  "wynwood",
+  "brickell",
+  "doral",
+  "coral gables",
+  "coconut grove",
+  "south beach",
+  "inter miami",
+  "messi",
+];
+
+const SOCCER_CONTEXT_TERMS = [
+  "world cup",
+  "soccer",
+  "football",
+  "match",
+  "fixture",
+  "stadium",
+  "fan zone",
+  "watch party",
+  "supporters",
+  "brazil",
+  "colombia",
+  "portugal",
+  "uruguay",
+  "scotland",
+  "saudi arabia",
+  "cape verde",
+  "inter miami",
+  "messi",
+];
+
+const FAN_ACTIVITY_TERMS = [
+  "watch party",
+  "fan zone",
+  "fan festival",
+  "sports bar",
+  "restaurant",
+  "nightlife",
+  "viewing party",
+  "public event",
+  "meetup",
+  "tailgate",
+];
+
+const TEAM_COMMUNITY_TERMS = [
+  "brazil",
+  "brazilian",
+  "colombia",
+  "colombian",
+  "portugal",
+  "portuguese",
+  "uruguay",
+  "uruguayan",
+  "scotland",
+  "saudi arabia",
+  "cape verde",
+];
+
+const HARD_EXCLUDE_TERMS = [
+  "padel",
+  "pickleball",
+  "tennis",
+  "golf",
+  "basketball",
+  "nba",
+  "nfl",
+  "baseball",
+  "mlb",
+  "hockey",
+  "ufc",
+  "mma",
+  "formula 1",
+  "f1",
+  "luxury house",
+  "luxury houses",
+];
+
 const querySchema = z.object({
   q: z.string().trim().min(1).max(200).optional(),
   category: z.string().trim().min(1).max(80).optional(),
@@ -70,6 +156,111 @@ function makeId(...parts) {
     .slice(0, 120);
 }
 
+function articleSearchText(article = {}) {
+  const source =
+    typeof article.source === "string"
+      ? article.source
+      : article.source?.name || article.source_name || "";
+
+  return [
+    article.title,
+    article.description,
+    article.content,
+    article.summary,
+    source,
+    article.author,
+    article.url,
+    Array.isArray(article.tags) ? article.tags.join(" ") : "",
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function containsAny(text, terms) {
+  return terms.some((term) => text.includes(term));
+}
+
+function calculateArticleRelevance(article = {}, categorySlug = "") {
+  const text = articleSearchText(article);
+
+  const hasLocalContext = containsAny(text, LOCAL_CONTEXT_TERMS);
+  const hasSoccerContext = containsAny(text, SOCCER_CONTEXT_TERMS);
+  const hasFanActivity = containsAny(text, FAN_ACTIVITY_TERMS);
+  const hasTeamCommunity = containsAny(text, TEAM_COMMUNITY_TERMS);
+  const hasHardExclude = containsAny(text, HARD_EXCLUDE_TERMS);
+
+  const reasons = [];
+
+  if (hasLocalContext) reasons.push("local_context");
+  if (hasSoccerContext) reasons.push("soccer_context");
+  if (hasFanActivity) reasons.push("fan_activity");
+  if (hasTeamCommunity) reasons.push("team_community");
+  if (hasHardExclude) reasons.push("hard_exclude_term");
+
+  if (hasHardExclude && !(hasLocalContext && hasSoccerContext)) {
+    return {
+      accepted: false,
+      score: 0,
+      reasons,
+      rule: "Rejected because unrelated sport/lifestyle terms appeared without enough Miami soccer context.",
+    };
+  }
+
+  if (categorySlug === "watch-parties") {
+    const accepted = hasLocalContext && (hasSoccerContext || hasFanActivity);
+    return {
+      accepted,
+      score: Number(hasLocalContext) + Number(hasSoccerContext) + Number(hasFanActivity),
+      reasons,
+      rule: "Watch party content must connect Miami/local context to soccer or fan gathering activity.",
+    };
+  }
+
+  if (categorySlug === "fan-zone-events") {
+    const accepted = hasLocalContext && (hasSoccerContext || hasFanActivity);
+    return {
+      accepted,
+      score: Number(hasLocalContext) + Number(hasSoccerContext) + Number(hasFanActivity),
+      reasons,
+      rule: "Fan zone content must connect Miami/local context to soccer or public fan activity.",
+    };
+  }
+
+  if (categorySlug === "team-fan-communities") {
+    const accepted = hasLocalContext && hasSoccerContext && hasTeamCommunity;
+    return {
+      accepted,
+      score: Number(hasLocalContext) + Number(hasSoccerContext) + Number(hasTeamCommunity),
+      reasons,
+      rule: "Team fan community content must connect Miami/local context to soccer and target team communities.",
+    };
+  }
+
+  if (categorySlug === "match-day-updates") {
+    const accepted = hasLocalContext && hasSoccerContext;
+    return {
+      accepted,
+      score: Number(hasLocalContext) + Number(hasSoccerContext),
+      reasons,
+      rule: "Match-day content must connect Miami/local context to soccer, match, or stadium activity.",
+    };
+  }
+
+  const accepted = hasLocalContext && hasSoccerContext;
+
+  return {
+    accepted,
+    score: Number(hasLocalContext) + Number(hasSoccerContext),
+    reasons,
+    rule: "Default editorial rule requires Miami/local context plus soccer/World Cup context.",
+  };
+}
+
+function isEditoriallyRelevant(article = {}, categorySlug = "") {
+  return calculateArticleRelevance(article, categorySlug).accepted;
+}
+
 function normalizeArticle(article, provider = "fallback", index = 0, forcedCategory = "") {
   const title = safeString(article.title || article.name || "Miami football update", "Miami football update");
   const description = safeString(
@@ -98,6 +289,8 @@ function normalizeArticle(article, provider = "fallback", index = 0, forcedCateg
     article.date ||
     new Date().toISOString();
 
+  const relevance = calculateArticleRelevance(article, forcedCategory || article.category || "");
+
   return {
     id: article.id || makeId(provider, title, publishedAt, index),
     title,
@@ -109,7 +302,12 @@ function normalizeArticle(article, provider = "fallback", index = 0, forcedCateg
     publishedAt,
     provider,
     category: forcedCategory || article.category || "miami-world-cup",
-    tags: Array.isArray(article.tags) ? article.tags : ["miami", "soccer", "news"],
+    tags: Array.isArray(article.tags) ? article.tags : [],
+    editorial: {
+      accepted: relevance.accepted,
+      score: relevance.score,
+      reasons: relevance.reasons,
+    },
   };
 }
 
@@ -180,7 +378,7 @@ async function fetchFromNewsApi({ query, limit, forceRefresh, categorySlug }) {
       params: {
         q: query,
         language: process.env.WCIM_NEWS_LANGUAGE || "en",
-        pageSize: limit,
+        pageSize: Math.min(Math.max(limit * 3, 10), 30),
         sortBy: "publishedAt",
         apiKey: apiKeys.newsApi,
       },
@@ -221,43 +419,70 @@ async function getStreamingNews(options = {}) {
 
   const limit = parsed.limit;
   const forceRefresh = boolValue(parsed.forceRefresh);
-  const categorySlug = selectedCategory?.slug || parsed.category || "";
+  const categorySlug = selectedCategory?.slug || parsed.category || "miami-world-cup";
 
   const providersTried = [];
+  const providerErrors = [];
 
-  const gnews = await fetchFromGNews({ query, limit, forceRefresh, categorySlug });
-  if (gnews) providersTried.push(gnews);
+  try {
+    const gnews = await fetchFromGNews({ query, limit, forceRefresh, categorySlug });
+    if (gnews) providersTried.push(gnews);
+  } catch (error) {
+    providerErrors.push({
+      provider: "gnews",
+      message: error.message,
+      details: error.details || null,
+    });
+  }
 
-  const newsapi = await fetchFromNewsApi({ query, limit, forceRefresh, categorySlug });
-  if (newsapi) providersTried.push(newsapi);
+  try {
+    const newsapi = await fetchFromNewsApi({ query, limit, forceRefresh, categorySlug });
+    if (newsapi) providersTried.push(newsapi);
+  } catch (error) {
+    providerErrors.push({
+      provider: "newsapi",
+      message: error.message,
+      details: error.details || null,
+    });
+  }
 
   const mergedArticles = providersTried
     .flatMap((providerResult) => providerResult.articles)
     .filter((article) => article.title && article.url);
 
+  const relevantArticles = mergedArticles.filter((article) =>
+    isEditoriallyRelevant(article, categorySlug)
+  );
+
   const deduped = [];
   const seen = new Set();
 
-  for (const article of mergedArticles) {
+  for (const article of relevantArticles) {
     const key = `${article.title.toLowerCase()}|${article.url}`;
     if (seen.has(key)) continue;
     seen.add(key);
     deduped.push(article);
   }
 
-  if (deduped.length > 0) {
+  const acceptedDeduped = deduped.filter((article) => article.editorial?.accepted === true);
+
+  if (acceptedDeduped.length > 0) {
     return {
       status: "ok",
       mode: "live",
       query,
       category: selectedCategory,
-      count: deduped.slice(0, limit).length,
+      relevanceFilter: "enabled",
+      count: acceptedDeduped.slice(0, limit).length,
+      totalFetchedBeforeFilter: mergedArticles.length,
+      totalAfterFilter: acceptedDeduped.length,
       providers: providersTried.map((provider) => ({
         provider: provider.provider,
         cached: provider.cached,
         fetchedAt: provider.fetchedAt,
       })),
-      articles: deduped.slice(0, limit),
+      providerErrors,
+      articles: acceptedDeduped.slice(0, limit),
     };
   }
 
@@ -268,8 +493,16 @@ async function getStreamingNews(options = {}) {
     mode: "fallback",
     query,
     category: selectedCategory,
+    relevanceFilter: "enabled",
     count: fallback.length,
-    providers: [],
+    totalFetchedBeforeFilter: mergedArticles.length,
+    totalAfterFilter: relevantArticles.length,
+    providers: providersTried.map((provider) => ({
+      provider: provider.provider,
+      cached: provider.cached,
+      fetchedAt: provider.fetchedAt,
+    })),
+    providerErrors,
     articles: fallback,
   };
 }
@@ -344,4 +577,6 @@ export {
   getNewsCategories,
   getNewsCategoryBySlug,
   getNewsByCategory,
+  calculateArticleRelevance,
+  isEditoriallyRelevant,
 };

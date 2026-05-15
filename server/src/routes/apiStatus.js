@@ -25,6 +25,8 @@ router.get("/status", async (req, res, next) => {
         dailyArticleEndpoint: "configured",
         imageSupport: "configured",
         categoriesEndpoint: "configured",
+        relevanceFilter: "configured",
+        providerFailureFallback: "configured",
         categoryCount: newsCategories.length,
       },
       events: {
