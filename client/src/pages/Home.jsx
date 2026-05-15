@@ -19,6 +19,7 @@ import SubmissionPanel from "../components/SubmissionPanel";
 import PublishedPromotionsPanel from "../components/PublishedPromotionsPanel";
 import ShopPreview from "../components/ShopPreview";
 import AdInventoryPreview from "../components/AdInventoryPreview";
+import EmailCapturePanel from "../components/EmailCapturePanel";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
 
@@ -540,6 +541,10 @@ export default function Home() {
       <ShopPreview />
 
       <AdInventoryPreview />
+
+      <EmailCapturePanel />
+
+
 
 
 

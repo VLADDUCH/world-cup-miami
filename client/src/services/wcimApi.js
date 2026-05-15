@@ -290,6 +290,13 @@ async function getAdPackages() {
   return data.packages || [];
 }
 
+async function submitLead(payload) {
+  return requestJson("/leads/subscribe", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 export {
   API_BASE_URL,
   getApiStatus,
@@ -322,4 +329,5 @@ export {
   getFeaturedAdSlots,
   getAdSections,
   getAdPackages,
+  submitLead,
 };
