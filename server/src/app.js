@@ -1,60 +1,27 @@
 import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
 
 import env from "./config/env.js";
+import securityHeaders from "./config/securityHeaders.js";
+import { globalRateLimiter } from "./config/rateLimit.js";
+import corsMiddleware from "./middleware/cors.js";
+import inputScanner from "./middleware/inputScanner.js";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
+import healthRouter from "./routes/health.js";
 import routes from "./routes/index.js";
 
 const app = express();
 
 app.disable("x-powered-by");
-app.set("trust proxy", 1);
+app.set("trust proxy", env.trustProxy);
 
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false,
-  })
-);
+app.use(securityHeaders());
+app.use(corsMiddleware());
+app.use(globalRateLimiter());
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin) {
-        return callback(null, true);
-      }
+app.use(express.json({ limit: env.requestBodyLimit }));
+app.use(express.urlencoded({ extended: true, limit: env.requestBodyLimit }));
 
-      const allowedOrigins = [
-        env.corsOrigin,
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-      ];
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error(`CORS blocked origin: ${origin}`));
-    },
-    credentials: true,
-  })
-);
-
-app.use(
-  rateLimit({
-    windowMs: env.rateLimitWindowMs,
-    max: env.rateLimitMaxRequests,
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: {
-      error: "Too many requests. Please try again shortly.",
-    },
-  })
-);
-
-app.use(express.json({ limit: "500kb" }));
-app.use(express.urlencoded({ extended: true, limit: "500kb" }));
+app.use(inputScanner);
 
 app.get("/", (req, res) => {
   res.type("html").send(`
@@ -89,6 +56,7 @@ app.get("/", (req, res) => {
         <main>
           <h1>World Cup in Miami API</h1>
           <p>The WCIM backend is running.</p>
+          <p>Health endpoint: <a href="/health"><code>/health</code></a></p>
           <p>Status endpoint: <a href="${env.apiPrefix}/status"><code>${env.apiPrefix}/status</code></a></p>
         </main>
       </body>
@@ -96,27 +64,14 @@ app.get("/", (req, res) => {
   `);
 });
 
+/*
+  Production platforms usually expect root-level probes.
+  API users can also call /api/v1/health, /api/v1/health/live, and /api/v1/health/ready.
+*/
+app.use("/", healthRouter);
 app.use(env.apiPrefix, routes);
 
-app.use((req, res) => {
-  res.status(404).json({
-    error: "Not found",
-    path: req.originalUrl,
-    timestamp: new Date().toISOString(),
-  });
-});
-
-app.use((error, req, res, next) => {
-  console.error("[error]", {
-    message: error.message,
-    path: req.originalUrl,
-    method: req.method,
-  });
-
-  res.status(error.status || 500).json({
-    error: env.nodeEnv === "production" ? "Internal server error" : error.message,
-    timestamp: new Date().toISOString(),
-  });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;

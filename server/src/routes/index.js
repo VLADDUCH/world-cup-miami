@@ -1,5 +1,6 @@
 import express from "express";
 import apiStatusRouter from "./apiStatus.js";
+import healthRouter from "./health.js";
 import businessesRouter from "./businesses.js";
 import newsFeedRouter from "./newsFeed.js";
 import eventsFeedRouter from "./eventsFeed.js";
@@ -18,6 +19,9 @@ router.get("/", (req, res) => {
     service: "world-cup-in-miami-api",
     message: "WCIM API root is online.",
     routes: {
+      health: "/api/v1/health",
+      liveHealth: "/api/v1/health/live",
+      readyHealth: "/api/v1/health/ready",
       status: "/api/v1/status",
       cache: "/api/v1/status/cache",
       businesses: "/api/v1/businesses",
@@ -44,6 +48,7 @@ router.get("/", (req, res) => {
   });
 });
 
+router.use("/", healthRouter);
 router.use("/", apiStatusRouter);
 router.use("/businesses", businessesRouter);
 router.use("/feeds/news", newsFeedRouter);
