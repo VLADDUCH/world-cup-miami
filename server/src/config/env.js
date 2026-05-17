@@ -35,11 +35,9 @@ const envSchema = z.object({
     .default("/api/v1"),
 
   CORS_ORIGIN: z.string().url().default("http://localhost:5173"),
-
   CORS_ALLOWED_ORIGINS: z.string().optional(),
 
   TRUST_PROXY: z.coerce.number().int().min(0).max(3).default(1),
-
   REQUEST_BODY_LIMIT: z.string().min(1).default("500kb"),
 
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60000),
@@ -55,6 +53,10 @@ const envSchema = z.object({
   SECURITY_HSTS_ENABLED: z.coerce.boolean().default(false),
 
   LOG_ERROR_STACKS: z.coerce.boolean().default(false),
+  LOG_LEVEL: z.enum(["debug", "info", "warn", "error", "silent"]).default("info"),
+  LOG_FORMAT: z.enum(["json"]).default("json"),
+  AUDIT_LOG_ENABLED: z.coerce.boolean().default(true),
+  REQUEST_LOGGING_ENABLED: z.coerce.boolean().default(true),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -78,7 +80,10 @@ const configuredOrigins = [
 ];
 
 const corsAllowedOrigins = Array.from(
-  new Set([...configuredOrigins, ...(raw.NODE_ENV === "production" ? [] : localDevOrigins)])
+  new Set([
+    ...configuredOrigins,
+    ...(raw.NODE_ENV === "production" ? [] : localDevOrigins),
+  ])
 );
 
 const env = {
@@ -109,6 +114,10 @@ const env = {
   securityHstsEnabled: raw.SECURITY_HSTS_ENABLED,
 
   logErrorStacks: raw.LOG_ERROR_STACKS,
+  logLevel: raw.LOG_LEVEL,
+  logFormat: raw.LOG_FORMAT,
+  auditLogEnabled: raw.AUDIT_LOG_ENABLED,
+  requestLoggingEnabled: raw.REQUEST_LOGGING_ENABLED,
 };
 
 export default env;

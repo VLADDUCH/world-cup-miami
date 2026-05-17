@@ -5,6 +5,8 @@ import securityHeaders from "./config/securityHeaders.js";
 import { globalRateLimiter } from "./config/rateLimit.js";
 import corsMiddleware from "./middleware/cors.js";
 import inputScanner from "./middleware/inputScanner.js";
+import requestContext from "./middleware/requestContext.js";
+import requestLogger from "./middleware/requestLogger.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import healthRouter from "./routes/health.js";
 import routes from "./routes/index.js";
@@ -14,9 +16,11 @@ const app = express();
 app.disable("x-powered-by");
 app.set("trust proxy", env.trustProxy);
 
+app.use(requestContext);
 app.use(securityHeaders());
 app.use(corsMiddleware());
 app.use(globalRateLimiter());
+app.use(requestLogger);
 
 app.use(express.json({ limit: env.requestBodyLimit }));
 app.use(express.urlencoded({ extended: true, limit: env.requestBodyLimit }));

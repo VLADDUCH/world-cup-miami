@@ -10,6 +10,16 @@ function memorySnapshot() {
   };
 }
 
+function observabilitySnapshot() {
+  return {
+    requestIdsEnabled: true,
+    requestLoggingEnabled: env.requestLoggingEnabled,
+    structuredLoggingEnabled: env.logFormat === "json",
+    auditLoggingEnabled: env.auditLogEnabled,
+    logLevel: env.logLevel,
+  };
+}
+
 export async function getLiveHealth() {
   return {
     status: "ok",
@@ -17,6 +27,7 @@ export async function getLiveHealth() {
     check: "live",
     environment: env.nodeEnv,
     uptimeSeconds: Math.round(process.uptime()),
+    observability: observabilitySnapshot(),
     timestamp: new Date().toISOString(),
   };
 }
@@ -38,6 +49,7 @@ export async function getReadyHealth() {
       cspEnabled: env.securityHeadersCspEnabled,
       hstsEnabled: env.securityHstsEnabled,
     },
+    observability: observabilitySnapshot(),
     memory: memorySnapshot(),
     timestamp: new Date().toISOString(),
   };

@@ -1,3 +1,5 @@
+import logger from "../config/logger.js";
+
 const SECRET_AND_ATTACK_PATTERNS = [
   {
     code: "AWS_ACCESS_KEY",
@@ -45,12 +47,16 @@ function scanValue(value, path = "root", findings = []) {
   }
 
   if (Array.isArray(value)) {
-    value.forEach((item, index) => scanValue(item, `${path}[${index}]`, findings));
+    value.forEach((item, index) => {
+      scanValue(item, `${path}[${index}]`, findings);
+    });
     return findings;
   }
 
   if (value && typeof value === "object") {
-    Object.entries(value).forEach(([key, item]) => scanValue(item, `${path}.${key}`, findings));
+    Object.entries(value).forEach(([key, item]) => {
+      scanValue(item, `${path}.${key}`, findings);
+    });
   }
 
   return findings;
@@ -64,6 +70,14 @@ export function inputScanner(req, res, next) {
   ];
 
   if (findings.length > 0) {
+    logger.security("security.input_policy.blocked", {
+      requestId: req.requestId,
+      method: req.method,
+      path: req.originalUrl,
+      ip: req.ip,
+      findings,
+    });
+
     return res.status(400).json({
       error: "Request blocked by input security policy.",
       code: "INPUT_POLICY_BLOCKED",
@@ -71,6 +85,7 @@ export function inputScanner(req, res, next) {
         code: finding.code,
         path: finding.path,
       })),
+      requestId: req.requestId,
       timestamp: new Date().toISOString(),
     });
   }
