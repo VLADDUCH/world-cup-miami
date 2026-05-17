@@ -1,4 +1,5 @@
 import express from "express";
+import { recordAuditEvent } from "../services/auditService.js";
 import {
   approveSubmission,
   getReviewQueue,
@@ -27,6 +28,30 @@ function requireAdmin(req, res, next) {
   }
 
   return next();
+}
+
+function auditActor(req) {
+  return {
+    type: "admin",
+    id: req.headers["x-admin-id"] || "admin-review-api",
+  };
+}
+
+function recordAdminReviewAudit(req, action, submission, metadata = {}) {
+  return recordAuditEvent({
+    action,
+    actor: auditActor(req),
+    resourceType: "promotionSubmission",
+    resourceId: req.params.id || submission?.id || "unknown",
+    requestId: req.requestId,
+    metadata: {
+      route: req.originalUrl,
+      method: req.method,
+      submissionStatus: submission?.reviewStatus || submission?.status || "unknown",
+      businessName: submission?.businessName || submission?.name || "unknown",
+      ...metadata,
+    },
+  });
 }
 
 router.use(requireAdmin);
@@ -84,6 +109,10 @@ router.patch("/promotions/:id", async (req, res, next) => {
   try {
     const submission = await updateSubmissionReview(req.params.id, req.body);
 
+    recordAdminReviewAudit(req, "admin.review.promotion.update", submission, {
+      updatedFields: Object.keys(req.body || {}),
+    });
+
     res.json({
       status: "ok",
       message: "Submission review updated.",
@@ -98,6 +127,10 @@ router.patch("/promotions/:id", async (req, res, next) => {
 router.post("/promotions/:id/approve", async (req, res, next) => {
   try {
     const submission = await approveSubmission(req.params.id, req.body);
+
+    recordAdminReviewAudit(req, "admin.review.promotion.approve", submission, {
+      decision: "approved",
+    });
 
     res.json({
       status: "ok",
@@ -114,6 +147,11 @@ router.post("/promotions/:id/reject", async (req, res, next) => {
   try {
     const submission = await rejectSubmission(req.params.id, req.body);
 
+    recordAdminReviewAudit(req, "admin.review.promotion.reject", submission, {
+      decision: "rejected",
+      reasonProvided: Boolean(req.body?.reason || req.body?.reviewNotes),
+    });
+
     res.json({
       status: "ok",
       message: "Submission rejected.",
@@ -128,6 +166,10 @@ router.post("/promotions/:id/reject", async (req, res, next) => {
 router.post("/promotions/:id/contacted", async (req, res, next) => {
   try {
     const submission = await markSubmissionContacted(req.params.id, req.body);
+
+    recordAdminReviewAudit(req, "admin.review.promotion.contacted", submission, {
+      decision: "contacted",
+    });
 
     res.json({
       status: "ok",
