@@ -10,6 +10,7 @@ import shopRouter from "./shop.js";
 import adInventoryRouter from "./adInventory.js";
 import leadsRouter from "./leads.js";
 import analyticsRouter from "./analytics.js";
+import auditRouter from "./audit.js";
 
 const router = express.Router();
 
@@ -43,6 +44,8 @@ router.get("/", (req, res) => {
       shopProducts: "/api/v1/shop/products",
       shopCategories: "/api/v1/shop/categories",
       shopFeatured: "/api/v1/shop/featured",
+      auditEvents: "/api/v1/audit/events",
+      auditStats: "/api/v1/audit/stats",
     },
     timestamp: new Date().toISOString(),
   });
@@ -59,5 +62,6 @@ router.use("/shop", shopRouter);
 router.use("/ads/inventory", adInventoryRouter);
 router.use("/leads", leadsRouter);
 router.use("/analytics", analyticsRouter);
+router.use("/audit", auditRouter);
 
 export default router;
