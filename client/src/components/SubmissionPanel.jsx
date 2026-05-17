@@ -6,7 +6,7 @@ import {
 import styles from "../styles/Home.module.css";
 
 const fallbackTypes = [
-  { slug: "business_listing", label: "Add My Business" },
+  { slug: "business_listing", label: "Put My Business on the Map" },
   { slug: "flyer", label: "Add My Flyer" },
   { slug: "watch_party", label: "Submit Watch Party" },
   { slug: "event", label: "Submit Event" },
@@ -98,15 +98,15 @@ export default function SubmissionPanel() {
     <section className={styles.submissionSection} id="submit">
       <div className={styles.sectionHeading}>
         <div>
-          <p>Promote Your Business</p>
-          <h2>Meet fans at the moment they are ready to choose</h2>
+          <p>Get Seen by Miami Fans</p>
+          <h2>Be visible when fans are choosing where to go, what to do, and who becomes part of their Miami story.</h2>
         </div>
-        <a href="#submit-form">Start Submission</a>
+        <a href="#submit-form">Start Your Spotlight Request</a>
       </div>
 
       <div className={styles.submissionLayout}>
         <aside className={styles.submissionPitch}>
-          <span>Ad + promotion intake</span>
+          <span>Business + event spotlight request</span>
           <h3>{activeType?.label || "Promote in Miami"}</h3>
           <p>
             Submit your business, flyer, watch party, local event, or sponsor inquiry.
@@ -138,7 +138,7 @@ export default function SubmissionPanel() {
         <form className={styles.submissionForm} id="submit-form" onSubmit={handleSubmit}>
           <div className={styles.formRow}>
             <label>
-              Business / Event Name *
+              Business, Event, or Experience Name *
               <input
                 name="businessName"
                 value={form.businessName}
@@ -188,17 +188,17 @@ export default function SubmissionPanel() {
 
           <div className={styles.formRow}>
             <label>
-              Category
+              What kind of experience is this?
               <input
                 name="category"
                 value={form.category}
                 onChange={updateField}
-                placeholder="Restaurant, sports bar, merch, nightlife..."
+                placeholder="Restaurant, sports bar, merch, nightlife, family event..."
               />
             </label>
 
             <label>
-              Miami Area
+              Miami neighborhood or area
               <input
                 name="locationArea"
                 value={form.locationArea}
@@ -264,7 +264,7 @@ export default function SubmissionPanel() {
           </div>
 
           <label>
-            Budget Range
+            Promotion budget range
             <select name="budgetRange" value={form.budgetRange} onChange={updateField}>
               <option value="not_sure">Not sure yet</option>
               <option value="under_250">Under $250</option>
@@ -275,7 +275,7 @@ export default function SubmissionPanel() {
           </label>
 
           <label>
-            What do you want to promote? *
+            Tell fans why this belongs in their Miami World Cup plans *
             <textarea
               name="message"
               value={form.message}
@@ -283,7 +283,7 @@ export default function SubmissionPanel() {
               required
               minLength={10}
               rows={5}
-              placeholder="Tell us about your flyer, watch party, event, business, offer, or sponsor request."
+              placeholder="Tell us what makes this worth discovering — the energy, the offer, the crowd, the food, the music, the location, or the moment fans should not miss."
             />
           </label>
 
@@ -305,7 +305,7 @@ export default function SubmissionPanel() {
           ) : null}
 
           <button type="submit" disabled={status === "submitting"}>
-            {status === "submitting" ? "Submitting..." : "Submit for Review"}
+            {status === "submitting" ? "Submitting..." : "Send My Spotlight Request"}
           </button>
         </form>
       </div>

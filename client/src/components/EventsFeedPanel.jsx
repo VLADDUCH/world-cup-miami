@@ -18,9 +18,9 @@ const FALLBACK_CATEGORIES = [
 const FALLBACK_EVENTS = [
   {
     id: "fallback-watch-party",
-    title: "Wynwood Soccer Watch Party Guide",
+    title: "Wynwood Watch Party Energy Guide",
     description:
-      "Track watch parties, nightlife venues, restaurants, and fan gathering spots around Wynwood during Miami match weeks.",
+      "Follow the energy through Wynwood — from packed watch parties and restaurants to music, murals, nightlife, and fans turning every block into part of the celebration.",
     imageUrl: DEFAULT_IMAGE,
     startDate: "2026-06-15",
     startTime: "18:00",
@@ -59,7 +59,7 @@ export default function EventsFeedPanel() {
   const [events, setEvents] = useState(FALLBACK_EVENTS);
   const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
   const [activeCategory, setActiveCategory] = useState("watch-parties");
-  const [categoryEvents, setCategoryEvents] = useState(FALLBACK_EVENTS);
+  const [categoryEvents, setActiveCategoryEvents] = useState(FALLBACK_EVENTS);
   const [mode, setMode] = useState("fallback");
   const [loading, setLoading] = useState(true);
 
@@ -108,12 +108,12 @@ export default function EventsFeedPanel() {
         const result = await getEventsByCategory(activeCategory, 4, true);
 
         if (!ignore) {
-          setCategoryEvents(result.events || FALLBACK_EVENTS);
+          setActiveCategoryEvents(result.events || FALLBACK_EVENTS);
         }
       } catch (error) {
         if (!ignore) {
           const fallback = events.filter((event) => event.category === activeCategory);
-          setCategoryEvents(fallback.length > 0 ? fallback : FALLBACK_EVENTS);
+          setActiveCategoryEvents(fallback.length > 0 ? fallback : FALLBACK_EVENTS);
         }
       }
     }
@@ -131,17 +131,17 @@ export default function EventsFeedPanel() {
     <section className={styles.eventsSection} id="events">
       <div className={styles.sectionHeading}>
         <div>
-          <p>Miami Event Feed</p>
-          <h2>Watch parties, fan zones, nightlife, and local match-week events</h2>
+          <p>Where Miami Comes Alive</p>
+          <h2>Find the watch parties, fan zones, nightlife, family events, and neighborhood moments that turn matchday into a Miami memory.</h2>
         </div>
         <a href="#business">Promote Your Event</a>
       </div>
 
       <div className={styles.eventsStatusBar}>
         <span className={styles.statusDot} />
-        <strong>Events feed:</strong>
+        <strong>Local event pulse:</strong>
         <span>{loading ? "loading" : mode}</span>
-        <small>No external event API keys required — showing WCIM local event feed.</small>
+        <small>Showing local WCIM event highlights now. More live event sources can connect as Miami’s matchweek calendar grows.</small>
       </div>
 
       <div className={styles.eventTabs} role="tablist" aria-label="Event categories">
@@ -184,7 +184,7 @@ export default function EventsFeedPanel() {
                   <small>{event.venueName} • {event.city}</small>
                 </div>
 
-                <a href={event.url || "#"}>View Event</a>
+                <a href={event.url || "#"}>Explore This Moment</a>
               </div>
             </article>
           ))}

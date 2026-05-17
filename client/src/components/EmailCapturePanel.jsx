@@ -24,8 +24,8 @@ const DEFAULT_FORM = {
 
 export default function EmailCapturePanel({
   source = "homepage",
-  title = "Get Miami match-week updates before everyone else",
-  subtitle = "Join the WCIM list for fan updates, merch drops, events, sponsor opportunities, and local World Cup activity.",
+  title = "Get Closer to the Moment Before Everyone Else",
+  subtitle = "Join the WCIM list and be first to know where fans are gathering, what drops are coming, which events are heating up, and where Miami’s World Cup energy is moving next.",
   compact = false,
 }) {
   const [form, setForm] = useState(DEFAULT_FORM);
@@ -71,7 +71,7 @@ export default function EmailCapturePanel({
   return (
     <section className={`${styles.emailCaptureSection} ${compact ? styles.emailCaptureCompact : ""}`}>
       <div className={styles.emailCaptureCopy}>
-        <p>WCIM Lead Capture</p>
+        <p>Join the Miami World Cup List</p>
         <h2>{title}</h2>
         <span>{subtitle}</span>
       </div>
@@ -131,7 +131,7 @@ export default function EmailCapturePanel({
             rows={compact ? 2 : 3}
             value={form.message}
             onChange={updateField}
-            placeholder="Tell us what you want updates about..."
+            placeholder="Tell us what kind of Miami World Cup moments you want first..."
           />
         </label>
 
@@ -143,11 +143,11 @@ export default function EmailCapturePanel({
             onChange={updateField}
             required
           />
-          <span>I agree to be contacted by World Cup in Miami about updates, offers, and opportunities.</span>
+          <span>Yes — send me Miami World Cup updates, local experiences, merch drops, and opportunities worth knowing about.</span>
         </label>
 
         <button type="submit" disabled={status === "submitting"}>
-          {status === "submitting" ? "Submitting..." : "Join List"}
+          {status === "submitting" ? "Submitting..." : "Join the Miami List"}
         </button>
 
         {notice ? (

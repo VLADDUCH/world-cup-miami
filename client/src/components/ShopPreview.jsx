@@ -62,17 +62,17 @@ export default function ShopPreview() {
     <section className={styles.shopPreviewSection} id="shop-preview">
       <div className={styles.sectionHeading}>
         <div>
-          <p>Merch Drop</p>
-          <h2>Miami-inspired fanwear built for match-week traffic</h2>
+          <p>Miami Fanwear Drop</p>
+          <h2>Fanwear made for the photos, the parties, the stadium walk, and the feeling of being part of Miami’s World Cup story.</h2>
         </div>
-        <a href="/shop">Shop Merch</a>
+        <a href="/shop">Shop Fanwear</a>
       </div>
 
       <div className={styles.shopPreviewStatus}>
         <span className={styles.statusDot} />
-        <strong>Shop catalog:</strong>
+        <strong>Miami fanwear preview:</strong>
         <span>{mode}</span>
-        <small>External checkout links can connect to Shopify, Printful, Printify, or Stripe later.</small>
+        <small>Limited drops can connect to your shop, checkout, or print-on-demand system when you are ready to start selling.</small>
       </div>
 
       <div className={styles.shopPreviewGrid}>

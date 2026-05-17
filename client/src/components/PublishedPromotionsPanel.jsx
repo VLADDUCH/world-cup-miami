@@ -91,7 +91,7 @@ export default function PublishedPromotionsPanel() {
           <p>Featured Miami Experiences</p>
           <h2>Local offers, events, and sponsor placements for matchweek visitors</h2>
         </div>
-        <a href="#submit">Promote Your Business</a>
+        <a href="#submit">Get Seen by Miami Fans</a>
       </div>
 
       <div className={styles.publishedGrid}>
@@ -114,7 +114,7 @@ export default function PublishedPromotionsPanel() {
               <h3>{event.title}</h3>
               <p>{event.description}</p>
               <small>{event.startDate} {event.startTime ? `• ${event.startTime}` : ""}</small>
-              <a href={event.url || "#"}>View Event</a>
+              <a href={event.url || "#"}>Explore This Moment</a>
             </article>
           ))}
 

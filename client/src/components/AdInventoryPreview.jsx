@@ -44,17 +44,17 @@ export default function AdInventoryPreview() {
     <section className={styles.adPreviewSection} id="advertise">
       <div className={styles.sectionHeading}>
         <div>
-          <p>Advertise With WCIM</p>
-          <h2>Sell clear sponsor placements to Miami businesses</h2>
+          <p>Put Your Brand Inside Miami’s World Cup Moment</p>
+          <h2>Give local businesses a visible place in the fan journey — before, during, and after matchday.</h2>
         </div>
-        <a href="/advertise">View Ad Packages</a>
+        <a href="/advertise">Explore Featured Placements</a>
       </div>
 
       <div className={styles.adPreviewStatus}>
         <span className={styles.statusDot} />
-        <strong>Ad inventory:</strong>
+        <strong>Featured placement preview:</strong>
         <span>{mode}</span>
-        <small>Manual inquiry flow connected to the existing submission form.</small>
+        <small>Businesses can request placement now and join the review list before matchweek demand rises.</small>
       </div>
 
       <div className={styles.adPreviewGrid}>

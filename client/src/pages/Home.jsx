@@ -83,9 +83,9 @@ const FALLBACK_MAP_PINS = [
 const FALLBACK_NEWS = [
   {
     id: "fallback-miami-world-cup",
-    title: "Miami prepares for global football energy",
+    title: "Miami is getting ready to welcome the world",
     description:
-      "World Cup in Miami is tracking fan zones, watch parties, local businesses, streaming updates, and match-day movement across the city.",
+      "From fan zones and watch parties to local restaurants, nightlife, merch drops, and match-day movement, World Cup in Miami helps you feel where the city is coming alive before you even arrive.",
     source: "World Cup in Miami",
     url: "/",
     imageUrl: DEFAULT_BACKGROUND,
@@ -93,9 +93,9 @@ const FALLBACK_NEWS = [
   },
   {
     id: "fallback-watch-parties",
-    title: "Watch party listings become a core Miami fan feature",
+    title: "Watch parties are becoming part of Miami’s World Cup heartbeat",
     description:
-      "Restaurants, sports bars, and nightlife venues can be organized by area so fans know where to watch and gather.",
+      "Fans can discover the restaurants, sports bars, rooftops, lounges, and neighborhood spots where the match-day energy is already building.",
     source: "World Cup in Miami",
     url: "/#map",
     imageUrl: DEFAULT_BACKGROUND,
@@ -103,9 +103,9 @@ const FALLBACK_NEWS = [
   },
   {
     id: "fallback-business",
-    title: "Local businesses can request featured placement",
+    title: "Local businesses can step into the fan journey",
     description:
-      "Restaurants, bars, venues, and fan-focused businesses can prepare for match-day traffic through featured map listings and promotion slots.",
+      "Restaurants, bars, venues, shops, and fan-focused businesses can get discovered while visitors are choosing where to eat, watch, shop, and celebrate.",
     source: "World Cup in Miami",
     url: "/#business",
     imageUrl: DEFAULT_BACKGROUND,
@@ -146,43 +146,43 @@ const MIAMI_MATCHES = [
     date: "June 15",
     time: "6:00 PM",
     match: "Saudi Arabia vs Uruguay",
-    label: "Opening Miami match energy",
+    label: "Miami’s first wave of global match energy",
   },
   {
     date: "June 21",
     time: "6:00 PM",
     match: "Uruguay vs Cape Verde",
-    label: "International fan meetup opportunity",
+    label: "A night for cultures, colors, chants, and new fan connections",
   },
   {
     date: "June 24",
     time: "6:00 PM",
     match: "Scotland vs Brazil",
-    label: "Major Brazil fan traffic moment",
+    label: "Brazil energy meets Miami heat — expect color, music, and movement",
   },
   {
     date: "June 27",
     time: "7:30 PM",
     match: "Colombia vs Portugal",
-    label: "Huge South Florida audience moment",
+    label: "A massive South Florida fan moment with pride on every side",
   },
   {
     date: "July 3",
     time: "6:00 PM",
     match: "Round of 32",
-    label: "Knockout stage traffic spike",
+    label: "The pressure rises, the city tightens, and every fan starts watching closer",
   },
   {
     date: "July 11",
     time: "5:00 PM",
     match: "Quarter-final",
-    label: "Premium ad placement opportunity",
+    label: "A premium football moment where Miami feels like the center of the world",
   },
   {
     date: "July 18",
     time: "5:00 PM",
     match: "Bronze Final",
-    label: "Final weekend audience surge",
+    label: "One final weekend wave of fans, memories, photos, and citywide celebration",
   },
 ];
 
@@ -314,7 +314,7 @@ export default function Home() {
         }
       } catch (error) {
         if (!ignore) {
-          setApiError("Backend feeds are unavailable. Showing local fallback content.");
+          setApiError("Miami is warming up. Showing local highlights while fresh city updates continue to load.");
         }
       } finally {
         if (!ignore) {
@@ -333,7 +333,7 @@ export default function Home() {
   useEffect(() => {
     let ignore = false;
 
-    async function loadCategory() {
+    async function loadCategoryArticles() {
       try {
         const result = await getNewsByCategory(activeCategory, 4);
 
@@ -352,7 +352,7 @@ export default function Home() {
     }
 
     if (activeCategory) {
-      loadCategory();
+      loadCategoryArticles();
     }
 
     return () => {
@@ -393,21 +393,21 @@ export default function Home() {
           <a href="#matches">Matches</a>
           <a href="#map">Map</a>
           <a href="#business">Businesses</a>
-          <a href="#shop">Shop Merch</a>
-          <a href="#news">Miami Updates</a>
+          <a href="#shop">Shop Fanwear</a>
+          <a href="#news">Miami Is Getting Ready</a>
         </nav>
 
         <a className={styles.advertiseTopBtn} href="#business">
-          Advertise Now
+          Claim a Featured Spot
         </a>
       </header>
 
       <section className={styles.heroShell}>
         <section className={styles.heroText}>
-          <div className={styles.kicker}>Miami fan guide • live updates • business promotions</div>
+          <div className={styles.kicker}>Your Miami matchweek guide • live updates • fan experiences • places to celebrate</div>
 
           <h1>
-            The World Comes To <span>Miami</span>
+            The World Is Coming to <span>Miami</span> — Feel It First
           </h1>
 
           <p className={styles.heroCopy}>
@@ -416,21 +416,21 @@ export default function Home() {
           </p>
 
           <div className={styles.heroActions}>
-            <a href="#matches" className={styles.primaryBtn}>Explore Match Schedule</a>
-            <a href="#business" className={styles.secondaryBtn}>Promote Your Business</a>
+            <a href="#matches" className={styles.primaryBtn}>View the Miami Match Schedule</a>
+            <a href="#business" className={styles.secondaryBtn}>Get Seen by Miami Fans</a>
           </div>
 
           <div className={styles.apiFeedStatus}>
             <span className={styles.statusDot} />
             <span>
-              Backend feeds: {apiStatus?.status === "ok" ? "connected" : "fallback mode"} • News: {feedMode}
+              Miami update system: {apiStatus?.status === "ok" ? "connected" : "warming up"} • News: {feedMode}
             </span>
           </div>
 
           {apiError ? <p className={styles.feedWarning}>{apiError}</p> : null}
 
           <div className={styles.countdownCard}>
-            <p>{kickoffCountdown.isLive ? "Miami kickoff is live" : "Miami kickoff begins in"}</p>
+            <p>{kickoffCountdown.isLive ? "Miami kickoff is live" : "The countdown to Miami’s football takeover has begun"}</p>
             <div className={styles.countdownGrid}>
               <span><strong>{kickoffCountdown.days}</strong><small>Days</small></span>
               <span><strong>{String(kickoffCountdown.hours).padStart(2, "0")}</strong><small>Hrs</small></span>
@@ -447,8 +447,8 @@ export default function Home() {
 
         <aside className={styles.sidePanel} id="news">
           <div className={styles.panelHeader}>
-            <h2>Miami Updates</h2>
-            <a href="#newsTabs">{loading ? "Loading" : "Live Feed"}</a>
+            <h2>Miami Is Getting Ready</h2>
+            <a href="#newsTabs">{loading ? "Loading" : "City Pulse"}</a>
           </div>
 
           <article className={styles.dailyArticleCard}>
@@ -456,10 +456,10 @@ export default function Home() {
               <ArticleImage src={dailyArticle?.imageUrl} alt={dailyArticle?.title || "Daily Miami update"} />
             </div>
             <div>
-              <span>Daily Featured Update</span>
+              <span>Featured Miami Moment</span>
               <h3>{dailyArticle?.title}</h3>
               <p>{dailyArticle?.description}</p>
-              <ArticleLink article={dailyArticle}>Read update</ArticleLink>
+              <ArticleLink article={dailyArticle}>Explore the Update</ArticleLink>
             </div>
           </article>
 
@@ -478,13 +478,13 @@ export default function Home() {
           </div>
 
           <div className={styles.businessCallout} id="business">
-            <h2>Promote your business</h2>
+            <h2>Bring Fans to Your Door</h2>
             <p>
               Reach fans looking for watch parties, food, nightlife, merch, local events,
               and match-day places to go.
             </p>
             <a href="mailto:info@worldcupinmiami.com?subject=Add%20My%20Business%20to%20World%20Cup%20in%20Miami">
-              Promote Your Business
+              Get Seen by Miami Fans
             </a>
           </div>
         </aside>
@@ -492,39 +492,39 @@ export default function Home() {
 
       <section className={styles.quickCards}>
         <article className={styles.card} id="matches">
-          <div className={styles.cardTopline}>Next Match</div>
+          <div className={styles.cardTopline}>Next Miami Match Moment</div>
           <h2>Saudi Arabia vs Uruguay</h2>
           <p>June 15 • 6:00 PM • Miami Gardens</p>
-          <a href="#schedule">View Match Details</a>
+          <a href="#schedule">Plan Around This Match</a>
         </article>
 
         <article className={styles.card}>
-          <div className={styles.cardTopline}>Backend Powered</div>
-          <h2>News + Business Feeds</h2>
-          <p>Fresh Miami updates, local places, and fan experiences come together in one matchweek guide.</p>
-          <a href="#newsTabs">View Updates</a>
+          <div className={styles.cardTopline}>Always Moving With Miami</div>
+          <h2>Fresh Updates + Local Discoveries</h2>
+          <p>Every update, featured place, and fan experience is designed to help visitors move through Miami with confidence, excitement, and something new to discover.</p>
+          <a href="#newsTabs">See What’s Happening</a>
         </article>
 
         <article className={styles.card} id="shop">
-          <div className={styles.cardTopline}>Shop Merch</div>
-          <h2>Rep Miami. Rep the Moment.</h2>
-          <p>Miami-first shirts, hats, posters, stickers, and fan drops.</p>
-          <a href="#shop">Shop Merch</a>
+          <div className={styles.cardTopline}>Shop Fanwear</div>
+          <h2>Put Miami on Your Chest</h2>
+          <p>This is more than fanwear. It is the photo, the watch party, the stadium walk, the memory, and the feeling of saying: I was in Miami when the world showed up.</p>
+          <a href="#shop">Shop Fanwear</a>
         </article>
 
         <article className={styles.card}>
-          <div className={styles.cardTopline}>Ad Space</div>
-          <h2>Featured Business Slots</h2>
-          <p>Meet fans while they are choosing where to eat, watch, shop, and celebrate.</p>
-          <a href="#submit">Advertise Now</a>
+          <div className={styles.cardTopline}>Be Where Fans Decide</div>
+          <h2>Featured Local Moments</h2>
+          <p>Place your brand in the path of fans who are already looking for where to go, what to wear, what to eat, and where to celebrate next.</p>
+          <a href="#submit">Claim a Featured Spot</a>
         </article>
       </section>
 
       <section className={styles.newsTabsSection} id="newsTabs">
         <div className={styles.sectionHeading}>
           <div>
-            <p>Miami Matchweek Pulse</p>
-            <h2>Curated soccer, events, travel, and fan activity across Miami</h2>
+            <p>The Miami Matchweek Pulse</p>
+            <h2>Feel the rhythm of Miami matchweek — from big matches and watch parties to local events, fan hotspots, and the places everyone will be talking about.</h2>
           </div>
         </div>
 
@@ -549,7 +549,7 @@ export default function Home() {
             <h2>{categoryArticles[0]?.title || "Miami World Cup Updates"}</h2>
             <span>{categoryArticles[0]?.description}</span>
             <ArticleLink article={categoryArticles[0]} className={styles.inlineReadMore}>
-              Open update
+              Open the Moment
             </ArticleLink>
           </article>
 
@@ -589,10 +589,10 @@ export default function Home() {
       <section className={styles.mapSection} id="map">
         <div className={styles.sectionHeading}>
           <div>
-            <p>Interactive Miami Map</p>
-            <h2>Fan zones, watch parties, business listings, and match-day hotspots</h2>
+            <p>Explore Miami Through the World Cup Map</p>
+            <h2>Move through Miami before you arrive — discover fan zones, watch parties, featured businesses, stadium areas, and places where the city will feel alive.</h2>
           </div>
-          <a href="#submit">Add Your Location</a>
+          <a href="#submit">Add Your Spot</a>
         </div>
 
         <div className={styles.mapLayout}>
@@ -633,7 +633,7 @@ export default function Home() {
           </div>
 
           <div className={styles.locationPanel}>
-            <h3>Business Map Pins Loaded</h3>
+            <h3>Miami Hotspots Loaded</h3>
             <p>{mapPins.length} Miami locations loaded from the WCIM backend map feed.</p>
 
             <div className={styles.locationList}>
@@ -657,10 +657,10 @@ export default function Home() {
       <section className={styles.featuredBusinessSection}>
         <div className={styles.sectionHeading}>
           <div>
-            <p>Promoted Local Businesses</p>
-            <h2>Miami favorites fans can discover before the next match</h2>
+            <p>Miami Places Fans Can Discover</p>
+            <h2>Featured local spots where fans can gather, celebrate, explore, and turn matchday into a full Miami experience.</h2>
           </div>
-          <a href="#submit">Promote Your Brand</a>
+          <a href="#submit">Feature My Business</a>
         </div>
 
         <div className={styles.featuredBusinessGrid}>
@@ -678,8 +678,8 @@ export default function Home() {
       <section className={styles.scheduleSection} id="schedule">
         <div className={styles.sectionHeading}>
           <div>
-            <p>Miami Match Schedule</p>
-            <h2>Designed to help fans plan, share, shop, and feel Miami before matchday</h2>
+            <p>Plan Your Miami Matchweek</p>
+            <h2>Every match is more than a kickoff. It is a reason to plan the day, choose the spot, wear the colors, meet the crowd, and feel Miami before the whistle blows.</h2>
           </div>
         </div>
 
@@ -697,13 +697,13 @@ export default function Home() {
 
       <section className={styles.emailBar}>
         <div>
-          <h2>Stay in the game</h2>
-          <p>Get Miami updates, match alerts, merch drops, and business promotions.</p>
+          <h2>Stay Close to the Miami Moment</h2>
+          <p>Get match alerts, local event updates, merch drops, and Miami experiences before the crowd catches on.</p>
         </div>
 
         <form className={styles.emailForm}>
-          <input type="email" placeholder="Enter your email" aria-label="Email address" />
-          <button type="submit">Join Alerts</button>
+          <input type="email" placeholder="Your best email" aria-label="Email address" />
+          <button type="submit">Keep Me Updated</button>
         </form>
       </section>
 
