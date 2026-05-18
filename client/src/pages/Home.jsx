@@ -17,11 +17,12 @@ import styles from "../styles/Home.module.css";
 import EventsFeedPanel from "../components/EventsFeedPanel";
 import SubmissionPanel from "../components/SubmissionPanel";
 import PublishedPromotionsPanel from "../components/PublishedPromotionsPanel";
-import ShopPreview from "../components/ShopPreview";
+
 import AdInventoryPreview from "../components/AdInventoryPreview";
 import EmailCapturePanel from "../components/EmailCapturePanel";
 
 const DEFAULT_BACKGROUND = "/images/wcim_soccer_ball_miami_background.png";
+const DEFAULT_NEWS_IMAGE = "/images/hero-skyline.jpg";
 
 const MIAMI_KICKOFF_TARGET = "2026-06-15T18:00:00-04:00";
 
@@ -85,7 +86,7 @@ const FALLBACK_NEWS = [
     id: "fallback-miami-world-cup",
     title: "Miami is getting ready to welcome the world",
     description:
-      "From fan zones and watch parties to local restaurants, nightlife, merch drops, and match-day movement, World Cup in Miami helps you feel where the city is coming alive before you even arrive.",
+      "From fan zones and watch parties to local restaurants, nightlife, and match-day movement, World Cup in Miami helps you feel where the city is coming alive before you even arrive.",
     source: "World Cup in Miami",
     url: "/",
     imageUrl: DEFAULT_BACKGROUND,
@@ -105,7 +106,7 @@ const FALLBACK_NEWS = [
     id: "fallback-business",
     title: "Local businesses can step into the fan journey",
     description:
-      "Restaurants, bars, venues, shops, and fan-focused businesses can get discovered while visitors are choosing where to eat, watch, shop, and celebrate.",
+      "Restaurants, bars, venues, explores, and fan-focused businesses can get discovered while visitors are choosing where to eat, watch, explore, and celebrate.",
     source: "World Cup in Miami",
     url: "/#business",
     imageUrl: DEFAULT_BACKGROUND,
@@ -393,7 +394,7 @@ export default function Home() {
           <a href="#matches">Matches</a>
           <a href="#map">Map</a>
           <a href="#business">Businesses</a>
-          <a href="#shop">Shop Fanwear</a>
+          <a href="#explore">explore fan culture</a>
           <a href="#news">Miami Is Getting Ready</a>
         </nav>
 
@@ -412,7 +413,7 @@ export default function Home() {
 
           <p className={styles.heroCopy}>
             One city. One energy. One unforgettable football experience. Find matches,
-            fan zones, Miami updates, local businesses, watch parties, and Miami-first merch.
+            fan zones, Miami updates, local businesses, watch parties, and Miami-first fan experiences.
           </p>
 
           <div className={styles.heroActions}>
@@ -480,7 +481,7 @@ export default function Home() {
           <div className={styles.businessCallout} id="business">
             <h2>Bring Fans to Your Door</h2>
             <p>
-              Reach fans looking for watch parties, food, nightlife, merch, local events,
+              Reach fans looking for watch parties, food, nightlife, fan experiences, local events,
               and match-day places to go.
             </p>
             <a href="mailto:info@worldcupinmiami.com?subject=Add%20My%20Business%20to%20World%20Cup%20in%20Miami">
@@ -505,17 +506,17 @@ export default function Home() {
           <a href="#newsTabs">See What’s Happening</a>
         </article>
 
-        <article className={styles.card} id="shop">
-          <div className={styles.cardTopline}>Shop Fanwear</div>
+        <article className={styles.card} id="explore">
+          <div className={styles.cardTopline}>explore fan culture</div>
           <h2>Put Miami on Your Chest</h2>
-          <p>This is more than fanwear. It is the photo, the watch party, the stadium walk, the memory, and the feeling of saying: I was in Miami when the world showed up.</p>
-          <a href="#shop">Shop Fanwear</a>
+          <p>This is more than a visit. It is the photo, the watch party, the stadium walk, the memory, and the feeling of saying: I was in Miami when the world showed up.</p>
+          <a href="#explore">explore fan culture</a>
         </article>
 
         <article className={styles.card}>
           <div className={styles.cardTopline}>Be Where Fans Decide</div>
           <h2>Featured Local Moments</h2>
-          <p>Place your brand in the path of fans who are already looking for where to go, what to wear, what to eat, and where to celebrate next.</p>
+          <p>Place your brand in the path of fans who are already looking for where to go, what to eat, what to experience, and where to celebrate next.</p>
           <a href="#submit">Claim a Featured Spot</a>
         </article>
       </section>
@@ -571,8 +572,6 @@ export default function Home() {
       <EventsFeedPanel />
 
       <PublishedPromotionsPanel />
-
-      <ShopPreview />
 
       <AdInventoryPreview />
 
@@ -698,7 +697,7 @@ export default function Home() {
       <section className={styles.emailBar}>
         <div>
           <h2>Stay Close to the Miami Moment</h2>
-          <p>Get match alerts, local event updates, merch drops, and Miami experiences before the crowd catches on.</p>
+          <p>Get match alerts, local event updates, and Miami experiences before the crowd catches on.</p>
         </div>
 
         <form className={styles.emailForm}>
@@ -716,7 +715,7 @@ export default function Home() {
           <a href="#matches">Matches</a>
           <a href="#map">Map</a>
           <a href="#business">Advertise</a>
-          <a href="#shop">Shop</a>
+          <a href="#explore">explore</a>
         </div>
       </footer>
     </main>

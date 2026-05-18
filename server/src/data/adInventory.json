@@ -69,25 +69,25 @@
     "featured": true
   },
   {
-    "id": "shop-sponsor",
-    "name": "Shop / Merch Sponsor",
-    "slot": "shop_section",
-    "section": "shop",
+    "id": "site-sponsor",
+    "name": "site / fan experiences Sponsor",
+    "slot": "site_section",
+    "section": "site",
     "packageTier": "standard",
     "price": 500,
     "currency": "USD",
     "durationDays": 7,
     "status": "available",
-    "headline": "Sponsor the merch experience",
-    "description": "Placement near shop and merchandise previews for brands aligned with apparel, fanwear, and lifestyle products.",
+    "headline": "Sponsor the fan experiences experience",
+    "description": "Placement near site and fan experiences previews for brands aligned with apparel, fan culture, and lifestyle offers.",
     "deliverables": [
-      "Sponsor card near shop preview",
+      "Sponsor card near site preview",
       "CTA link",
       "Brand mention",
-      "Product-adjacent visibility"
+      "offer-adjacent visibility"
     ],
-    "recommendedFor": ["apparel brands", "local creators", "merch vendors", "retail shops"],
-    "ctaLabel": "Sponsor Shop",
+    "recommendedFor": ["apparel brands", "local creators", "fan experiences vendors", "retail sites"],
+    "ctaLabel": "Sponsor site",
     "ctaHref": "/#submit",
     "featured": false
   },
@@ -109,7 +109,7 @@
       "Location area",
       "Link or contact CTA"
     ],
-    "recommendedFor": ["restaurants", "bars", "shops", "parking", "transportation", "local services"],
+    "recommendedFor": ["restaurants", "bars", "sites", "parking", "transportation", "local services"],
     "ctaLabel": "Request Map Pin",
     "ctaHref": "/#submit",
     "featured": false
@@ -132,7 +132,7 @@
       "CTA link",
       "Homepage rotation option"
     ],
-    "recommendedFor": ["restaurants", "bars", "shops", "attractions", "local services"],
+    "recommendedFor": ["restaurants", "bars", "sites", "attractions", "local services"],
     "ctaLabel": "Feature My Business",
     "ctaHref": "/#submit",
     "featured": true

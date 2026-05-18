@@ -63,17 +63,17 @@ test("getLeadStats returns lead counts", async () => {
   await resetLeads();
 
   await createLead({
-    email: "merch@example.com",
-    source: "shop",
-    interest: "merch",
-    message: "Merch interest.",
+    email: "fan-experiences@example.com",
+    source: "site",
+    interest: "fan_experiences",
+    message: "fan experiences interest.",
     consentToContact: true,
   });
 
   const stats = await getLeadStats();
 
   assert.equal(stats.total, 1);
-  assert.equal(stats.byInterest.merch, 1);
+  assert.equal(stats.byInterest.fan_experiences, 1);
 });
 
 test("leadsToCsv exports CSV text", () => {

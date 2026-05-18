@@ -7,10 +7,10 @@ async function requestJson(path, options = {}) {
   const response = await fetch(url, {
     headers: {
       Accept: "application/json",
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
+      ...(options.headers || {})
+},
+    ...options
+});
 
   if (!response.ok) {
     const text = await response.text();
@@ -49,9 +49,9 @@ async function getStreamingNews(limit = 6) {
     ...data,
     articles: (data.articles || []).map((article) => ({
       ...article,
-      imageUrl: normalizeImageUrl(article.imageUrl),
-    })),
-  };
+      imageUrl: normalizeImageUrl(article.imageUrl)
+}))
+};
 }
 
 async function getDailyNews() {
@@ -61,10 +61,10 @@ async function getDailyNews() {
     article: data.article
       ? {
           ...data.article,
-          imageUrl: normalizeImageUrl(data.article.imageUrl),
-        }
-      : null,
-  };
+          imageUrl: normalizeImageUrl(data.article.imageUrl)
+}
+      : null
+};
 }
 
 async function getNewsCategories() {
@@ -81,9 +81,9 @@ async function getNewsByCategory(slug, limit = 4) {
     ...data,
     articles: (data.articles || []).map((article) => ({
       ...article,
-      imageUrl: normalizeImageUrl(article.imageUrl),
-    })),
-  };
+      imageUrl: normalizeImageUrl(article.imageUrl)
+}))
+};
 }
 
 async function getEventsFeed(limit = 6, offline = true) {
@@ -94,9 +94,9 @@ async function getEventsFeed(limit = 6, offline = true) {
     ...data,
     events: (data.events || []).map((event) => ({
       ...event,
-      imageUrl: normalizeImageUrl(event.imageUrl),
-    })),
-  };
+      imageUrl: normalizeImageUrl(event.imageUrl)
+}))
+};
 }
 
 async function getEventCategories() {
@@ -114,9 +114,9 @@ async function getEventsByCategory(slug, limit = 4, offline = true) {
     ...data,
     events: (data.events || []).map((event) => ({
       ...event,
-      imageUrl: normalizeImageUrl(event.imageUrl),
-    })),
-  };
+      imageUrl: normalizeImageUrl(event.imageUrl)
+}))
+};
 }
 
 async function getPromotionTypes() {
@@ -128,10 +128,10 @@ async function submitPromotion(payload) {
   return requestJson("/promotions/submit", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+      "Content-Type": "application/json"
+},
+    body: JSON.stringify(payload)
+});
 }
 
 async function requestAdminJson(path, token, options = {}) {
@@ -142,10 +142,10 @@ async function requestAdminJson(path, token, options = {}) {
       Accept: "application/json",
       "Content-Type": "application/json",
       "x-admin-token": token,
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
+      ...(options.headers || {})
+},
+    ...options
+});
 
   if (!response.ok) {
     const text = await response.text();
@@ -173,29 +173,29 @@ async function getAdminPromotionStats(token) {
 async function updateAdminPromotionReview(token, id, payload) {
   return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}`, token, {
     method: "PATCH",
-    body: JSON.stringify(payload),
-  });
+    body: JSON.stringify(payload)
+});
 }
 
 async function approveAdminPromotion(token, id, payload = {}) {
   return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}/approve`, token, {
     method: "POST",
-    body: JSON.stringify(payload),
-  });
+    body: JSON.stringify(payload)
+});
 }
 
 async function rejectAdminPromotion(token, id, payload = {}) {
   return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}/reject`, token, {
     method: "POST",
-    body: JSON.stringify(payload),
-  });
+    body: JSON.stringify(payload)
+});
 }
 
 async function markAdminPromotionContacted(token, id, payload = {}) {
   return requestAdminJson(`/admin/review/promotions/${encodeURIComponent(id)}/contacted`, token, {
     method: "POST",
-    body: JSON.stringify(payload),
-  });
+    body: JSON.stringify(payload)
+});
 }
 
 async function getPublishedPromotions() {
@@ -213,9 +213,9 @@ async function getPublishedPromotionEvents() {
     ...data,
     events: (data.events || []).map((event) => ({
       ...event,
-      imageUrl: normalizeImageUrl(event.imageUrl),
-    })),
-  };
+      imageUrl: normalizeImageUrl(event.imageUrl)
+}))
+};
 }
 
 async function getPublishedPromotionMapPins() {
@@ -228,41 +228,11 @@ async function getPublishedPromotionSponsors() {
   return data.sponsors || [];
 }
 
-async function getShopProducts(options = {}) {
-  const params = new URLSearchParams();
 
-  if (options.category) params.set("category", options.category);
-  if (options.featured) params.set("featured", "true");
-  if (options.limit) params.set("limit", String(options.limit));
 
-  const query = params.toString();
-  const data = await requestJson(`/shop/products${query ? `?${query}` : ""}`);
 
-  return {
-    ...data,
-    products: (data.products || []).map((product) => ({
-      ...product,
-      imageUrl: normalizeImageUrl(product.imageUrl),
-    })),
-  };
-}
 
-async function getFeaturedShopProducts(limit = 6) {
-  const data = await requestJson(`/shop/featured?limit=${encodeURIComponent(limit)}`);
 
-  return {
-    ...data,
-    products: (data.products || []).map((product) => ({
-      ...product,
-      imageUrl: normalizeImageUrl(product.imageUrl),
-    })),
-  };
-}
-
-async function getShopCategories() {
-  const data = await requestJson("/shop/categories");
-  return data.categories || [];
-}
 
 async function getAdInventory(options = {}) {
   const params = new URLSearchParams();
@@ -295,10 +265,10 @@ async function submitLead(payload) {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+      "Content-Type": "application/json"
+},
+    body: JSON.stringify(payload)
+});
 
   const text = await response.text();
   let data = null;
@@ -326,10 +296,10 @@ async function submitAnalyticsEvent(payload) {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+      "Content-Type": "application/json"
+},
+    body: JSON.stringify(payload)
+});
 
   const responseText = await response.text();
   let data = null;
@@ -376,13 +346,12 @@ export {
   getPublishedPromotionEvents,
   getPublishedPromotionMapPins,
   getPublishedPromotionSponsors,
-  getShopProducts,
-  getFeaturedShopProducts,
-  getShopCategories,
+
+  
   getAdInventory,
   getFeaturedAdSlots,
   getAdSections,
   getAdPackages,
   submitLead,
-  submitAnalyticsEvent,
+  submitAnalyticsEvent
 };

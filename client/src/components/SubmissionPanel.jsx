@@ -193,7 +193,7 @@ export default function SubmissionPanel() {
                 name="category"
                 value={form.category}
                 onChange={updateField}
-                placeholder="Restaurant, sports bar, merch, nightlife, family event..."
+                placeholder="Restaurant, sports bar, fan experiences, nightlife, family event..."
               />
             </label>
 

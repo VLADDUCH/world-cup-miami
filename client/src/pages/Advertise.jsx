@@ -83,7 +83,7 @@ export default function Advertise() {
           <p>World Cup in Miami Advertising</p>
           <h1>Ad packages built for local revenue</h1>
           <span>
-            Sell sponsorship placements for homepage visibility, news, events, shop,
+            Sell sponsorship placements for homepage visibility, news, events, site,
             maps, featured businesses, and approved promotions.
           </span>
         </div>

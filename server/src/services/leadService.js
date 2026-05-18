@@ -16,7 +16,8 @@ const leadSchema = z.object({
   interest: z
     .enum([
       "fan_updates",
-      "merch",
+    "fan_experiences",
+      "fan experiences",
       "advertising",
       "business_listing",
       "events",
@@ -53,10 +54,10 @@ function normalizeInterest(value) {
     fan_update: "fan_updates",
     updates: "fan_updates",
     fan: "fan_updates",
-
-    merch: "merch",
-    merch_drops: "merch",
-    merchandise: "merch",
+    fan_experiences: "fan_experiences",
+    fan_experience: "fan_experiences",
+    fan_experience_updates: "fan_experiences",
+    fan_experience_drops: "fan_experiences",
 
     advertising: "advertising",
     advertising_sponsorship: "advertising",

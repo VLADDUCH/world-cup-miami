@@ -138,8 +138,8 @@ test("GET /api/v1/analytics/events returns admin events", async () => {
   await resetAnalyticsEvents();
 
   await createAnalyticsEvent({
-    eventType: "shop_product_clicked",
-    page: "/shop",
+    eventType: "generic_click",
+    page: "/site",
     label: "Miami Tee",
     source: "test",
   });

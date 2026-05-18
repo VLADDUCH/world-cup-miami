@@ -3,21 +3,15 @@ import { useLocation } from "react-router-dom";
 
 const SITE = {
   name: "World Cup in Miami",
-  url: "https://worldcupinmiami.com",
+  url: "https://www.worldcupinmiami.com",
   image: "/images/wcim_soccer_ball_miami_background.png",
 };
 
-const PAGE_META = {
+const ROUTE_META = {
   "/": {
-    title: "World Cup in Miami | Events, News, Merch, Sponsors",
+    title: "World Cup in Miami | Events, News, Sponsors",
     description:
-      "Discover Miami soccer events, World Cup watch parties, merch drops, local businesses, sponsor packages, and fan updates.",
-    noIndex: false,
-  },
-  "/shop": {
-    title: "Miami World Cup Merch Shop | World Cup in Miami",
-    description:
-      "Shop Miami-inspired soccer fanwear, merch drops, bundles, hats, hoodies, tees, and match-week products.",
+      "Discover Miami soccer events, World Cup watch parties, local businesses, sponsor opportunities, and fan updates.",
     noIndex: false,
   },
   "/advertise": {
@@ -34,48 +28,45 @@ const PAGE_META = {
   },
 };
 
-function absoluteUrl(pathOrUrl) {
-  if (!pathOrUrl) return SITE.url;
-
-  if (String(pathOrUrl).startsWith("http")) {
-    return pathOrUrl;
-  }
-
-  return `${SITE.url}${String(pathOrUrl).startsWith("/") ? "" : "/"}${pathOrUrl}`;
+function absoluteUrl(value) {
+  if (!value) return SITE.url;
+  const normalized = String(value);
+  if (normalized.startsWith("http")) return normalized;
+  return `${SITE.url}${normalized.startsWith("/") ? "" : "/"}${normalized}`;
 }
 
 function setMeta(attribute, key, content) {
   if (!content) return;
 
-  let element = document.head.querySelector(`meta[${attribute}="${key}"]`);
+  let tag = document.head.querySelector(`meta[${attribute}="${key}"]`);
 
-  if (!element) {
-    element = document.createElement("meta");
-    element.setAttribute(attribute, key);
-    document.head.appendChild(element);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute(attribute, key);
+    document.head.appendChild(tag);
   }
 
-  element.setAttribute("content", content);
+  tag.setAttribute("content", content);
 }
 
 function setCanonical(href) {
-  let element = document.head.querySelector('link[rel="canonical"]');
+  let link = document.head.querySelector('link[rel="canonical"]');
 
-  if (!element) {
-    element = document.createElement("link");
-    element.setAttribute("rel", "canonical");
-    document.head.appendChild(element);
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
+    document.head.appendChild(link);
   }
 
-  element.setAttribute("href", href);
+  link.setAttribute("href", href);
 }
 
 export default function SEO() {
   const location = useLocation();
 
   useEffect(() => {
-    const meta = PAGE_META[location.pathname] || PAGE_META["/"];
-    const canonicalUrl = absoluteUrl(location.pathname);
+    const meta = ROUTE_META[location.pathname] || ROUTE_META["/"];
+    const pageUrl = absoluteUrl(location.pathname);
     const imageUrl = absoluteUrl(SITE.image);
 
     document.title = meta.title;
@@ -87,7 +78,7 @@ export default function SEO() {
     setMeta("property", "og:title", meta.title);
     setMeta("property", "og:description", meta.description);
     setMeta("property", "og:type", "website");
-    setMeta("property", "og:url", canonicalUrl);
+    setMeta("property", "og:url", pageUrl);
     setMeta("property", "og:image", imageUrl);
 
     setMeta("name", "twitter:card", "summary_large_image");
@@ -95,14 +86,14 @@ export default function SEO() {
     setMeta("name", "twitter:description", meta.description);
     setMeta("name", "twitter:image", imageUrl);
 
-    setCanonical(canonicalUrl);
+    setCanonical(pageUrl);
 
-    const jsonLd = {
+    const schema = {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: SITE.name,
       url: SITE.url,
-      description: PAGE_META["/"].description,
+      description: ROUTE_META["/"].description,
     };
 
     let script = document.head.querySelector('script[data-wcim-seo="jsonld"]');
@@ -114,7 +105,7 @@ export default function SEO() {
       document.head.appendChild(script);
     }
 
-    script.textContent = JSON.stringify(jsonLd);
+    script.textContent = JSON.stringify(schema);
   }, [location.pathname]);
 
   return null;

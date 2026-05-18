@@ -6,7 +6,7 @@ import newsFeedRouter from "./newsFeed.js";
 import eventsFeedRouter from "./eventsFeed.js";
 import promotionsRouter from "./promotions.js";
 import adminReviewRouter from "./adminReview.js";
-import shopRouter from "./shop.js";
+
 import adInventoryRouter from "./adInventory.js";
 import leadsRouter from "./leads.js";
 import analyticsRouter from "./analytics.js";
@@ -41,9 +41,9 @@ router.get("/", (req, res) => {
       promotionTypes: "/api/v1/promotions/types",
       submitPromotion: "/api/v1/promotions/submit",
       adminPromotionReview: "/api/v1/admin/review/promotions",
-      shopProducts: "/api/v1/shop/products",
-      shopCategories: "/api/v1/shop/categories",
-      shopFeatured: "/api/v1/shop/featured",
+      
+      
+      
       auditEvents: "/api/v1/audit/events",
       auditStats: "/api/v1/audit/stats",
     },
@@ -58,7 +58,7 @@ router.use("/feeds/news", newsFeedRouter);
 router.use("/feeds/events", eventsFeedRouter);
 router.use("/promotions", promotionsRouter);
 router.use("/admin/review", adminReviewRouter);
-router.use("/shop", shopRouter);
+
 router.use("/ads/inventory", adInventoryRouter);
 router.use("/leads", leadsRouter);
 router.use("/analytics", analyticsRouter);

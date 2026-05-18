@@ -5,7 +5,7 @@ import styles from "../styles/Home.module.css";
 
 const INTEREST_OPTIONS = [
   { value: "fan_updates", label: "Fan updates" },
-  { value: "merch", label: "Merch drops" },
+  { value: "fan experiences", label: "fan experiences updates" },
   { value: "advertising", label: "Advertising / sponsorship" },
   { value: "business_listing", label: "Business listing" },
   { value: "events", label: "Events / watch parties" },
@@ -25,7 +25,7 @@ const DEFAULT_FORM = {
 export default function EmailCapturePanel({
   source = "homepage",
   title = "Get Closer to the Moment Before Everyone Else",
-  subtitle = "Join the WCIM list and be first to know where fans are gathering, what drops are coming, which events are heating up, and where Miami’s World Cup energy is moving next.",
+  subtitle = "Join the WCIM list and be first to know where fans are gathering, what updates are coming, which events are heating up, and where Miami’s World Cup energy is moving next.",
   compact = false,
 }) {
   const [form, setForm] = useState(DEFAULT_FORM);
@@ -143,7 +143,7 @@ export default function EmailCapturePanel({
             onChange={updateField}
             required
           />
-          <span>Yes — send me Miami World Cup updates, local experiences, merch drops, and opportunities worth knowing about.</span>
+          <span>Yes — send me Miami World Cup updates, local experiences, fan experiences updates, and opportunities worth knowing about.</span>
         </label>
 
         <button type="submit" disabled={status === "submitting"}>

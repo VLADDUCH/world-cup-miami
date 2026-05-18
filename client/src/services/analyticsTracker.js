@@ -1,10 +1,7 @@
-import { submitAnalyticsEvent } from "./wcimApi";
-
-const VALID_EVENT_TYPES = new Set([
+const TRACKED_EVENT_TYPES = new Set([
   "page_view",
   "lead_submitted",
   "promotion_submitted",
-  "shop_product_clicked",
   "advertise_cta_clicked",
   "news_article_clicked",
   "event_clicked",
@@ -12,7 +9,7 @@ const VALID_EVENT_TYPES = new Set([
   "generic_click",
 ]);
 
-function safeString(value, fallback = "") {
+function sanitizeText(value, fallback = "") {
   if (value === null || value === undefined) return fallback;
 
   return String(value)
@@ -23,46 +20,73 @@ function safeString(value, fallback = "") {
 
 function currentPage() {
   if (typeof window === "undefined") return "";
-
   return `${window.location.pathname}${window.location.search || ""}`;
 }
 
-function safeMetadata(metadata = {}) {
+function normalizeMetadata(metadata = {}) {
   if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
     return {};
   }
 
   return Object.fromEntries(
     Object.entries(metadata).map(([key, value]) => [
-      safeString(key),
-      typeof value === "string" ? safeString(value) : value,
+      sanitizeText(key),
+      typeof value === "string" ? sanitizeText(value) : value,
     ])
   );
 }
 
-async function trackEvent({
+async function submitAnalyticsEvent(payload) {
+  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
+
+  const response = await fetch(`${apiBase}/analytics/events`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const raw = await response.text();
+  let data = null;
+
+  try {
+    data = raw ? JSON.parse(raw) : null;
+  } catch {
+    data = { raw };
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error
+        ? `Analytics event failed: ${data.error}`
+        : `Analytics event failed with status ${response.status}`
+    );
+  }
+
+  return data;
+}
+
+export async function trackEvent({
   eventType = "generic_click",
-  page,
+  page = "",
   label = "",
   target = "",
   source = "frontend",
   metadata = {},
 } = {}) {
-  const finalEventType = VALID_EVENT_TYPES.has(eventType)
-    ? eventType
-    : "generic_click";
-
   const payload = {
-    eventType: finalEventType,
-    page: safeString(page || currentPage(), "/"),
-    label: safeString(label),
-    target: safeString(target),
-    source: safeString(source || "frontend"),
+    eventType: TRACKED_EVENT_TYPES.has(eventType) ? eventType : "generic_click",
+    page: sanitizeText(page || currentPage(), "/"),
+    label: sanitizeText(label),
+    target: sanitizeText(target),
+    source: sanitizeText(source || "frontend"),
     metadata: {
-      ...safeMetadata(metadata),
+      ...normalizeMetadata(metadata),
       userAgent:
         typeof navigator !== "undefined"
-          ? safeString(navigator.userAgent).slice(0, 220)
+          ? sanitizeText(navigator.userAgent).slice(0, 220)
           : "",
       trackedAtClient:
         typeof Date !== "undefined" ? new Date().toISOString() : "",
@@ -78,19 +102,22 @@ async function trackEvent({
   }
 }
 
-function trackPageView(pathname) {
+export function trackPageView(page) {
   return trackEvent({
     eventType: "page_view",
-    page: pathname || currentPage(),
+    page: page || currentPage(),
     label: "Page View",
     source: "frontend",
     metadata: {
-      path: pathname || currentPage(),
+      path: page || currentPage(),
     },
   });
 }
 
-function trackLeadSubmitted({ source = "homepage", interest = "", email = "" } = {}) {
+export function trackLeadSubmitted({ source = "homepage", interest = "", email = "" } = {}) {
+  const cleanedEmail = sanitizeText(email);
+  const emailDomain = cleanedEmail.includes("@") ? cleanedEmail.split("@").pop() : "";
+
   return trackEvent({
     eventType: "lead_submitted",
     page: currentPage(),
@@ -99,30 +126,12 @@ function trackLeadSubmitted({ source = "homepage", interest = "", email = "" } =
     metadata: {
       leadSource: source,
       interest,
-      emailDomain: safeString(email).includes("@")
-        ? safeString(email).split("@").pop()
-        : "",
+      emailDomain,
     },
   });
 }
 
-function trackShopProductClicked(product = {}) {
-  return trackEvent({
-    eventType: "shop_product_clicked",
-    page: currentPage(),
-    label: product.name || product.id || "Shop Product",
-    target: product.checkoutUrl || "/shop",
-    source: "frontend",
-    metadata: {
-      productId: product.id || "",
-      category: product.category || "",
-      price: product.price || 0,
-      currency: product.currency || "USD",
-    },
-  });
-}
-
-function trackAdvertiseCtaClicked(slot = {}) {
+export function trackAdvertiseCtaClick(slot = {}) {
   return trackEvent({
     eventType: "advertise_cta_clicked",
     page: currentPage(),
@@ -139,27 +148,27 @@ function trackAdvertiseCtaClicked(slot = {}) {
   });
 }
 
-function trackNewsArticleClicked(article = {}) {
+export function trackNewsArticleClick(article = {}) {
   return trackEvent({
     eventType: "news_article_clicked",
     page: currentPage(),
-    label: article.title || "News Article",
+    label: article.title || article.id || "News Article",
     target: article.url || "",
     source: "frontend",
     metadata: {
       articleId: article.id || "",
-      sourceName: article.source || "",
-      category: article.category || "",
+      source: article.source || "",
       provider: article.provider || "",
+      category: article.category || "",
     },
   });
 }
 
-function trackEventClicked(event = {}) {
+export function trackEventClick(event = {}) {
   return trackEvent({
     eventType: "event_clicked",
     page: currentPage(),
-    label: event.title || event.name || "Event",
+    label: event.title || event.id || "Event",
     target: event.url || "",
     source: "frontend",
     metadata: {
@@ -171,12 +180,7 @@ function trackEventClicked(event = {}) {
   });
 }
 
-export {
-  trackEvent,
-  trackPageView,
-  trackLeadSubmitted,
-  trackShopProductClicked,
-  trackAdvertiseCtaClicked,
-  trackNewsArticleClicked,
-  trackEventClicked,
-};
+
+export function trackAdvertiseCtaClicked(slot = {}) {
+  return trackAdvertiseCtaClick(slot);
+}

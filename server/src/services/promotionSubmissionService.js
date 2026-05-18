@@ -12,12 +12,12 @@ const promotionTypes = [
   {
     slug: "business_listing",
     label: "Add My Business",
-    description: "For restaurants, bars, shops, venues, creators, and local services.",
+    description: "For restaurants, bars, sites, venues, creators, and local services.",
   },
   {
     slug: "flyer",
     label: "Add My Flyer",
-    description: "For flyers, watch parties, merch drops, nightlife, and local events.",
+    description: "For flyers, watch parties, fan experiences drops, nightlife, and local events.",
   },
   {
     slug: "watch_party",

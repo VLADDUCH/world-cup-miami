@@ -12,7 +12,7 @@ const allowedEventTypes = [
   "page_view",
   "lead_submitted",
   "promotion_submitted",
-  "shop_product_clicked",
+  
   "advertise_cta_clicked",
   "news_article_clicked",
   "event_clicked",
@@ -163,7 +163,7 @@ async function getAnalyticsSummary() {
     conversions: {
       lead_submitted: 0,
       promotion_submitted: 0,
-      shop_product_clicked: 0,
+      content_clicked: 0,
       advertise_cta_clicked: 0,
     },
   };
