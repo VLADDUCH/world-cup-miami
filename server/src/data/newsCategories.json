@@ -4,20 +4,20 @@
     "label": "Miami World Cup",
     "homepageLabel": "Miami World Cup Updates",
     "description": "Core Miami-focused tournament updates, stadium activity, fan movement, city energy, and match-week developments.",
-    "query": "Miami soccer OR World Cup Miami OR Hard Rock Stadium soccer OR Miami Gardens soccer",
+    "query": "FIFA World Cup Miami OR 2026 World Cup Miami OR World Cup Miami OR Hard Rock Stadium World Cup OR Miami Gardens World Cup OR World Cup tickets Miami OR Brazil World Cup Miami OR Colombia World Cup Miami OR Portugal World Cup Miami OR Uruguay World Cup Miami",
     "priority": 1,
     "showOnHomepage": true,
-    "editorialRule": "Must connect soccer, tournament energy, stadium activity, or Miami fan experience to South Florida."
+    "editorialRule": "Prioritize fresh FIFA World Cup stories tied to Miami, Hard Rock Stadium, Miami Gardens, teams playing in Miami, players from those teams, tickets, and South Florida tournament activity. Do not use Inter Miami or Messi stories unless the article clearly connects to a World Cup match/tournament moment in Miami."
   },
   {
     "slug": "match-day-updates",
     "label": "Match-Day Updates",
     "homepageLabel": "Match-Day Updates",
     "description": "Match-day logistics, crowd movement, public updates, stadium-area activity, and real-time fan usefulness.",
-    "query": "Hard Rock Stadium soccer OR Miami Gardens match day OR Miami soccer traffic OR Miami match day",
+    "query": "Hard Rock Stadium World Cup OR Miami Gardens World Cup OR FIFA Miami match day OR World Cup traffic Miami OR World Cup tickets Miami OR Miami World Cup stadium",
     "priority": 2,
     "showOnHomepage": true,
-    "editorialRule": "Must help fans understand what is happening before, during, or after match days."
+    "editorialRule": "Must help fans understand match-day logistics, stadium activity, tickets, traffic, timing, or crowd movement in Miami."
   },
   {
     "slug": "watch-parties",
@@ -44,10 +44,10 @@
     "label": "Team Fan Communities",
     "homepageLabel": "Team Fan Communities",
     "description": "Brazil, Colombia, Portugal, Uruguay, and other major fan communities active in South Florida.",
-    "query": "Brazil fans Miami soccer OR Colombia fans Miami soccer OR Portugal fans Miami soccer OR Uruguay fans Miami soccer",
+    "query": "Brazil World Cup squad OR Colombia World Cup squad OR Portugal World Cup squad OR Uruguay World Cup squad OR Scotland World Cup squad OR Saudi Arabia World Cup squad OR Cape Verde World Cup squad OR Brazil fans Miami World Cup OR Colombia fans Miami World Cup OR Portugal fans Miami World Cup OR Uruguay fans Miami World Cup",
     "priority": 5,
     "showOnHomepage": true,
-    "editorialRule": "Must connect international team fan communities to Miami or South Florida."
+    "editorialRule": "Must connect teams playing in Miami, their players, their fan communities, or South Florida fan activity to the World Cup."
   },
   {
     "slug": "business-promotions",

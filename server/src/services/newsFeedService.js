@@ -30,12 +30,13 @@ const LOCAL_CONTEXT_TERMS = [
   "coral gables",
   "coconut grove",
   "south beach",
-  "inter miami",
-  "messi",
 ];
 
 const SOCCER_CONTEXT_TERMS = [
   "world cup",
+  "2026 world cup",
+  "fifa",
+  "fifa world cup",
   "soccer",
   "football",
   "match",
@@ -44,6 +45,8 @@ const SOCCER_CONTEXT_TERMS = [
   "fan zone",
   "watch party",
   "supporters",
+  "tickets",
+  "ticket",
   "brazil",
   "colombia",
   "portugal",
@@ -51,8 +54,6 @@ const SOCCER_CONTEXT_TERMS = [
   "scotland",
   "saudi arabia",
   "cape verde",
-  "inter miami",
-  "messi",
 ];
 
 const FAN_ACTIVITY_TERMS = [
@@ -78,8 +79,11 @@ const TEAM_COMMUNITY_TERMS = [
   "uruguay",
   "uruguayan",
   "scotland",
+  "scottish",
   "saudi arabia",
+  "saudi",
   "cape verde",
+  "cape verdean",
 ];
 
 const HARD_EXCLUDE_TERMS = [
@@ -99,6 +103,43 @@ const HARD_EXCLUDE_TERMS = [
   "f1",
   "luxury house",
   "luxury houses",
+];
+
+const WORLD_CUP_CORE_TERMS = [
+  "world cup",
+  "2026 world cup",
+  "fifa",
+  "fifa world cup",
+];
+
+const MIAMI_HOST_CONTEXT_TERMS = [
+  "miami",
+  "miami gardens",
+  "hard rock stadium",
+  "south florida",
+  "world cup miami",
+  "fifa miami",
+];
+
+const MIAMI_MATCH_TEAM_TERMS = [
+  "saudi arabia",
+  "uruguay",
+  "cape verde",
+  "scotland",
+  "brazil",
+  "colombia",
+  "portugal",
+];
+
+const EXCLUDED_NON_TOURNAMENT_LOCAL_TERMS = [
+  "inter miami",
+  "mls",
+  "major league soccer",
+];
+
+const MESSI_TERMS = [
+  "messi",
+  "lionel messi",
 ];
 
 const querySchema = z.object({
@@ -181,6 +222,78 @@ function containsAny(text, terms) {
   return terms.some((term) => text.includes(term));
 }
 
+
+function articleFreshnessScore(article = {}) {
+  const publishedAt = article.publishedAt || article.date || article.createdAt;
+  const timestamp = publishedAt ? new Date(publishedAt).getTime() : 0;
+
+  if (!Number.isFinite(timestamp) || timestamp <= 0) return 0;
+
+  const ageHours = Math.max(0, (Date.now() - timestamp) / 36e5);
+
+  if (ageHours <= 24) return 4;
+  if (ageHours <= 72) return 3;
+  if (ageHours <= 24 * 7) return 2;
+  if (ageHours <= 24 * 21) return 1;
+
+  return 0;
+}
+
+function hasWorldCupCore(article = {}) {
+  return containsAny(articleSearchText(article), WORLD_CUP_CORE_TERMS);
+}
+
+function hasMiamiHostContext(article = {}) {
+  return containsAny(articleSearchText(article), MIAMI_HOST_CONTEXT_TERMS);
+}
+
+function hasMiamiMatchTeamContext(article = {}) {
+  return containsAny(articleSearchText(article), MIAMI_MATCH_TEAM_TERMS);
+}
+
+function isDisallowedInterMiamiOrMessiArticle(article = {}) {
+  const text = articleSearchText(article);
+  const mentionsExcludedLocalClub = containsAny(text, EXCLUDED_NON_TOURNAMENT_LOCAL_TERMS);
+  const mentionsMessi = containsAny(text, MESSI_TERMS);
+
+  if (!mentionsExcludedLocalClub && !mentionsMessi) return false;
+
+  const clearlyWorldCupInMiami =
+    hasWorldCupCore(article) &&
+    hasMiamiHostContext(article) &&
+    !text.includes("inter miami cf") &&
+    !text.includes("mls comeback") &&
+    !text.includes("mls denied");
+
+  return !clearlyWorldCupInMiami;
+}
+
+function articleHasFreshWorldCupValue(article = {}) {
+  if (articleFreshnessScore(article) < 2) return false;
+  if (!hasWorldCupCore(article)) return false;
+  if (isDisallowedInterMiamiOrMessiArticle(article)) return false;
+
+  return hasMiamiHostContext(article) || hasMiamiMatchTeamContext(article);
+}
+
+function sortArticlesForHomepage(articles = []) {
+  return [...articles].sort((a, b) => {
+    const scoreA =
+      Number(a.editorial?.score || 0) * 10 +
+      articleFreshnessScore(a) * 4 +
+      Number(Boolean(a.imageUrl)) * 2;
+
+    const scoreB =
+      Number(b.editorial?.score || 0) * 10 +
+      articleFreshnessScore(b) * 4 +
+      Number(Boolean(b.imageUrl)) * 2;
+
+    if (scoreB !== scoreA) return scoreB - scoreA;
+
+    return new Date(b.publishedAt || 0).getTime() - new Date(a.publishedAt || 0).getTime();
+  });
+}
+
 function calculateArticleRelevance(article = {}, categorySlug = "") {
   const text = articleSearchText(article);
 
@@ -198,7 +311,7 @@ function calculateArticleRelevance(article = {}, categorySlug = "") {
   if (hasTeamCommunity) reasons.push("team_community");
   if (hasHardExclude) reasons.push("hard_exclude_term");
 
-  if (hasHardExclude && !(hasLocalContext && hasSoccerContext)) {
+  if (hasHardExclude && !(hasLocalContext && hasSoccerContext) && !articleHasFreshWorldCupValue(article)) {
     return {
       accepted: false,
       score: 0,
