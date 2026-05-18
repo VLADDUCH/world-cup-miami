@@ -41,7 +41,7 @@ function normalizeProduct(product = {}) {
     compareAtPrice: Number(product.compareAtPrice || 0),
     currency: product.currency || "USD",
     description: product.description || "",
-    imageUrl: product.imageUrl || "/images/wcim_soccer_ball_miami_background.png",
+    imageUrl: product.imageUrl || "/images/merch-fan-zone.jpg",
     checkoutUrl: product.checkoutUrl || "#submit",
     badge: product.badge || "",
     featured: Boolean(product.featured),

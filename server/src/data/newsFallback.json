@@ -6,7 +6,7 @@
     "source": "World Cup in Miami",
     "author": "WCIM Desk",
     "url": "/",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/hero-skyline.jpg",
     "publishedAt": "2026-05-14T00:00:00.000Z",
     "category": "miami-world-cup",
     "tags": ["miami", "soccer", "fan-guide", "business"]
@@ -18,7 +18,7 @@
     "source": "World Cup in Miami",
     "author": "WCIM Match Desk",
     "url": "/#matches",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/hero-skyline.jpg",
     "publishedAt": "2026-05-14T00:00:00.000Z",
     "category": "match-day-updates",
     "tags": ["match-day", "miami-gardens", "stadium", "updates"]
@@ -30,7 +30,7 @@
     "source": "World Cup in Miami",
     "author": "WCIM Watch Party Desk",
     "url": "/#map",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/hero-skyline.jpg",
     "publishedAt": "2026-05-14T00:00:00.000Z",
     "category": "watch-parties",
     "tags": ["watch-party", "sports-bars", "wynwood", "brickell"]
@@ -42,7 +42,7 @@
     "source": "World Cup in Miami",
     "author": "WCIM Map Desk",
     "url": "/#map",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/hero-skyline.jpg",
     "publishedAt": "2026-05-14T00:00:00.000Z",
     "category": "fan-zone-events",
     "tags": ["fan-zone", "map", "events", "public-space"]
@@ -54,7 +54,7 @@
     "source": "World Cup in Miami",
     "author": "WCIM Fan Desk",
     "url": "/#matches",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/hero-skyline.jpg",
     "publishedAt": "2026-05-14T00:00:00.000Z",
     "category": "team-fan-communities",
     "tags": ["brazil", "colombia", "portugal", "uruguay", "south-florida"]
@@ -66,7 +66,7 @@
     "source": "World Cup in Miami",
     "author": "WCIM Business Desk",
     "url": "/#business",
-    "imageUrl": "/images/wcim_soccer_ball_miami_background.png",
+    "imageUrl": "/images/hero-skyline.jpg",
     "publishedAt": "2026-05-14T00:00:00.000Z",
     "category": "business-promotions",
     "tags": ["advertising", "business", "featured-listings", "map-pins"]

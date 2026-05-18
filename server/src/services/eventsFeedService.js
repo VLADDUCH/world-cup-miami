@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const fallbackEventsPath = path.resolve(__dirname, "../data/eventsFallback.json");
 const eventCategoriesPath = path.resolve(__dirname, "../data/eventCategories.json");
 
-const DEFAULT_IMAGE = "/images/wcim_soccer_ball_miami_background.png";
+const DEFAULT_IMAGE = "/images/only_in_Miami.png";
 
 const eventQuerySchema = z.object({
   q: z.string().trim().min(1).max(220).optional(),

@@ -13,7 +13,7 @@ const fallbackNewsPath = path.resolve(__dirname, "../data/newsFallback.json");
 const dailyNewsPath = path.resolve(__dirname, "../data/dailyNews.json");
 const categoriesPath = path.resolve(__dirname, "../data/newsCategories.json");
 
-const DEFAULT_IMAGE = "/images/wcim_soccer_ball_miami_background.png";
+const DEFAULT_IMAGE = "/images/hero-skyline.jpg";
 
 const LOCAL_CONTEXT_TERMS = [
   "miami",
